@@ -70,7 +70,7 @@ export const resendOtp = async (req, res) => {
         }
 
         // Check if OTP has expired
-        if (Date.now() > user.verifyOtpExpireAt) {
+        if ((Date.now() + 4 * 60 * 1000) > user.verifyOtpExpireAt) {
             const newOtp = crypto.randomInt(100000, 999999).toString();
             user.verifyOtp = newOtp;
             user.verifyOtpExpireAt = Date.now() + 4 * 60 * 1000; // New OTP expires in 4 minutes
@@ -79,11 +79,11 @@ export const resendOtp = async (req, res) => {
              // Send OTP email for verification
         const mailOptions = {
             from: process.env.SENDER_EMAIL,
-            to: email,
+            to: user.email,
             subject: 'Account Verification OTP',
-            text: `Hi ${name},
+            text: `Hi ${user.name},
 
-Your OTP for verifying your Dynasty Soundwave account  again: ${otp}
+Your OTP for verifying your Dynasty Soundwave account  again: ${user.verifyOtp }
 
 Please use this OTP to verify your account within 4 minutes.
 
@@ -139,7 +139,7 @@ export const verifyEmail = async (req, res) => {
 const mailOptions = {
 
  from: process.env.SENDER_EMAIL,
-  to: email,
+  to: user.email,
   subject: 'Welcome to Dynasty Soundwaves',
  text: `Dear ${user.name},
       
@@ -288,7 +288,7 @@ export const forgotPassword = async (req, res) => {
         // Send OTP email for password reset
         const mailOptions = {
             from: process.env.SENDER_EMAIL,
-            to: email,
+            to: user.email,
             subject: 'Password Reset OTP',
             text: `Hi ${user.name},
 
