@@ -1,6 +1,7 @@
 import express from 'express';
 import { 
     registerUser, 
+    resendOtp,
     loginUser, 
     logoutUser, 
     getUserProfile, 
@@ -19,7 +20,8 @@ const router = express.Router();
 
 router.post('/register', registerUser);
 
-
+//Sub Method 
+router.post('/resend-otp',resendOtp)
 router.post('/verify-email', verifyEmail); 
 
 router.post('/login', loginUser);

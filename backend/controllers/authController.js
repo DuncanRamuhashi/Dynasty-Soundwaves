@@ -55,6 +55,55 @@ The Dynasty Soundwave Team`,
     }
 };
 
+//resend otp this isa sub  method just in case 
+export const resendOtp = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        if (user.isAccountVerified) {
+            return res.status(400).json({ success: false, message: 'Account already verified' });
+        }
+
+        // Check if OTP has expired
+        if (Date.now() > user.verifyOtpExpireAt) {
+            const newOtp = crypto.randomInt(100000, 999999).toString();
+            user.verifyOtp = newOtp;
+            user.verifyOtpExpireAt = Date.now() + 4 * 60 * 1000; // New OTP expires in 4 minutes
+            await user.save();
+
+             // Send OTP email for verification
+        const mailOptions = {
+            from: process.env.SENDER_EMAIL,
+            to: email,
+            subject: 'Account Verification OTP',
+            text: `Hi ${name},
+
+Your OTP for verifying your Dynasty Soundwave account  again: ${otp}
+
+Please use this OTP to verify your account within 4 minutes.
+
+If you did not request this, please disregard this email.
+
+Best regards,
+The Dynasty Soundwave Team`,
+        };
+
+        await transporter.sendMail(mailOptions);
+            return res.status(200).json({ success: true, message: 'New OTP sent successfully' });
+        }
+
+        res.status(400).json({ success: false, message: 'Current OTP is still valid' });
+    } catch (error) {
+        console.error('Error during OTP resend:', error);
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+};
+
 // Verify email after registration
 export const verifyEmail = async (req, res) => {
     const { userId, otp } = req.body;
