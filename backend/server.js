@@ -5,8 +5,10 @@ import  authRoutes from './routes/userRoutes.js'
 import cookieParser from 'cookie-parser';
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-dotenv.config();                                  // remember to call the dotenv file fusek;
+dotenv.config();
+const PORT = process.env.PORT;
+console.log(process.env.SMTP_USER);
+console.log(process.env.SMTP_PASS);                                  // remember to call the dotenv file fusek;
 db();                                 
 
 app.use(express.json());
