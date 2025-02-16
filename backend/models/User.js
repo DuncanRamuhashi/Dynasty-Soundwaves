@@ -13,10 +13,10 @@ const UserSchema = new mongoose.Schema({
     bio: { type: String, trim: true, maxlength: 500 },
     role: { type: String, enum: ['user','seller', 'admin'], default: 'user' },
     verifyOtp: { type: String, default: '' },
-    verifyOtpExpireAt: { type: Number, default: 0 }, // Change to Number
+    verifyOtpExpireAt: { type: Number, default: 0 }, 
     isAccountVerified: { type: Boolean, default: false },
     resetOtp: { type: String, default: '' },
-    resetOtpExpireAt: { type: Number, default: 0 }, // Change to Number
+    resetOtpExpireAt: { type: Number, default: 0 }, 
 }, { timestamps: true });
 
 // Hash password before saving
