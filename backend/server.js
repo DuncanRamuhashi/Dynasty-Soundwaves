@@ -2,6 +2,12 @@ import dotenv from 'dotenv';
 import express from 'express';
 import db from './config/mongodb.js'
 import  authRoutes from './routes/userRoutes.js'
+import cartRouter from './routes/cartRoutes.js';
+import invoiceRouter from './routes/invoiceRoutes.js';
+import musicRouter from './routes/musicRoutes.js';
+import paymentRouter from './routes/paymentRoutes.js';
+import reportRouter from './routes/reportRoutes.js';
+import TandCRouter from './routes/termsRoutes.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 const app = express();
@@ -16,7 +22,12 @@ app.use(cors());
 app.use(cookieParser());
 
 app.use('/api/auth',authRoutes);
-
+app.use('/api/cart',cartRouter);
+app.use('/api/invoice',invoiceRouter);
+app.use('/api/music',musicRouter);
+app.use('/api/payment',paymentRouter);
+app.use('/api/report',reportRouter);
+app.use('/api/tsandcs',TandCRouter);
 
 app.listen(PORT,() =>{
     console.log(`Server running on port ${PORT}`);

@@ -17,4 +17,4 @@ PaymentSchema.pre('save', async function(next) {
 });
 
 
-export default mongoose.model('Payment', PaymentSchema);
+export default mongoose.model('Instalment', PaymentSchema);
