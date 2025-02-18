@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const ReportSchema = new mongoose.Schema({
-    userID: { type: String, required: true }, 
+    userID: { type: String, required: true}, 
     totalrevenue: { type: Number, required: true },  
    
 },{timestamps: true});
