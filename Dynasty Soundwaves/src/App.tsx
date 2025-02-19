@@ -9,7 +9,7 @@ function App() {
   return (
     <>
 
-      <p className='text-8xl'>
+      <p className='text-8xl text'>
         Click on the Vite and React logos to learn more
       </p>
     </>
