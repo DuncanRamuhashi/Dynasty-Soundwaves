@@ -1,12 +1,12 @@
 import React from "react";
-import logo from "../assets/logo.png";
+import logo from "../assets/ddddd-removebg-preview.png";
 import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa";
 
 const Navbar: React.FC = () => {
   return (
-    <nav className="flex items-center justify-between px-8 py-4 bg-black text-white">
+    <nav className="flex items-center justify-between px-8 py-4  text-gray-900">
       {/* Logo */}
-      <img src={logo} alt="Logo" className="h-10 w-auto" />
+      <img src={logo} alt="Logo" className="h-14 w-auto" />
 
       {/* Nav Links */}
       <ul className="hidden md:flex space-x-6 text-lg">

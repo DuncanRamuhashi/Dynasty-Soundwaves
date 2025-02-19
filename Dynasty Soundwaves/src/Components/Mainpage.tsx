@@ -1,9 +1,11 @@
 import React from "react";
 import { FaPlay, FaShoppingCart, FaDownload } from "react-icons/fa";
+import Navbar from "./Navbar";
 const Mainpage = () => {
   return (
+    
     <div className="text-white px-6 py-10">
-    {/* Search Bar */}
+    {/* Search Bar */}  <Navbar />
     <div className="flex justify-center">
       <div className="flex items-center bg-gray-800 p-2 rounded-lg w-full max-w-lg">
         <input

@@ -1,19 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Welcome from './Components/Welcome';
+import MainPage from './Components/Mainpage';
+import Navbar from './Components/Navbar';
 
-
-function App() {
-
-
+const App: React.FC = () => {
   return (
-    <>
+    <Router>
+      <div className="bg-gray-100 ">
+      
+        <Routes>
+          <Route path="/" element={<Welcome />} />
+          <Route path="/home" element={<MainPage />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+};
 
-      <p className='text-8xl text'>
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
-
-export default App
+export default App;

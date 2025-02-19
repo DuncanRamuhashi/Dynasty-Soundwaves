@@ -8,12 +8,12 @@ const Welcome = () => {
   useEffect(() => {
     setTimeout(() => {
       navigate('/home'); // Navigate to MainPage after 3 seconds
-    }, 3000);
+    }, 6000);
   }, [navigate]);
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-900">
-      <img src={welcomeGif} alt="Welcome" className="w-80 h-auto" />
+      <img src={welcomeGif} alt="Welcome" className="w-full h-full" />
     </div>
   );
 };
