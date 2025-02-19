@@ -7,7 +7,7 @@ import Navbar from './Components/Navbar';
 const App: React.FC = () => {
   return (
     <Router>
-      <div className="bg-gray-100 ">
+      <div className="bg-gray-100  ">
       
         <Routes>
           <Route path="/" element={<Welcome />} />

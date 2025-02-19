@@ -9,13 +9,9 @@ const Navbar: React.FC = () => {
       <img src={logo} alt="Logo" className="h-14 w-auto" />
 
       {/* Nav Links */}
-      <ul className="hidden md:flex space-x-6 text-lg">
-        <li className="hover:text-gray-400 cursor-pointer">Tracks</li>
-        <li className="hover:text-gray-400 cursor-pointer">Memberships</li>
-        <li className="hover:text-gray-400 cursor-pointer">Services</li>
-        <li className="hover:text-gray-400 cursor-pointer">About</li>
-        <li className="hover:text-gray-400 cursor-pointer">Contact</li>
-        <li className="hover:text-gray-400 cursor-pointer">Albums</li>
+      <ul className="hidden md:flex space-x-6 text-lg">       
+        <li className="hover:text-gray-400 cursor-pointer hover:font-bold">About</li>
+        <li className="hover:text-gray-400 cursor-pointer  hover:font-bold">Contact</li>
       </ul>
 
       {/* Search Bar & Icons */}
