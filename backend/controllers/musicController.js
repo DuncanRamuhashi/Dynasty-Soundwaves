@@ -3,8 +3,8 @@ import Music from "../models/music.js";
 // Create music
 export const uploadMusic = async (req, res) => {
   try {
-    const { title, duration, genre, bpm, price, audio, sellerID, tags, image } = req.body;
-    const newMusic = new Music({ title, duration, genre, bpm, price, audio, sellerID, tags, image });
+    const { title, duration, genre, bpm,mood, price, audio, sellerID, tags, image } = req.body;
+    const newMusic = new Music({ title, duration, genre, bpm,mood, price, audio, sellerID, tags, image });
     await newMusic.save();
     res.status(201).json({ success: true, message: 'Music uploaded successfully', data: newMusic });
   } catch (error) {
@@ -40,9 +40,9 @@ export const getMusicById = async (req, res) => {
 export const updateMusic = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, duration, genre, bpm, price, audio, sellerID, tags, image } = req.body;
+    const { title, duration, genre, bpm,mood, price, audio, sellerID, tags, image } = req.body;
     ss
-    const updatedMusic = await Music.findByIdAndUpdate(id, { title, duration, genre, bpm, price, audio, sellerID, tags, image }, { new: true });
+    const updatedMusic = await Music.findByIdAndUpdate(id, { title, duration, genre, bpm,mood, price, audio, sellerID, tags, image }, { new: true });
     if (!updatedMusic) {
       return res.status(404).json({ success: false, message: 'Music not found' });
     }

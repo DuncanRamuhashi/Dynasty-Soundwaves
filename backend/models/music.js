@@ -5,6 +5,7 @@ const MusicSchema = new mongoose.Schema({
     duration: { type: Number, required: true },
     genre: { type: String, required: true },
     bpm: { type: Number, required: true },
+    mood: { type: String, required: true },
     price: { type: Number, required: true },  
     audio: { type: String, required: true },  
     sellerID: { type: String, required: true },

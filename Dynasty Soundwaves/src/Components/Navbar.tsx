@@ -2,17 +2,12 @@ import React from "react";
 import logo from "../assets/ddddd-removebg-preview.png";
 import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa";
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
   return (
     <nav className="flex items-center justify-between px-8 py-4  text-gray-900">
       {/* Logo */}
       <img src={logo} alt="Logo" className="h-14 w-auto" />
 
-      {/* Nav Links */}
-      <ul className="hidden md:flex space-x-6 text-lg">       
-        <li className="hover:text-gray-400 cursor-pointer hover:font-bold">About</li>
-        <li className="hover:text-gray-400 cursor-pointer  hover:font-bold">Contact</li>
-      </ul>
 
       {/* Search Bar & Icons */}
       <div className="flex items-center space-x-4">
