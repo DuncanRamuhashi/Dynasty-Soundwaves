@@ -77,7 +77,7 @@ const Mainpage = () => {
         {/* Filter Section */}
         <div className="flex py-6 px-52 justify-center gap-2">
           {/* Mood Filter */}
-          <div className=" bg-gray-900 p-2 rounded-lg w-full flex h-10 justify-between">
+          <div className=" bg-gray-900 p-2 rounded-lg w-96 flex h-10 justify-between">
           <select
     aria-label="Select Mood"
     value={selectedMood}
@@ -95,13 +95,13 @@ const Mainpage = () => {
           </div>
 
           {/* Genre Filter */}
-          <div className="text-gray-100 bg-gray-900 p-2 rounded-lg w-full max-w-xs flex h-10 justify-between">
+          <div className="text-gray-100 bg-gray-900 p-2 rounded-lg w-96 max-w-xs flex h-10 justify-between">
             <select
               value={selectedGenre}
               onChange={handleFilterChange(setSelectedGenre)}
               className="bg-gray-900 text-gray-100  w-full"
             >
-              <option value="">Genre</option>
+              <option value="" disabled>Genre</option>
               {Genre.map((genre) => (
                 <option key={genre.id} value={genre.label}>
                   {genre.label}
@@ -112,13 +112,13 @@ const Mainpage = () => {
           </div>
 
           {/* BPM Filter */}
-          <div className="text-gray-100 bg-gray-900 p-2 rounded-lg w-full max-w-xs flex h-10 ">
+          <div className="text-gray-100 bg-gray-900 p-2 rounded-lg w-96 max-w-xs flex h-10 ">
             <select
               value={selectedBPM}
               onChange={handleFilterChange(setSelectedBPM)}
               className="bg-gray-900 text-gray-100  w-full "
             >
-              <option value="">BPM</option>
+              <option value="" disabled>BPM</option>
               {BPM.map((bpm) => (
                 <option key={bpm.id} value={bpm.label} className="">
                   {bpm.label}
@@ -129,13 +129,13 @@ const Mainpage = () => {
           </div>
 
           {/* Price Filter */}
-          <div className="text-gray-100 bg-gray-900 p-2 rounded-lg w-full max-w-xs flex h-10 ">
+          <div className="text-gray-100 bg-gray-900 p-2 rounded-lg w-96 max-w-xs flex h-10 ">
             <select
               value={selectedPrice}
               onChange={handleFilterChange(setSelectedPrice)}
               className="bg-gray-900 text-gray-100  w-full"
             >
-              <option value="">Price</option>
+              <option value="" disabled>Price</option>
               {Price.map((price) => (
                 <option key={price.id} value={price.label}>
                   {price.label}

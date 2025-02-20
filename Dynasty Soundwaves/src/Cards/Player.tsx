@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeDown, FaStepForward, FaStepBackward } from 'react-icons/fa';
-
+import artwork from '../assets/qqq.jpg'
 type PlayerProps = {
   songID: string;
 
@@ -8,8 +8,7 @@ type PlayerProps = {
 };
 
 const Player: React.FC<PlayerProps> = ({ 
-  songID,
-
+  songID
 
 }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -72,9 +71,9 @@ const Player: React.FC<PlayerProps> = ({
 
       <div className=" items-center mb-4 flex justify-between">
       <div className="ml-4">
-          <p className="text-white text-lg font-medium">etuttu</p>
-          <p className="text-gray-400 text-sm">rtytr</p>
-          <p className="text-gray-400 text-xs mt-1">trtyr</p>
+          <p className="text-white text-lg font-medium">Alright</p>
+          <p className="text-gray-400 text-sm">Gunnna</p>
+          
         </div>
        
 
@@ -105,7 +104,7 @@ const Player: React.FC<PlayerProps> = ({
           </button>
          
         </div>
-        <img src={''} alt="Album cover" className="h-20 w-20 object-cover rounded-md" />
+        <img src={artwork} alt="Album cover" className="h-12 w-12 object-cover rounded-md" />
       </div>
 
       <div className="flex items-center gap-4">
@@ -137,6 +136,7 @@ const Player: React.FC<PlayerProps> = ({
             step="0.1"
             value={volume}
             onChange={handleVolumeChange}
+            
             className="w-24 h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer"
           />
         </div>
