@@ -3,7 +3,7 @@ import { FaArrowDown } from "react-icons/fa";
 import Navbar from "./Navbar";
 
 const Mood = [
-  { id: 1, label: "Happy (Always)" },
+  { id: 1, label: "Happy" },
   { id: 2, label: "Sad " },
   { id: 3, label: "Energetic" },
   { id: 4, label: "Calm" },
@@ -83,7 +83,7 @@ const Mainpage = () => {
     aria-label="Select Mood"
     value={selectedMood}
     onChange={handleFilterChange(setSelectedMood)}
-    className="bg-gray-900 text-gray-100 w-full" // Added w-full for consistent width
+    className="bg-gray-900 text-gray-100 w-full"
   >
     <option value="" disabled>Mood</option>
     {Mood.map((mood) => (
@@ -117,11 +117,11 @@ const Mainpage = () => {
             <select
               value={selectedBPM}
               onChange={handleFilterChange(setSelectedBPM)}
-              className="bg-gray-900 text-gray-100  w-full"
+              className="bg-gray-900 text-gray-100  w-full "
             >
               <option value="">BPM</option>
               {BPM.map((bpm) => (
-                <option key={bpm.id} value={bpm.label}>
+                <option key={bpm.id} value={bpm.label} className="">
                   {bpm.label}
                 </option>
               ))}
