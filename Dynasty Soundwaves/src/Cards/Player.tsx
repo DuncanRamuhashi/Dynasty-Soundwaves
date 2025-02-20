@@ -60,7 +60,7 @@ const Player: React.FC<PlayerProps> = ({ artistname, title, imagesrc, audiosrc, 
   };
 
   return (
-    <div className="fle bg-gray-800 p-4 rounded-lg shadow-lg w-full md:w-3/4 lg:w-1/2">
+    <div className=" bg-gray-900 p-4  shadow-lg w-full ">
       <audio
         ref={audioRef}
         src={audiosrc}
