@@ -59,9 +59,9 @@ const Mainpage = () => {
   return (
     <>
       <Navbar />
-      <div className="text-gray-100  ">
+      <div className="text-gray-100   ">
             {/* Search Bar */}
-            <div className="flex justify-center">
+            <div className="flex justify-center ">
           <div className="flex items-center bg-gray-900 p-2 rounded-lg w-full max-w-lg">
             <input
               type="text"
@@ -75,9 +75,9 @@ const Mainpage = () => {
         </div>
 
         {/* Filter Section */}
-        <div className="flex py-14 px-52 justify-center gap-2">
+        <div className="flex py-6 px-52 justify-center gap-2">
           {/* Mood Filter */}
-          <div className="text-gray-100 bg-gray-900 p-2 rounded-lg w-full flex h-10 justify-between">
+          <div className=" bg-gray-900 p-2 rounded-lg w-full flex h-10 justify-between">
           <select
     aria-label="Select Mood"
     value={selectedMood}
@@ -147,7 +147,7 @@ const Mainpage = () => {
         </div>
 
         {/* Music Table */}
-        <div className="flex flex-col bg-gray-900 py-5 px-5 mx-52 rounded-lg shadow-lg">
+        <div className="flex flex-col bg-gray-900 py-3 px-3 mx-52 rounded-lg shadow-lg">
           <div className="flex bg-gray-800 text-gray-100 font-semibold">
             <div className="w-1/5 p-4 text-center">TITLE</div>
             <div className="w-1/5 p-4 text-center">TIME</div>
@@ -172,11 +172,8 @@ const Mainpage = () => {
         {/* Pass the props to Player component */}
         <div className="flex fixed bottom-0 left-0 right-0 z-50 "> 
         <Player
-          artistname="Kendrick Lamar"
-          title="HUMBLE"
-          imagesrc="path/to/album-image.jpg"
-          audiosrc="path/to/audio-file.mp3"
-          time="3:30"         
+          songID="23424234242342342"
+        
         />
         </div>
       </div>

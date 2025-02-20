@@ -1,20 +1,22 @@
 import React, { useState, useRef } from 'react';
-import { FaPlay, FaPause, FaVolumeUp, FaVolumeDown } from 'react-icons/fa'; // Import icons
+import { FaPlay, FaPause, FaVolumeUp, FaVolumeDown, FaStepForward, FaStepBackward } from 'react-icons/fa';
 
 type PlayerProps = {
-  artistname: string;
-  title: string;
-  imagesrc: string;
-  audiosrc: string;
-  time: string;
+  songID: string;
+
+
 };
 
-const Player: React.FC<PlayerProps> = ({ artistname, title, imagesrc, audiosrc, time }) => {
+const Player: React.FC<PlayerProps> = ({ 
+  songID,
+
+
+}) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(1); // Default volume is 1 (100%)
+  const [volume, setVolume] = useState(1);
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -60,46 +62,74 @@ const Player: React.FC<PlayerProps> = ({ artistname, title, imagesrc, audiosrc, 
   };
 
   return (
-    <div className=" bg-gray-900 p-4  shadow-lg w-full ">
+    <div className="bg-gray-900 p-2 shadow-lg w-full ">
       <audio
-        ref={audioRef}
-        src={audiosrc}
+   
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         className="hidden"
       />
 
-      <div className="flex items-center mb-4">
-        <img src={imagesrc} alt="Album cover" className="h-20 w-20 object-cover rounded-md" />
-        <div className="ml-4">
-          <p className="text-white text-lg">{artistname}</p>
-          <p className="text-gray-400 text-sm">{title}</p>
-          <p className="text-gray-400 text-sm">{time}</p>
+      <div className=" items-center mb-4 flex justify-between">
+      <div className="ml-4">
+          <p className="text-white text-lg font-medium">etuttu</p>
+          <p className="text-gray-400 text-sm">rtytr</p>
+          <p className="text-gray-400 text-xs mt-1">trtyr</p>
         </div>
+       
+
+        <div className="flex items-center gap-10">
+          <button 
+            
+            className="text-white hover:text-gray-300 transition-colors"
+          >
+            <FaStepBackward className="h-5 w-5" />
+          </button>
+          
+          <button 
+            onClick={togglePlay} 
+            className="text-white hover:text-gray-300 transition-colors"
+          >
+            {isPlaying ? (
+              <FaPause className="h-8 w-8" />
+            ) : (
+              <FaPlay className="h-8 w-8" />
+            )}
+          </button>
+          
+          <button 
+          
+            className="text-white hover:text-gray-300 transition-colors"
+          >
+            <FaStepForward className="h-5 w-5" />
+          </button>
+         
+        </div>
+        <img src={''} alt="Album cover" className="h-20 w-20 object-cover rounded-md" />
       </div>
 
-      <div className="flex items-center">
-        <button onClick={togglePlay} className="text-white hover:text-gray-300 mr-3 focus:outline-none">
-          {isPlaying ? <FaPause className="h-6 w-6" /> : <FaPlay className="h-6 w-6" />}
-        </button>
+      <div className="flex items-center gap-4">
 
-        <div className="flex-grow">
+
+        <div className="flex-1">
           <input
             type="range"
             min="0"
             max="100"
             value={duration ? (currentTime / duration) * 100 : 0}
             onChange={handleSeek}
-            className="w-full appearance-none bg-gray-600 rounded-md h-1 cursor-pointer"
+            className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer"
           />
-          <div className="flex justify-between text-gray-400 text-sm mt-1">
+          <div className="flex justify-between text-gray-400 text-xs mt-1">
             <span>{formatTime(currentTime)}</span>
             <span>{formatTime(duration)}</span>
           </div>
         </div>
 
-        <div className="ml-4 flex items-center">
-          {volume > 0 ? <FaVolumeUp className="h-6 w-6 text-white hover:text-gray-300 mr-2 cursor-pointer" /> : <FaVolumeDown className="h-6 w-6 text-white hover:text-gray-300 mr-2 cursor-pointer" />}
+        <div className="flex items-center gap-2">
+          <div className="text-white">
+            {volume > 0 ? <FaVolumeUp className="h-5 w-5" /> : <FaVolumeDown className="h-5 w-5" />}
+          </div>
           <input
             type="range"
             min="0"
@@ -107,7 +137,7 @@ const Player: React.FC<PlayerProps> = ({ artistname, title, imagesrc, audiosrc, 
             step="0.1"
             value={volume}
             onChange={handleVolumeChange}
-            className="w-16 appearance-none bg-gray-600 rounded-md h-1 cursor-pointer"
+            className="w-24 h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer"
           />
         </div>
       </div>
