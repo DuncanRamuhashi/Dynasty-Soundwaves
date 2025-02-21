@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import logo from "../assets/ddddd-removebg-preview.png";
 import { FaSearch, FaShoppingCart, FaRegUser, FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
+import CartCard from "../Cards/Cart";
 const Navbar = () => {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isRegOpen, setIsRegOpen] = useState(false);
@@ -27,8 +27,14 @@ const Navbar = () => {
                     />
                     <FaSearch className="absolute top-2.5 right-3 text-gray-500 cursor-pointer" />
                 </div>
-                <FaShoppingCart className="text-xl cursor-pointer hover:text-gray-400" />
-                <span className="text-sm">$0.00</span>
+                <Link to="/cart" className="relative ">
+  <FaShoppingCart className="text-xl cursor-pointer hover:text-gray-400" />
+  <span className="absolute -top-4 -right-3 bg-gray-900 hover:text-gray-400 text-gray-100 text-xs font-bold px-2 py-1 rounded-full">
+    5
+  </span>
+</Link>
+
+                <span className="text-sm">R0.00</span>
 
                 {/* User Icon & Logout Button */}
                 {isLoggedIn ? (
