@@ -15,8 +15,8 @@ export const createReport = async (req, res) => {
 // Get a single Report by ID
 export const getReport = async (req, res) => {
   try {
-    const { id } = req.params;
-    const report = await Report.findById(id);
+    const { userID } = req.params;
+    const report = await Report.findOne({userID});
     if (!report) {
       return res.status(404).json({ success: false, message: 'Report not found' });
     }
