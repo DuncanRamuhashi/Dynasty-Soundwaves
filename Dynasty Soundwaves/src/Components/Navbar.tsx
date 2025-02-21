@@ -72,7 +72,6 @@ const Navbar = () => {
             {/* Forgot Password Link */}
             <p 
                 className="text-sm text-blue-500 cursor-pointer text-right mb-4 hover:underline"
-
             >
                 Forgot Password?
             </p>
@@ -114,7 +113,6 @@ const Navbar = () => {
                         >
                             ✖
                         </button>
-
                         <h2 className="text-lg font-bold mb-4">Register</h2>
 
                         {/* User Type Dropdown */}
@@ -126,15 +124,14 @@ const Navbar = () => {
                             <option value="user">Register as User</option>
                             <option value="seller">Register as Seller</option>
                         </select>
-
                         <input type="text" placeholder="Name" className="w-full p-2 border rounded mb-2" />
                         <input type="email" placeholder="Email" className="w-full p-2 border rounded mb-2" />
                         <input type="password" placeholder="Password" className="w-full p-2 border rounded mb-2" />
+                        <input type="passwordConfirm" placeholder="Confirm password" className="w-full p-2 border rounded mb-2" />
 
                         <button className="bg-gray-900 text-white w-full py-2 rounded">
                             Register as {userType === "seller" ? "Seller" : "User"}
                         </button>
-
                         <p className="text-sm mt-2">
                             Already have an account?{" "}
                             <span
