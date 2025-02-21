@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import logo from "../assets/ddddd-removebg-preview.png";
 import { FaSearch, FaShoppingCart, FaRegUser, FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -11,7 +12,10 @@ const Navbar = () => {
     return (
         <nav className="flex items-center justify-between px-8 py-4 text-gray-900">
             {/* Logo */}
+            <a href="/">
             <img src={logo} alt="Logo" className="h-14 w-auto" />
+            </a>
+           
 
             {/* Search Bar & Icons */}
             <div className="flex items-center space-x-4">
@@ -29,7 +33,10 @@ const Navbar = () => {
                 {/* User Icon & Logout Button */}
                 {isLoggedIn ? (
                     <div className="flex items-center space-x-3">
+                        <Link to='/profile'>
                         <FaUser className="text-xl cursor-pointer hover:text-gray-400" />
+                        </Link>
+                       
                         <button
                             className="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600"
                             onClick={() => setIsLoggedIn(false)}
@@ -45,44 +52,57 @@ const Navbar = () => {
                 )}
             </div>
 
-            {/* Login Modal */}
-            {isLoginOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
-                        <button
-                            className="absolute top-2 right-3 text-xl text-gray-600 hover:text-red-500"
-                            onClick={() => setIsLoginOpen(false)}
-                        >
-                            ✖
-                        </button>
+{/* Login Modal */}
+{isLoginOpen && (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
+            {/* Close Button */}
+            <button
+                className="absolute top-2 right-3 text-xl text-gray-600 hover:text-red-500"
+                onClick={() => setIsLoginOpen(false)}
+            >
+                ✖
+            </button>
 
-                        <h2 className="text-lg font-bold mb-4">Login</h2>
-                        <input type="email" placeholder="Email" className="w-full p-2 border rounded mb-2" />
-                        <input type="password" placeholder="Password" className="w-full p-2 border rounded mb-2" />
-                        <button
-                            className="bg-gray-900 text-white w-full py-2 rounded"
-                            onClick={() => {
-                                setIsLoggedIn(true);
-                                setIsLoginOpen(false);
-                            }}
-                        >
-                            Login
-                        </button>
-                        <p className=" text-sm mt-2">
-                            Don't have an account?{" "}
-                            <span
-                                className="text-blue-500 cursor-pointer"
-                                onClick={() => {
-                                    setIsLoginOpen(false);
-                                    setIsRegOpen(true);
-                                }}
-                            >
-                                Register
-                            </span>
-                        </p>
-                    </div>
-                </div>
-            )}
+            <h2 className="text-lg font-bold mb-4">Login</h2>
+
+            <input type="email" placeholder="Email" className="w-full p-2 border rounded mb-2" />
+            <input type="password" placeholder="Password" className="w-full p-2 border rounded mb-2" />
+
+            {/* Forgot Password Link */}
+            <p 
+                className="text-sm text-blue-500 cursor-pointer text-right mb-4 hover:underline"
+
+            >
+                Forgot Password?
+            </p>
+
+            <button
+                className="bg-gray-900 text-white w-full py-2 rounded"
+                onClick={() => {
+                    setIsLoggedIn(true);
+                    setIsLoginOpen(false);
+                }}
+            >
+                Login
+            </button>
+
+            <p className="text-sm mt-2">
+                Don't have an account?{" "}
+                <span
+                    className="text-blue-500 cursor-pointer hover:underline"
+                    onClick={() => {
+                        setIsLoginOpen(false);
+                        setIsRegOpen(true);
+                    }}
+                >
+                    Register
+                </span>
+            </p>
+        </div>
+    </div>
+)}
+
 
             {/* Register Modal */}
             {isRegOpen && (

@@ -58,7 +58,7 @@ const Mainpage = () => {
 
   return (
     <>
-      <Navbar />
+     
       <div className="text-gray-100   ">
             {/* Search Bar */}
             <div className="flex justify-center ">
