@@ -60,7 +60,7 @@ const Navbar = () => {
                         <input type="email" placeholder="Email" className="w-full p-2 border rounded mb-2" />
                         <input type="password" placeholder="Password" className="w-full p-2 border rounded mb-2" />
                         <button
-                            className="bg-blue-500 text-white w-full py-2 rounded"
+                            className="bg-gray-900 text-white w-full py-2 rounded"
                             onClick={() => {
                                 setIsLoggedIn(true);
                                 setIsLoginOpen(false);
@@ -68,10 +68,10 @@ const Navbar = () => {
                         >
                             Login
                         </button>
-                        <p className="text-sm mt-2">
+                        <p className=" text-sm mt-2">
                             Don't have an account?{" "}
                             <span
-                                className="text-gray-900 cursor-pointer"
+                                className="text-blue-500 cursor-pointer"
                                 onClick={() => {
                                     setIsLoginOpen(false);
                                     setIsRegOpen(true);
