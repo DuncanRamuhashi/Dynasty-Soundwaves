@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import logo from "../assets/ddddd-removebg-preview.png";
-import { FaSearch, FaShoppingCart, FaRegUser, FaUser } from "react-icons/fa";
+import { FaSearch, FaShoppingCart, FaRegUser, FaUser,FaRegListAlt ,FaListAlt,FaMoneyBillWave,} from "react-icons/fa";
 import { Link } from "react-router-dom";
 import CartCard from "../Cards/Cart";
 const Navbar = () => {
@@ -33,7 +33,15 @@ const Navbar = () => {
     5
   </span>
 </Link>
-
+           <Link to='/usereport'>
+           <FaRegListAlt/>
+           </Link>
+           <Link to='/usereport'>
+           <FaListAlt/>
+           </Link>
+           <Link to='/usereport'>
+           <FaMoneyBillWave/>
+           </Link>
                 <span className="text-sm">R0.00</span>
 
                 {/* User Icon & Logout Button */}
