@@ -36,10 +36,13 @@ const Navbar = () => {
            <Link to='/usereport'>
            <FaRegListAlt/>
            </Link>
-           <Link to='/usereport'>
+           {/** this for seller and for everything relating to user*/}
+           <Link to='/allreport'>
+
            <FaListAlt/>
            </Link>
-           <Link to='/usereport'>
+            {/** this for admin */}
+           <Link to='/payments'>
            <FaMoneyBillWave/>
            </Link>
                 <span className="text-sm">R0.00</span>
