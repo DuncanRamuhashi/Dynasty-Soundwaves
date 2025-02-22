@@ -9,8 +9,13 @@ const MusicSchema = new mongoose.Schema({
     price: { type: Number, required: true },  
     audio: { type: String, required: true },  
     sellerID: { type: String, required: true },
-    tags: { type: [String], default: [] },  // Allows up to 5 tags
-    image: { type: String, required: true }
+    tags: { 
+        type: [String], 
+        default: [], 
+        validate: [tags => tags.length <= 5, 'Maximum of 5 tags allowed']
+    },
+    image: { type: String, required: true },
+    downloadable: { type: Boolean, default: false }
 }, { timestamps: true });
 
 MusicSchema.pre('save', async function(next) {
@@ -24,6 +29,5 @@ MusicSchema.pre('save', async function(next) {
 
     next();
 });
-
 
 export default mongoose.model('Music', MusicSchema);

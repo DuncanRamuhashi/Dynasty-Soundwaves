@@ -40,9 +40,9 @@ export const getMusicById = async (req, res) => {
 export const updateMusic = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, duration, genre, bpm,mood, price, audio, sellerID, tags, image } = req.body;
-    ss
-    const updatedMusic = await Music.findByIdAndUpdate(id, { title, duration, genre, bpm,mood, price, audio, sellerID, tags, image }, { new: true });
+    const { title, duration, genre, bpm,mood, price, audio, sellerID, tags, image,downloadable } = req.body;
+    
+    const updatedMusic = await Music.findByIdAndUpdate(id, { title, duration, genre, bpm,mood, price, audio, sellerID, tags, image,downloadable }, { new: true });
     if (!updatedMusic) {
       return res.status(404).json({ success: false, message: 'Music not found' });
     }
