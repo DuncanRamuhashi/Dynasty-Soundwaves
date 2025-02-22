@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 
 const Payments = () => {
   const payments = [
-    { id: 'PAY123', date: '2025-02-21', amount: 'R1,500.00', method: 'Visa', status: 'Completed' },
-    { id: 'PAY124', date: '2025-02-20', amount: 'R800.00', method: 'Mastercard', status: 'Failed' },
-    { id: 'PAY125', date: '2025-02-19', amount: 'R2,200.00', method: 'Amex', status: 'Pending' },
-    { id: 'PAY126', date: '2025-02-18', amount: 'R950.00', method: 'PayPal', status: 'Completed' },
-    { id: 'PAY127', date: '2025-02-17', amount: 'R3,500.00', method: 'Visa', status: 'Completed' },
+    { email: 'user1@example.com', name: 'John Doe', song: 'Melody Vibes', amount: 'R1,500.00', date: '2025-02-21', method: 'Visa', status: 'Completed' },
+    { email: 'user2@example.com', name: 'Jane Smith', song: 'Beats & Bass', amount: 'R800.00', date: '2025-02-20', method: 'Mastercard', status: 'Failed' },
+    { email: 'user3@example.com', name: 'Mike Johnson', song: 'Chill Waves', amount: 'R2,200.00', date: '2025-02-19', method: 'Amex', status: 'Pending' },
+    { email: 'user4@example.com', name: 'Emily Davis', song: 'Urban Flow', amount: 'R950.00', date: '2025-02-18', method: 'PayPal', status: 'Completed' },
+    { email: 'user5@example.com', name: 'Chris Brown', song: 'Groove Nation', amount: 'R3,500.00', date: '2025-02-17', method: 'Visa', status: 'Completed' },
   ];
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,12 +28,16 @@ const Payments = () => {
           {currentPayments.map((payment, index) => (
             <div key={index} className="bg-gray-50 p-6 rounded-lg shadow-sm">
               <div className="flex justify-between text-gray-900 mb-2">
-                <span className="font-medium">Transaction ID:</span>
-                <span>{payment.id}</span>
+                <span className="font-medium">User Email:</span>
+                <span>{payment.email}</span>
               </div>
               <div className="flex justify-between text-gray-900 mb-2">
-                <span className="font-medium">Date:</span>
-                <span>{payment.date}</span>
+                <span className="font-medium">User Name:</span>
+                <span>{payment.name}</span>
+              </div>
+              <div className="flex justify-between text-gray-900 mb-2">
+                <span className="font-medium">Song Name:</span>
+                <span>{payment.song}</span>
               </div>
               <div className="flex justify-between text-gray-900 mb-2">
                 <span className="font-medium">Amount:</span>
@@ -56,7 +60,7 @@ const Payments = () => {
         {/* Pagination Controls */}
         <div className="flex justify-center space-x-4 mt-6">
           <button
-            className={`px-4 py-2 rounded-lg text-white ${currentPage === 1 ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
+            className={`px-4 py-2 rounded-lg text-white ${currentPage === 1 ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-900 hover:bg-gray-600'}`}
             onClick={() => setCurrentPage(currentPage - 1)}
             disabled={currentPage === 1}
           >
@@ -64,7 +68,7 @@ const Payments = () => {
           </button>
           <span className="px-4 py-2 bg-gray-200 rounded-lg">Page {currentPage} of {totalPages}</span>
           <button
-            className={`px-4 py-2 rounded-lg text-white ${currentPage === totalPages ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
+            className={`px-4 py-2 rounded-lg text-white ${currentPage === totalPages ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-900 hover:bg-gray-600'}`}
             onClick={() => setCurrentPage(currentPage + 1)}
             disabled={currentPage === totalPages}
           >

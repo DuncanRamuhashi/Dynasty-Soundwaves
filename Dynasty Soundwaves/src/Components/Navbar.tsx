@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import logo from "../assets/ddddd-removebg-preview.png";
-import { FaSearch, FaShoppingCart, FaRegUser, FaUser,FaRegListAlt ,FaListAlt,FaMoneyBillWave,} from "react-icons/fa";
+import { FaSearch, FaShoppingCart, FaRegUser, FaUser,FaRegListAlt ,FaListAlt,FaMoneyBillWave,FaPeopleCarry} from "react-icons/fa";
 import { Link } from "react-router-dom";
 import CartCard from "../Cards/Cart";
 const Navbar = () => {
@@ -36,15 +36,22 @@ const Navbar = () => {
            <Link to='/usereport'>
            <FaRegListAlt/>
            </Link>
+           
            {/** this for seller and for everything relating to user*/}
            <Link to='/allreport'>
 
            <FaListAlt/>
            </Link>
             {/** this for admin */}
+
            <Link to='/payments'>
+       
            <FaMoneyBillWave/>
            </Link>
+           <Link to='/members'>
+           <FaPeopleCarry/>
+           </Link>
+           
                 <span className="text-sm">R0.00</span>
 
                 {/* User Icon & Logout Button */}
