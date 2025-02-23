@@ -3,10 +3,6 @@ import React, { useState } from 'react';
 export const VerifyOTP: React.FC = () => {
   const [otp, setOtp] = useState<string>("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^0-9]/g, "");
-    setOtp(value);
-  };
 
   const handleSubmit = () => {
     alert(`Entered OTP: ${otp}`);
@@ -20,7 +16,7 @@ export const VerifyOTP: React.FC = () => {
           type="text"
           maxLength={6}
           value={otp}
-          onChange={handleChange}
+  
           className="w-48 h-12 text-center border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl tracking-widest"
         />
         <button 
