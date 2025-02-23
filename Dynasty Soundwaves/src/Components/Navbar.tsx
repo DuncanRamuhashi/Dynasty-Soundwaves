@@ -48,6 +48,7 @@ const Navbar = () => {
        
            <FaMoneyBillWave/>
            </Link>
+                {/** this for admin */}
            <Link to='/members'>
            <FaPeopleCarry/>
            </Link>
