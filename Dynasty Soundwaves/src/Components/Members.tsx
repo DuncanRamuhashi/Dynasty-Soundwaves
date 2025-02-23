@@ -31,7 +31,7 @@ const Members = () => {
                 <th className="border border-gray-300 px-4 py-2">Email</th>
                 <th className="border border-gray-300 px-4 py-2">Name</th>
                 <th className="border border-gray-300 px-4 py-2">Role</th>
-                <th className="border border-gray-300 px-4 py-2">Active since</th>
+                <th className="border border-gray-300 px-4 py-2">Verification</th>
               </tr>
             </thead>
             <tbody>

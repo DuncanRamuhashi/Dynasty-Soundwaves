@@ -196,7 +196,7 @@ const Navbar = () => {
                             onClick={() => {
                                 // Simulate OTP verification success
                                 setIsOtpOpen(false);
-                                navigate("/verified"); // Redirect to a verified page
+                              
                             }}
                         >
                             Verify OTP
