@@ -11,6 +11,7 @@ import Usereport from './Components/Usereport';
 import Payments from './Components/Payments';
 import Members from './Components/Members';
 
+
 const App: React.FC = () => {
   return (
     <Router>
@@ -26,6 +27,7 @@ const App: React.FC = () => {
           <Route path="/usereport" element={<Usereport/>} />
           <Route path="/payments" element={<Payments/>} />
           <Route path="/members" element={<Members/>} />
+
         </Routes>
       </div>
     </Router>
