@@ -51,7 +51,7 @@ const Navbar = () => {
             setIsLoginOpen(false);
             setUser(data.user); // This sets the user object from the 
             // Store user data in sessionStorage
-           sessionStorage.setItem('user', JSON.stringify(data.user);
+           sessionStorage.setItem('user', JSON.stringify(data.user));
           } else {
             alert(data.message);
           }
@@ -143,6 +143,7 @@ const Navbar = () => {
             const data = await response.json();
 
             if (data.success) {
+                sessionStorage.removeItem('user');
                 alert("User is Out", );
                 setIsLoggedIn(false);
             } else {
