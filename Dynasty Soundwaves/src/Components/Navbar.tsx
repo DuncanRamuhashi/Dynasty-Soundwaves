@@ -1,16 +1,111 @@
-import React, { useState } from "react";
-import logo from "../assets/ddddd-removebg-preview.png";
+import React, { use, useState } from "react";
 import { FaSearch, FaShoppingCart, FaRegUser, FaUser, FaRegListAlt, FaListAlt, FaMoneyBillWave, FaPeopleCarry } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import CartCard from "../Cards/Cart";
+import logo from "../assets/ddddd-removebg-preview.png";
 
 const Navbar = () => {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isRegOpen, setIsRegOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isOtpOpen, setIsOtpOpen] = useState(false);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [otp, setOtp] = useState("");
     const [userType, setUserType] = useState("user");
-    const [isOtpOpen, setIsOtpOpen] = useState(false); // State to control OTP modal
+    const [isOtpSent, setIsOtpSent] = useState(false);
     const navigate = useNavigate();
+    const [inputEmail,setInputEmail] = useState("");
+    const handleLogin = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email, password }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                setIsLoggedIn(true);
+                setIsLoginOpen(false);
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Login failed, please try again");
+        }
+    };
+
+    const handleOtpVerification = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/api/auth/verify-email", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ userId: email, otp }),
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                alert("OTP verified successfully!");
+                setIsOtpOpen(false);
+                setIsLoggedIn(true);
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error(error);
+            alert("OTP verification failed");
+        }
+    };
+
+    const handleRegistration = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/api/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ name: name, email, password, role: userType }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                alert("Registration successful, please check your email for the OTP!");
+                setIsRegOpen(false);
+                setIsOtpOpen(true);
+                setIsOtpSent(true);
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Registration failed, please try again");
+        }
+    };
+
+    const handleResendOtp = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/api/auth/resend-otp", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                alert("OTP resent successfully!");
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Error in resending OTP");
+        }
+    };
 
     return (
         <nav className="flex items-center justify-between px-8 py-4 text-gray-900">
@@ -87,21 +182,28 @@ const Navbar = () => {
 
                         <h2 className="text-lg font-bold mb-4">Login</h2>
 
-                        <input type="email" placeholder="Email" className="w-full p-2 border rounded mb-2" />
-                        <input type="password" placeholder="Password" className="w-full p-2 border rounded mb-2" />
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full p-2 border rounded mb-2"
+                        />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full p-2 border rounded mb-2"
+                        />
 
-                        {/* Forgot Password Link */}
                         <p className="text-sm text-blue-500 cursor-pointer text-right mb-4 hover:underline">
                             Forgot Password?
                         </p>
 
                         <button
                             className="bg-gray-900 text-white w-full py-2 rounded"
-                            onClick={() => {
-                                // Simulate that the user isn't verified
-                                setIsLoginOpen(false);
-                                setIsOtpOpen(true);
-                            }}
+                            onClick={handleLogin}
                         >
                             Login
                         </button>
@@ -134,7 +236,6 @@ const Navbar = () => {
                         </button>
                         <h2 className="text-lg font-bold mb-4">Register</h2>
 
-                        {/* User Type Dropdown */}
                         <select
                             className="w-full p-2 border rounded mb-2"
                             value={userType}
@@ -143,18 +244,31 @@ const Navbar = () => {
                             <option value="user">Register as User</option>
                             <option value="seller">Register as Seller</option>
                         </select>
-                        <input type="text" placeholder="Name" className="w-full p-2 border rounded mb-2" />
-                        <input type="email" placeholder="Email" className="w-full p-2 border rounded mb-2" />
-                        <input type="password" placeholder="Password" className="w-full p-2 border rounded mb-2" />
-                        <input type="passwordConfirm" placeholder="Confirm password" className="w-full p-2 border rounded mb-2" />
+                        <input
+                            type="Name"
+                            placeholder="Name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            className="w-full p-2 border rounded mb-2"
+                        />
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full p-2 border rounded mb-2"
+                        />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full p-2 border rounded mb-2"
+                        />
 
                         <button
                             className="bg-gray-900 text-white w-full py-2 rounded"
-                            onClick={() => {
-                                // Simulate OTP modal after registration
-                                setIsRegOpen(false);
-                                setIsOtpOpen(true);
-                            }}
+                            onClick={handleRegistration}
                         >
                             Register as {userType === "seller" ? "Seller" : "User"}
                         </button>
@@ -185,22 +299,31 @@ const Navbar = () => {
                         >
                             ✖
                         </button>
+                        <h2 className="text-lg font-bold mb-4">OTP Verification</h2>
 
-                        <h2 className="text-lg font-bold mb-4">Verify OTP</h2>
-                        <p className="mb-4">Enter the OTP sent to your email:</p>
-
-                        <input type="text" placeholder="Enter OTP" className="w-full p-2 border rounded mb-4" />
+                        <input
+                            type="text"
+                            placeholder="Enter OTP"
+                            value={otp}
+                            onChange={(e) => setOtp(e.target.value)}
+                            className="w-full p-2 border rounded mb-2"
+                        />
 
                         <button
                             className="bg-gray-900 text-white w-full py-2 rounded"
-                            onClick={() => {
-                                // Simulate OTP verification success
-                                setIsOtpOpen(false);
-                              
-                            }}
+                            onClick={handleOtpVerification}
                         >
                             Verify OTP
                         </button>
+
+                        {isOtpSent && (
+                            <button
+                                className="text-blue-500 mt-2 text-sm"
+                                onClick={handleResendOtp}
+                            >
+                                Resend OTP
+                            </button>
+                        )}
                     </div>
                 </div>
             )}
