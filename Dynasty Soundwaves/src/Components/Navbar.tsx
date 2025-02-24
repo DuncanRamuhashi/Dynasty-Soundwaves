@@ -1,5 +1,5 @@
 import React, { use, useState } from "react";
-import { FaSearch, FaShoppingCart, FaRegUser, FaUser, FaRegListAlt, FaListAlt, FaMoneyBillWave, FaPeopleCarry } from "react-icons/fa";
+import { FaSearch, FaShoppingCart, FaRegUser, FaUser, FaRegListAlt, FaListAlt, FaMoneyBillWave, FaPeopleCarry,FaUpload,FaBook } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/ddddd-removebg-preview.png";
 interface User {
@@ -195,6 +195,12 @@ const Navbar = () => {
                 </Link>
                 <Link to='/members'>
                     <FaPeopleCarry />
+                </Link>
+                <Link to='/upload'>
+                    <FaUpload />
+                </Link>
+                <Link to='/termsandcondition'>
+                    <FaBook />
                 </Link>
 
                 <span className="text-sm">R0.00</span>

@@ -16,7 +16,10 @@ const generateToken = (res, user) => {
 export const registerUser = async (req, res) => {
     try {
         const { name, email, password, role } = req.body;
-
+          // Validate required fields
+    if (!name || !email || !password || !role) {
+    return res.status(400).json({ message: 'Name, email, and password are required.' });
+  }
         if (await User.findOne({ email })) {
             return res.status(400).json({ success: false, message: 'User already exists' });
         }
