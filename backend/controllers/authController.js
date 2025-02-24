@@ -106,15 +106,15 @@ The Dynasty Soundwave Team`,
 
 // Verify email after registration
 export const verifyEmail = async (req, res) => {
-    const { userId, otp } = req.body;
+    const { email, otp } = req.body;
 
     // Validate input
-    if (!userId || !otp) {
-        return res.status(400).json({ success: false, message: 'Missing details: userId and OTP are required.' });
+    if (!email || !otp) {
+        return res.status(400).json({ success: false, message: 'Missing details:  OTP is required.' });
     }
 
     try {
-        const user = await User.findById(userId);
+        const user = await User.findOne({email});
 
         // Check if the user exists
         if (!user) {

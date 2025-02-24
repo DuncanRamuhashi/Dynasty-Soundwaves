@@ -2,7 +2,25 @@ import React, { use, useState } from "react";
 import { FaSearch, FaShoppingCart, FaRegUser, FaUser, FaRegListAlt, FaListAlt, FaMoneyBillWave, FaPeopleCarry } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/ddddd-removebg-preview.png";
-
+interface User {
+    name: string;
+    email: string;
+    password:string,
+    social?: {
+      facebook?: string;
+      instagram?: string;
+      x?: string;
+    };
+    bio?: string;
+    role?: "user" | "seller" | "admin";
+    verifyOtp?: string;
+    verifyOtpExpireAt?: number;
+    isAccountVerified?: boolean;
+    resetOtp?: string;
+    resetOtpExpireAt?: number;
+    timestamps?: boolean;
+  }
+  
 const Navbar = () => {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isRegOpen, setIsRegOpen] = useState(false);
@@ -16,27 +34,32 @@ const Navbar = () => {
     const [isOtpSent, setIsOtpSent] = useState(false);
     const navigate = useNavigate();
     const [inputEmail,setInputEmail] = useState("");
+    const [user,setUser] = useState<User>();
     const handleLogin = async () => {
         try {
-            const response = await fetch("http://localhost:5000/api/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email, password }),
-            });
-            const data = await response.json();
-            if (data.success) {
-                setIsLoggedIn(true);
-                setIsLoginOpen(false);
-            } else {
-                alert(data.message);
-            }
+          const response = await fetch("http://localhost:5000/api/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+          });
+          const data = await response.json();
+          
+          if (data.success) {
+            setIsLoggedIn(true);
+            setIsLoginOpen(false);
+            setUser(data.user); // This sets the user object from the 
+            // Store user data in sessionStorage
+           sessionStorage.setItem('user', JSON.stringify(data.user);
+          } else {
+            alert(data.message);
+          }
         } catch (error) {
-            console.error(error);
-            alert("Login failed, please try again");
+          console.error(error);
+          alert("Login failed, please try again");
         }
-    };
+      };
 
     const handleOtpVerification = async () => {
         try {
@@ -45,7 +68,7 @@ const Navbar = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ userId: email, otp }),
+                body: JSON.stringify({ email, otp }),
             });
             const data = await response.json();
             
@@ -69,7 +92,7 @@ const Navbar = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ name: name, email, password, role: userType }),
+                body: JSON.stringify({ name, email, password, role: userType }),
             });
             const data = await response.json();
             if (data.success) {
@@ -93,17 +116,41 @@ const Navbar = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ email }),
+                body: JSON.stringify({ email,otp }),
             });
             const data = await response.json();
+
             if (data.success) {
-                alert("OTP resent successfully!");
+                alert("OTP resent successfully!", );
             } else {
                 alert(data.message);
             }
         } catch (error) {
             console.error(error);
             alert("Error in resending OTP");
+        }
+    };
+    
+    const handleLogOut = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/api/auth/logout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+              
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                alert("User is Out", );
+                setIsLoggedIn(false);
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Error Logging out");
         }
     };
 
@@ -156,7 +203,7 @@ const Navbar = () => {
 
                         <button
                             className="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600"
-                            onClick={() => setIsLoggedIn(false)}
+                            onClick={handleLogOut}
                         >
                             Logout
                         </button>
