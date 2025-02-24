@@ -15,7 +15,9 @@ const MusicSchema = new mongoose.Schema({
         validate: [tags => tags.length <= 5, 'Maximum of 5 tags allowed']
     },
     image: { type: String, required: true },
-    downloadable: { type: Boolean, default: false }
+    downloadable: { type: Boolean, default: false },
+    userID:{ type: String, required: false },
+    
 }, { timestamps: true });
 
 MusicSchema.pre('save', async function(next) {

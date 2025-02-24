@@ -40,14 +40,14 @@ export const getMusicById = async (req, res) => {
 export const updateMusic = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, duration, genre, bpm,mood, price, audio, sellerID, tags, image,downloadable } = req.body;
+    const { userID } = req.body;
     
-    const updatedMusic = await Music.findByIdAndUpdate(id, { title, duration, genre, bpm,mood, price, audio, sellerID, tags, image,downloadable }, { new: true });
+    const updatedMusic = await Music.findByIdAndUpdate(id, {downloadable :true,userID }, { new: true });
     if (!updatedMusic) {
       return res.status(404).json({ success: false, message: 'Music not found' });
     }
 
-    res.status(200).json({ success: true, message: 'Music updated successfully', data: updatedMusic });
+    res.status(200).json({ success: true, message: 'Music is now downloadable', data: updatedMusic });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server Error' });
   }

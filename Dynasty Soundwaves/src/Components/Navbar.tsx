@@ -1,5 +1,5 @@
 import React, { use, useState } from "react";
-import { FaSearch, FaShoppingCart, FaRegUser, FaUser, FaRegListAlt, FaListAlt, FaMoneyBillWave, FaPeopleCarry,FaUpload,FaBook } from "react-icons/fa";
+import { FaSearch, FaShoppingCart, FaRegUser, FaUser, FaRegListAlt, FaListAlt, FaMoneyBillWave, FaPeopleCarry,FaUpload,FaBook,FaMusic,FaHome } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/ddddd-removebg-preview.png";
 interface User {
@@ -20,7 +20,7 @@ interface User {
     resetOtpExpireAt?: number;
     timestamps?: boolean;
   }
-  
+  const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
 const Navbar = () => {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isRegOpen, setIsRegOpen] = useState(false);
@@ -158,52 +158,98 @@ const Navbar = () => {
             alert("Error Logging out");
         }
     };
-
+  
     return (
         <nav className="flex items-center justify-between px-8 py-4 text-gray-900">
             {/* Logo */}
-            <a href="/">
+            <Link to="/home">
                 <img src={logo} alt="Logo" className="h-14 w-auto" />
-            </a>
+            </Link>
 
             {/* Search Bar & Icons */}
             <div className="flex items-center space-x-4">
-                <div className="relative hidden md:block">
-                    <input
-                        type="text"
-                        placeholder="Search for a track..."
-                        className="px-4 py-2 rounded-md text-black border border-gray-300"
-                    />
-                    <FaSearch className="absolute top-2.5 right-3 text-gray-500 cursor-pointer" />
-                </div>
-                <Link to="/cart" className="relative">
-                    <FaShoppingCart className="text-xl cursor-pointer hover:text-gray-400" />
-                    <span className="absolute -top-4 -right-3 bg-gray-900 hover:text-gray-400 text-gray-100 text-xs font-bold px-2 py-1 rounded-full">
-                        5
-                    </span>
-                </Link>
+ 
+       
+ { storedUser?.role === "user" ? ( <>
+
+    <Link to="/cart" className="relative">
+      <FaShoppingCart className="text-xl cursor-pointer hover:text-gray-400" />
+      <span className="absolute -top-4 -right-3 bg-gray-900 hover:text-gray-400 text-gray-100 text-xs font-bold px-2 py-1 rounded-full">
+        5
+      </span>
+    </Link>
+    <span className="text-sm">R0.00</span>
+    </>
+  ) : (
+    <></>
+  )
+}
+{  storedUser?.role  === "user" ? ( <>
                 <Link to='/usereport'>
                     <FaRegListAlt />
                 </Link>
-
+                </>
+  ) : (
+    <></>
+  )
+}
                 {/* Seller and admin links */}
+                { user?.role === "admin" ? ( <>
                 <Link to='/allreport'>
                     <FaListAlt />
                 </Link>
+                </>
+  ) : (
+    <></>
+  )
+}
+{  storedUser?.role  === "admin" ? ( <>
                 <Link to='/payments'>
                     <FaMoneyBillWave />
                 </Link>
+                </>
+  ) : (
+    <></>
+  )
+}
+{  storedUser?.role  === "admin" ? ( <>
                 <Link to='/members'>
                     <FaPeopleCarry />
                 </Link>
+                </>
+  ) : (
+    <></>
+  )
+}
+{  storedUser?.role  === "seller" ? ( <>
                 <Link to='/upload'>
                     <FaUpload />
                 </Link>
+                </>
+  ) : (
+    <></>
+  )
+}
+{  storedUser?.role  === "admin" ? ( <>
                 <Link to='/termsandcondition'>
                     <FaBook />
                 </Link>
-
-                <span className="text-sm">R0.00</span>
+                </>
+  ) : (
+    <></>
+  )
+}
+                {  storedUser?.role  === "seller" ? ( <>
+                <Link to='/artistmusic'>
+                    <FaMusic/>
+                </Link>
+                </>
+  ) : (
+    <></>
+  )
+}
+  
+               
 
                 {/* User Icon & Logout Button */}
                 {isLoggedIn ? (
