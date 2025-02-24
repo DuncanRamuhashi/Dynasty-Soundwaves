@@ -45,7 +45,7 @@ const Navbar = () => {
             body: JSON.stringify({ email, password }),
           });
           const data = await response.json();
-          
+           
           if (data.success) {
             setIsLoggedIn(true);
             setIsLoginOpen(false);
@@ -53,6 +53,10 @@ const Navbar = () => {
             // Store user data in sessionStorage
            sessionStorage.setItem('user', JSON.stringify(data.user));
           } else {
+            if(data.message === "Please verify your email address."){
+                setIsOtpOpen(true);
+                setIsOtpSent(true);
+            }
             alert(data.message);
           }
         } catch (error) {
