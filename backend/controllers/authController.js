@@ -9,7 +9,14 @@ const generateToken = (res, user) => {
         expiresIn: '7d',
     });
 
-    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' });
+    res.cookie('token', token, { 
+        httpOnly: true, 
+        secure: process.env.NODE_ENV === 'production', // Adjust based on environment
+        sameSite: 'strict',
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+    });
+
+    return token; // Return the token for further use
 };
 
 // Register user with email verification
@@ -183,8 +190,12 @@ export const loginUser = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Please verify your email address.' });
         }
 
-        generateToken(res, user);
-        res.status(200).json({ success: true, user });
+        const token = generateToken(res, user);
+     res.status(200).json({ 
+         success: true, 
+         user: { user },
+         token // Include the token in the response body
+     });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server Error' });
     }
@@ -196,7 +207,7 @@ export const logoutUser = (req, res) => {
     res.json({ success: true, message: 'Logged out' });
 };
 
-// Get User Profile (Protected)
+// Get User Profile (Protected)  (for normal user to see the profile of Seller maybe some fan things)
 export const getUserProfile = async (req, res) => {
     res.json({ success: true, user: req.user });
 };

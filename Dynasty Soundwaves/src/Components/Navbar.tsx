@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/ddddd-removebg-preview.png";
 
 interface User {
+    _id:string;
     name: string;
     email: string;
     password: string;
@@ -35,15 +36,15 @@ const Navbar = () => {
     const [isOtpSent, setIsOtpSent] = useState(false);
     const navigate = useNavigate();
     const [user, setUser] = useState<User | null>(null);
-
+    const storedUser = JSON.parse(sessionStorage.getItem('user') || 'null');
     // Check if user is logged and  in on component mount
     useEffect(() => {
-        const storedUser = JSON.parse(sessionStorage.getItem('user') || 'null');
+      
         if (storedUser) {
             setUser(storedUser);
             setIsLoggedIn(true);
         }
-    }, []);
+    }, storedUser);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -56,12 +57,14 @@ const Navbar = () => {
                 body: JSON.stringify({ email, password }),
             });
             const data = await response.json();
-
+            
             if (data.success) {
                 setIsLoggedIn(true);
                 setIsLoginOpen(false);
                 setUser(data.user);
-                sessionStorage.setItem('user', JSON.stringify(data.user));
+                sessionStorage.setItem('user', JSON.stringify(data.user.user));
+                
+                sessionStorage.setItem('token', JSON.stringify(data.token));
                 setEmail("");
                 setPassword("");
             } else {
@@ -171,6 +174,7 @@ const Navbar = () => {
 
             if (data.success) {
                 sessionStorage.removeItem('user');
+                sessionStorage.removeItem('token');
                 setIsLoggedIn(false);
                 setUser(null);
                 alert("Logged out successfully");
