@@ -11,6 +11,7 @@ import Usereport from './Components/Usereport';
 import Payments from './Components/Payments';
 import Members from './Components/Members';
 import Upload from './Components/Upload';
+import MusicList from './Components/MusicList';
 
 
 const App: React.FC = () => {
@@ -29,6 +30,7 @@ const App: React.FC = () => {
           <Route path="/payments" element={<Payments/>} />
           <Route path="/members" element={<Members/>} />
           <Route path="/upload" element={<Upload/>} />
+          <Route path="/artistmusic" element={<MusicList/>} />
 
         </Routes>
       </div>

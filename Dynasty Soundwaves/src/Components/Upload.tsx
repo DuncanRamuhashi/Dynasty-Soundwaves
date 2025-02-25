@@ -1,5 +1,23 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+
+interface MusicUploadData {
+  title: string;
+  duration: number | null;
+  genre: string;
+  bpm: string;
+  mood: string;
+  price: string;
+  audio: string | null;
+  sellerID: string;
+  tags: string[];
+  image: string | null;
+  token: string;
+  role: string;
+}
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
 const Upload = () => {
   const [duration, setDuration] = useState<number | null>(null);
   const [songTitle, setSongTitle] = useState<string>('');
@@ -10,111 +28,182 @@ const Upload = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [image, setImage] = useState<string | null>(null);
   const [audioFile, setAudioFile] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  
   const navigate = useNavigate();
   const user = JSON.parse(sessionStorage.getItem("user") || "null");
 
-    useEffect(() => {
-      
-  
-      if (!user) {
-        navigate("/");
-      } 
-    }, [navigate]);
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
+  const validateInputs = () => {
+    if (!songTitle.trim()) return "Song title is required";
+    if (!audioFile) return "Audio file is required";
+    if (price && isNaN(Number(price))) return "Price must be a number";
+    if (bpm && isNaN(Number(bpm))) return "BPM must be a number";
+    return null;
+  };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && file.type === 'audio/mp3') {
-      const reader =  new FileReader();
-       reader.onloadend = () => {
-        // setting base64 of audio
-            setAudioFile(reader.result as string); 
-            const audio =  new Audio(reader.result as string);
-            audio.onloadedmetadata =() => {
-                  setDuration(audio.duration);
-            };
+    if (!file) return;
 
-       };
-       reader.readAsDataURL(file); // Convert audio file to base64
-    
- 
+    if (file.size > MAX_FILE_SIZE) {
+      setError("Audio file must be less than 10MB");
+      return;
+    }
+
+    if (file.type === 'audio/mpeg') {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const audioResult = reader.result as string;
+        setAudioFile(audioResult);
+        
+        const audio = new Audio(audioResult);
+        audio.onloadedmetadata = () => {
+          setDuration(audio.duration);
+        };
+        audio.onerror = () => {
+          setError('Error loading audio file');
+          setAudioFile(null);
+          setDuration(null);
+        };
+      };
+      reader.onerror = () => {
+        setError('Error reading audio file');
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setError('Please upload a valid MP3 file');
     }
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
+    if (!file) return;
+
+    if (file.size > MAX_FILE_SIZE) {
+      setError("Image file must be less than 10MB");
+      return;
+    }
+
+    if (['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result as string); // Set base64 string of image
+        setImage(reader.result as string);
       };
-      reader.readAsDataURL(file); // Convert image file to base64
+      reader.onerror = () => {
+        setError('Error reading image file');
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setError('Please upload a valid PNG or JPG file');
     }
   };
 
   const handleTagsChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const newTags = value.split(',').map((tag) => tag.trim()).filter((tag) => tag.length > 0);
-
-    // Ensure the tag array doesn't exceed 8 tags
-    if (newTags.length <= 8) {
-      setTags(newTags);
-    } else {
-      setTags(newTags.slice(0, 8)); // Only keep the first 8 tags
-    }
+    const newTags = e.target.value
+      .split(',')
+      .map(tag => tag.trim())
+      .filter(tag => tag.length > 0)
+      .slice(0, 8);
+    setTags(newTags);
   };
-  const handleSubmit = async () => {
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    
+    const validationError = validateInputs();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
     try {
+      setIsLoading(true);
       const token = sessionStorage.getItem("token");
-      if (!token) return;
-  
-      const updatedData = {
-        songTitle,
+      if (!token) {
+        setError('Authentication required');
+        navigate('/');
+        return;
+      }
+
+      const updatedData: MusicUploadData = {
+        title: songTitle,
         duration,
         genre,
         bpm,
         mood,
         price,
-        audioFile,
-        userId: user._id, // Update to match the correct field for user identification
+        audio: audioFile,
+        sellerID: user._id,
         tags,
         image,
+        token,
+        role: user.role,
       };
-  
-      const response = await fetch(`http://localhost:5000/api/music/upload`, {
-        method: "POST", // Assuming it's a POST request for upload
+
+      const response = await fetch(`${ 'http://localhost:5000'}/api/music/upload-music`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+        credentials: "include",
         body: JSON.stringify(updatedData),
       });
-  
+
       const data = await response.json();
-  
+
       if (data?.success) {
         alert(data.message);
+        // Reset form
+        setSongTitle('');
+        setGenre('');
+        setMood('');
+        setBpm('');
+        setPrice('');
+        setTags([]);
+        setImage(null);
+        setAudioFile(null);
+        setDuration(null);
       } else {
-        alert(data.message || "Upload failed, please try again.");
+        setError(data.message || "Upload failed, please try again.");
       }
     } catch (error) {
       console.error("Upload error:", error);
-      alert("An error occurred. Please try again.");
+      setError("An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
-  
+
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100 text-gray-900 p-10">
-      <div className="w-full max-w-3xl bg-white p-6 rounded-lg shadow-lg">
+      <div className="w-full max-w-3xl bg-gray-50 p-6 rounded-lg shadow-lg">
         <h1 className="text-3xl font-bold text-center mb-6 text-gray-900">Upload Music</h1>
 
-        <div className="space-y-6">
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-gray-700 font-medium">Song Title:</label>
             <input
               type="text"
               value={songTitle}
               onChange={(e) => setSongTitle(e.target.value)}
-              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
+              disabled={isLoading}
+              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
+              required
             />
           </div>
 
@@ -124,7 +213,8 @@ const Upload = () => {
               type="text"
               value={genre}
               onChange={(e) => setGenre(e.target.value)}
-              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
+              disabled={isLoading}
+              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
             />
           </div>
 
@@ -134,7 +224,8 @@ const Upload = () => {
               type="text"
               value={mood}
               onChange={(e) => setMood(e.target.value)}
-              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
+              disabled={isLoading}
+              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
             />
           </div>
 
@@ -144,7 +235,8 @@ const Upload = () => {
               type="number"
               value={bpm}
               onChange={(e) => setBpm(e.target.value)}
-              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
+              disabled={isLoading}
+              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
             />
           </div>
 
@@ -154,7 +246,8 @@ const Upload = () => {
               type="number"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
+              disabled={isLoading}
+              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
             />
           </div>
 
@@ -164,10 +257,14 @@ const Upload = () => {
               type="file"
               accept=".mp3"
               onChange={handleFileChange}
-              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
+              disabled={isLoading}
+              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
+              required
             />
             {audioFile && (
-              <p className="text-gray-600 mt-2">Duration: {duration ? duration.toFixed(2) : 'Loading...'} seconds</p>
+              <p className="text-gray-600 mt-2">
+                Duration: {duration ? `${duration.toFixed(2)} seconds` : 'Loading...'}
+              </p>
             )}
           </div>
 
@@ -177,31 +274,56 @@ const Upload = () => {
               type="file"
               accept=".png,.jpg,.jpeg"
               onChange={handleImageChange}
-              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
+              disabled={isLoading}
+              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
             />
-            {image && <p className="text-gray-600 mt-2">Image selected: {image}</p>}
+            {image && <p className="text-gray-600 mt-2">Image selected</p>}
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium">Tags (up to 8):</label>
+            <label className="block text-gray-700 font-medium">Tags (up to 8)  Separate tags using a ","(Comma) :</label>
             <input
               type="text"
+              
               onChange={handleTagsChange}
-              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
+              disabled={isLoading}
+              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
               placeholder="Enter tags separated by commas"
             />
-            <p className="text-gray-600 mt-2">Tags: {tags.join(', ')}</p>
+            {tags.length > 0 && (
+              <p className="text-gray-600 mt-2">Tags: {tags.join(', ')}</p>
+            )}
           </div>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-4">
             <button
               type="submit"
-              className="bg-gray-900 w-full text-white py-2 px-6 rounded-lg hover:bg-gray-700 transition duration-300"
+              disabled={isLoading}
+              className="bg-gray-900 w-full text-white py-2 px-6 rounded-lg hover:bg-gray-700 transition duration-300 disabled:bg-gray-600 disabled:cursor-not-allowed"
             >
-              Submit
+              {isLoading ? 'Uploading...' : 'Submit'}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSongTitle('');
+                setGenre('');
+                setMood('');
+                setBpm('');
+                setPrice('');
+                setTags([]);
+                setImage(null);
+                setAudioFile(null);
+                setDuration(null);
+                setError(null);
+              }}
+              disabled={isLoading}
+              className="bg-gray-500 w-full text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+              Reset
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

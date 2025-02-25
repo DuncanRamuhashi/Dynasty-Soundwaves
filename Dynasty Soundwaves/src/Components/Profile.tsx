@@ -59,10 +59,10 @@ const Profile: React.FC = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto mt-10 p-6 bg-gray-100 shadow-lg rounded-lg">
-      <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">Edit Profile</h2>
+    <div className="max-w-lg mx-auto mt-10 p-6 bg-gray-50 shadow-lg rounded-lg">
+      <h2 className="text-2xl font-bold text-center text-gray-800  mb-4">Edit Profile</h2>
 
-      <div className="space-y-4">
+      <div className="space-y-4 ">
         <div>
           <label className="block font-medium text-gray-800">Name</label>
           <input
