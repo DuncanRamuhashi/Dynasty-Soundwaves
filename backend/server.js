@@ -18,7 +18,12 @@ const PORT = process.env.PORT;                                 // remember to ca
 db();                                 
 
 app.use(express.json());
-app.use(cors());
+app.use(
+    cors({
+      origin: "http://localhost:5173", // Change this to your frontend URL
+      credentials: true, // Allow sending cookies and authentication headers
+    })
+  );
 app.use(cookieParser());
 
 app.use('/api/auth',authRoutes);

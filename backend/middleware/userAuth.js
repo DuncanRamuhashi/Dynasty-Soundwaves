@@ -2,12 +2,19 @@ import jwt from 'jsonwebtoken';
 
 const userAuth = async (req, res, next) => {
     try {
-        const token = req.cookies?.token; // Safe access to token
+        // Extract the token from the request body
+        let token = req.body.token; 
+
+        // Remove quotation marks if present
+        token = token.replace(/"/g, ''); // Removes any quotes
+
+        console.log(token); // For debugging purposes, logs the cleaned token
 
         if (!token) {
             return res.status(401).json({ success: false, message: 'Not Authorized. Please log in again.' });
         }
 
+        // Verify the token using JWT secret
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         if (!decoded?.id) {
@@ -15,7 +22,7 @@ const userAuth = async (req, res, next) => {
         }
 
         req.user = { id: decoded.id }; // Store user data in `req.user`
-        next();
+        next(); // Proceed to the next middleware or route handler
     } catch (error) {
         return res.status(401).json({ success: false, message: 'Authentication failed. Please log in again.' });
     }
