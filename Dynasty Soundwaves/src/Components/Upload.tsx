@@ -1,5 +1,5 @@
-import React, { useState, ChangeEvent } from 'react';
-
+import React, { useState, ChangeEvent, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 const Upload = () => {
   const [duration, setDuration] = useState<number | null>(null);
   const [songTitle, setSongTitle] = useState<string>('');
@@ -8,35 +8,100 @@ const Upload = () => {
   const [bpm, setBpm] = useState<string>('');
   const [price, setPrice] = useState<string>('');
   const [tags, setTags] = useState<string[]>([]);
-  const [image, setImage] = useState<File | null>(null);
-  const [audioFile, setAudioFile] = useState<File | null>(null);
+  const [image, setImage] = useState<string | null>(null);
+  const [audioFile, setAudioFile] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const user = JSON.parse(sessionStorage.getItem("user") || "null");
+
+    useEffect(() => {
+      
+  
+      if (!user) {
+        navigate("/");
+      } 
+    }, [navigate]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.type === 'audio/mp3') {
-      setAudioFile(file);
-      const audio = new Audio(URL.createObjectURL(file));
-      audio.onloadedmetadata = () => {
-        setDuration(audio.duration); // duration in seconds
-      };
-    }
+      const reader =  new FileReader();
+       reader.onloadend = () => {
+        // setting base64 of audio
+            setAudioFile(reader.result as string); 
+            const audio =  new Audio(reader.result as string);
+            audio.onloadedmetadata =() => {
+                  setDuration(audio.duration);
+            };
+
+       };
+       reader.readAsDataURL(file); // Convert audio file to base64
     
+ 
+    }
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result as string); // Set base64 string of image
+      };
+      reader.readAsDataURL(file); // Convert image file to base64
     }
   };
 
   const handleTagsChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value.length <= 8) {
-      setTags(value.split(',').map(tag => tag.trim()));
+    const newTags = value.split(',').map((tag) => tag.trim()).filter((tag) => tag.length > 0);
+
+    // Ensure the tag array doesn't exceed 8 tags
+    if (newTags.length <= 8) {
+      setTags(newTags);
+    } else {
+      setTags(newTags.slice(0, 8)); // Only keep the first 8 tags
     }
   };
-
+  const handleSubmit = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) return;
+  
+      const updatedData = {
+        songTitle,
+        duration,
+        genre,
+        bpm,
+        mood,
+        price,
+        audioFile,
+        userId: user._id, // Update to match the correct field for user identification
+        tags,
+        image,
+      };
+  
+      const response = await fetch(`http://localhost:5000/api/music/upload`, {
+        method: "POST", // Assuming it's a POST request for upload
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedData),
+      });
+  
+      const data = await response.json();
+  
+      if (data?.success) {
+        alert(data.message);
+      } else {
+        alert(data.message || "Upload failed, please try again.");
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert("An error occurred. Please try again.");
+    }
+  };
+  
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100 text-gray-900 p-10">
       <div className="w-full max-w-3xl bg-white p-6 rounded-lg shadow-lg">
@@ -114,7 +179,7 @@ const Upload = () => {
               onChange={handleImageChange}
               className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
             />
-            {image && <p className="text-gray-600 mt-2">Image selected: {image.name}</p>}
+            {image && <p className="text-gray-600 mt-2">Image selected: {image}</p>}
           </div>
 
           <div>

@@ -26,7 +26,7 @@ export const getAllMusic = async (req, res) => {
 export const getMusicById = async (req, res) => {
   try {
     const { id } = req.params;
-    const music = await Music.findById(id);
+    const music = await Music.find(id);
     if (!music) {
       return res.status(404).json({ success: false, message: 'Music not found' });
     }
