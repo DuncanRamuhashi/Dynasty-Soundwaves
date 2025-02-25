@@ -12,7 +12,7 @@ const MusicSchema = new mongoose.Schema({
     tags: { 
         type: [String], 
         default: [], 
-        validate: [tags => tags.length <= 5, 'Maximum of 5 tags allowed']
+        validate: [tags => tags.length <= 8, 'Maximum of 8 tags allowed']
     },
     image: { type: String, required: true },
     downloadable: { type: Boolean, default: false },

@@ -10,6 +10,7 @@ import Payment from './Components/Payment';
 import Usereport from './Components/Usereport';
 import Payments from './Components/Payments';
 import Members from './Components/Members';
+import Upload from './Components/Upload';
 
 
 const App: React.FC = () => {
@@ -27,6 +28,7 @@ const App: React.FC = () => {
           <Route path="/usereport" element={<Usereport/>} />
           <Route path="/payments" element={<Payments/>} />
           <Route path="/members" element={<Members/>} />
+          <Route path="/upload" element={<Upload/>} />
 
         </Routes>
       </div>
