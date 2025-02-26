@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaArrowDown, FaShoppingCart } from "react-icons/fa";
 import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
@@ -46,15 +46,68 @@ const Mood = [
     { id: 7, label: "R2500 - R5000 (Industry Level)" },
     { id: 8, label: "R5000+ (Elite)" },
   ];
+  interface Music {
+    _id: string;
+    title: string;
+    duration: number;
+    genre: string;
+    bpm: number;
+    mood: string;
+    price: number;
+    audio: string;
+    downloadable: boolean;
+    sellerID: string;
+    tags: string[];
+    image: string;
+}
+
+
 const Mainpage = () => {
+  const [playID, setPlayID] = useState("");
   const [selectedMood, setSelectedMood] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
   const [selectedBPM, setSelectedBPM] = useState("");
   const [selectedPrice, setSelectedPrice] = useState("");
-
+   const [musicList, setMusicList] = useState<Music[]>([]);
   const handleFilterChange = (setter: any) => (event: any) => {
     setter(event.target.value);
   };
+  const formatDuration = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.round(seconds % 60);
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+     // for seting the id to play audio
+      const  playAudio = (id: string) => {
+         setPlayID(playID);
+      };
+  useEffect(() => {
+    const getMusic = async  () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/music/get-all-music`, {
+          method: "GET", 
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",  
+         
+        });
+  
+        const data = await response.json();
+        console.log(data);
+        if (data?.success) {
+             setMusicList(data.data)
+             
+        } else {
+          alert(data.message || "Update failed, please try again.");
+        }
+      } catch (error) {
+       console.error("Error getting music:", error);
+       alert("An error occurred. Please try again.");
+      }
+    };
+    getMusic();
+  },[]);
 
   return (
     <>
@@ -155,24 +208,33 @@ const Mainpage = () => {
             <div className="w-1/5 p-4 text-center">MOOD</div>
             <div className="w-1/5 p-4 text-center">PRICE</div>
           </div>
+          {musicList.length === 0 ? (
+  <p className="text-center text-gray-500 text-lg">
+    No music in your collection yet!
+  </p>
+) : (
+  musicList.map((music) => (
+    <a onClick={() =>playAudio(music._id)} key={music._id} className="flex text-gray-100 hover:bg-gray-600 transition-colors">
+      <div className="w-1/5 p-4 text-center">{music?.title}</div>
+      <div className="w-1/5 p-4 text-center">{formatDuration((music.duration))} min</div>
+      <div className="w-1/5 p-4 text-center">{music?.bpm}</div>
+      <div className="w-1/5 p-4 text-center">{music?.mood}</div>
+      <div className="w-1/5 p-4 text-center flex justify-center gap-2">
+        <span className="text-sm">R{ music?.price}</span>
+        <FaShoppingCart className="text-xl cursor-pointer hover:text-gray-400" />
+      </div>
+    </a>
+  ))
+)}
 
-          {/* Music Row Example */}
-          <Link to={""} className="flex text-gray-100 hover:bg-gray-600 transition-colors">
-            <div className="w-1/5 p-4 text-center">Kendrick</div>
-            <div className="w-1/5 p-4 text-center">3:30</div>
-            <div className="w-1/5 p-4 text-center">120</div>
-            <div className="w-1/5 p-4 text-center">Sad</div>
-            <div className="w-1/5 p-4 text-center flex justify-center gap-2">
-              <span className="text-sm">R0.00</span>
-              <FaShoppingCart className="text-xl cursor-pointer hover:text-gray-400" />
-            </div>
-          </Link>
+
+
         </div>
 
         {/* Pass the props to Player component */}
         <div className="flex fixed bottom-0 left-0 right-0 z-50 "> 
         <Player
-          songID="23424234242342342"
+          songID={playID}
         
         />
         </div>
