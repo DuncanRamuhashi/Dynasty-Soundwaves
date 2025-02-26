@@ -4,7 +4,9 @@ const userAuth = async (req, res, next) => {
     try {
         // Extract the token from the request body
         let token = req.body.token; 
-
+         if(!token){
+            token = req.params.token;
+         }
         // Remove quotation marks if present
         token = token.replace(/"/g, ''); // Removes any quotes
 

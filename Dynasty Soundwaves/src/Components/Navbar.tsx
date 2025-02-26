@@ -217,9 +217,7 @@ const Navbar = () => {
                         <Link to='/allreport' className="hover:text-gray-400">
                             <FaListAlt className="text-xl" />
                         </Link>
-                        <Link to='/payments' className="hover:text-gray-400">
-                            <FaMoneyBillWave className="text-xl" />
-                        </Link>
+                       
                         <Link to='/members' className="hover:text-gray-400">
                             <FaPeopleCarry className="text-xl" />
                         </Link>
@@ -236,6 +234,9 @@ const Navbar = () => {
                         </Link>
                         <Link to='/artistmusic' className="hover:text-gray-400">
                             <FaMusic className="text-xl" />
+                        </Link>
+                        <Link to='/payments' className="hover:text-gray-400">
+                            <FaMoneyBillWave className="text-xl" />
                         </Link>
                     </>
                 )}

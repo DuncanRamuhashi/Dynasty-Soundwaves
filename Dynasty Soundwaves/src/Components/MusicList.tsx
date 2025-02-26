@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 interface Music {
-  id: number;
+  _id: number;
   title: string;
   genre: string;
   bpm: number;
@@ -11,36 +12,89 @@ interface Music {
   bought: boolean;
 }
 
-const dummyMusic: Music[] = [
-  {
-    id: 1,
-    title: "Amapiano Vibes",
-    genre: "Amapiano",
-    bpm: 120,
-    duration: "3:45",
-    image: "https://via.placeholder.com/150",
-    bought: false,
-  },
-  {
-    id: 2,
-    title: "Chill House",
-    genre: "Deep House",
-    bpm: 110,
-    duration: "4:20",
-    image: "https://via.placeholder.com/150",
-    bought: true,
-  },
-];
 
 const MusicList: React.FC = () => {
-  const [musicList, setMusicList] = useState<Music[]>(dummyMusic);
+  const user = JSON.parse(sessionStorage.getItem("user") || "null");
+  const [musicList, setMusicList] = useState<Music[]>([]);
+  const navigate = useNavigate();
+  
+     useEffect(() => {
+            
+       if (!user) {
+        navigate("/");
+       } 
+     }, [navigate]);
+// for fetcg
+const token = sessionStorage.getItem("token");
+useEffect(() => {
+ 
 
-  const handleDelete = (id: number) => {
-    setMusicList(musicList.filter((music) => music.id !== id));
+  const getMusic = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/music/get-music/${user._id}/${token}`, {
+        method: "GET", 
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",  
+       
+      });
+
+      const data = await response.json();
+      console.log(data);
+      if (data?.success) {
+           setMusicList(data.data)
+           
+      } else {
+        alert(data.message || "Update failed, please try again.");
+      }
+    } catch (error) {
+      console.error("Error getting music:", error);
+      alert("An error occurred. Please try again.");
+    }
+  };
+
+  getMusic();
+}, []);
+
+const formatDuration = (seconds: number): string => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+};
+
+// doita machelo 
+  const handleDelete = async (id :string) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/music/delete-music/${id}/${token}`, {
+        method: "DELETE", 
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, 
+        },
+        credentials: "include",  
+       
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log(data);
+      if (data?.success) {
+        alert(data.message || "Music deleted successfully.");
+        window.location.reload(); // Refresh the page   eish
+           
+      } else {
+        alert(data.message || "Delete failed, please try again.");
+      }
+    } catch (error) {
+      console.error("Error deleting music:", error);
+      alert("An error occurred. Please try again.");
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10">
+    <div className="min-h-screen bg-gray-100 py-10">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <h1 className="text-3xl font-extrabold text-gray-900 mb-8 text-center">
           Your Music Collection
@@ -54,7 +108,7 @@ const MusicList: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {musicList.map((music) => (
               <div
-                key={music.id}
+                key={music._id}
                 className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all hover:scale-105 hover:shadow-xl duration-300"
               >
                 <img
@@ -71,7 +125,7 @@ const MusicList: React.FC = () => {
                     <span className="font-medium">BPM:</span> {music.bpm}
                   </p>
                   <p className="text-sm text-gray-600">
-                    <span className="font-medium">Duration:</span> {music.duration}
+                    <span className="font-medium">Duration:</span> {formatDuration(parseInt(music.duration)) }
                   </p>
 
                   {/* Status (Bought or Not Bought) */}
@@ -82,14 +136,13 @@ const MusicList: React.FC = () => {
                   >
                     {music.bought ? "Bought " : "Not Bought "}
                   </p>
-
                   {/* Delete Button */}
                   <div className="mt-4 flex justify-between">
                   <p className="text-sm text-gray-600 mt-1">
                     <span className="font-medium">Genre:</span> {music.genre}
                   </p>
                     <button
-                      onClick={() => handleDelete(music.id)}
+                      onClick={() => handleDelete(String(music._id))}
                       className="text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none"
                       aria-label="Delete music"
                     >

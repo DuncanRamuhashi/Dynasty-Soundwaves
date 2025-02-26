@@ -35,8 +35,8 @@ export const getAllMusic = async (req, res) => {
 // ✅ Get Music By User ID with specific fields
 export const getMusicById = async (req, res) => {
   try {
-    const { userId } = req.params;
-
+    const  userId  = req.params.id;
+   
     // Find music documents with specific fields only
     const musics = await Music.find(
       { sellerID: userId },
@@ -46,7 +46,8 @@ export const getMusicById = async (req, res) => {
         genre: 1, 
         bpm: 1, 
         duration: 1 ,
-        downloadable: 1
+        downloadable: 1,
+        image:1,
       }
     );
 
@@ -56,7 +57,7 @@ export const getMusicById = async (req, res) => {
         message: "No music found for this user" 
       });
     }
-
+  
     res.status(200).json({ 
       success: true, 
       data: musics,
@@ -96,8 +97,11 @@ export const updateMusic = async (req, res) => {
 
 // ✅ Delete Music By ID
 export const deleteMusic = async (req, res) => {
+ 
+  
   try {
     const { id } = req.params;
+    
     const music = await Music.findByIdAndDelete(id);
 
     if (!music) {
