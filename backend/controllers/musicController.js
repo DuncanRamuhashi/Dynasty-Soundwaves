@@ -20,18 +20,41 @@ export const uploadMusic = async (req, res) => {
   }
 };
 
-// ✅ Get All Music
+// ✅ Get All Music (excluding downloadable tracks)
 export const getAllMusic = async (req, res) => {
   try {
-    const music = await Music.find().sort({ createdAt: -1 }); // Sort by newest first
-    
+    const music = await Music.find({ downloadable: { $ne: true } }) // Exclude downloadable tracks
+      .sort({ createdAt: -1 }) // Sort by newest first
+      .select("_id title genre bpm mood duration tags image");
+
     res.status(200).json({ success: true, data: music });
   } catch (error) {
     console.error("Get All Music Error:", error);
-    res.status(500).json({ success: false, message: "Server Error" });
+    res.status(500).json({ success: false, message: "Server Error", error: error.message });
   }
 };
 
+// ✅ Get Audio By ID
+export const getAudio = async (req, res) => {
+  try {
+    const songID = req.params.track;
+
+    if (!songID) {
+      return res.status(400).json({ success: false, message: "Track ID is required" });
+    }
+
+    const song = await Music.findById(songID).select("audio");
+
+    if (!song) {
+      return res.status(404).json({ success: false, message: "Song not found" });
+    }
+
+    res.status(200).json({ success: true, data: song });
+  } catch (error) {
+    console.error("Get Audio Error:", error);
+    res.status(500).json({ success: false, message: "Server Error", error: error.message });
+  }
+};
 // ✅ Get Music By User ID with specific fields
 export const getMusicById = async (req, res) => {
   try {

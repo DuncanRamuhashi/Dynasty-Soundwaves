@@ -15,7 +15,26 @@ interface MusicUploadData {
   token: string;
   role: string;
 }
-
+const Mood = [
+  { id: 1, label: "Happy" },
+  { id: 2, label: "Sad " },
+  { id: 3, label: "Energetic" },
+  { id: 4, label: "Calm" },
+  { id: 5, label: "Romantic" },
+  { id: 6, label: "Dark" },
+  { id: 7, label: "Chill" },
+  { id: 8, label: "Epic" },
+];
+const Genre = [
+  { id: 1, label: "Hip-Hop" },
+  { id: 2, label: "R&B" },
+  { id: 3, label: "Pop" },
+  { id: 4, label: "Afrobeat" },
+  { id: 5, label: "Amapiano" },
+  { id: 6, label: "Trap" },
+  { id: 7, label: "Lo-Fi" },
+  { id: 8, label: "Electronic" },
+];
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 const Upload = () => {
@@ -208,27 +227,37 @@ const Upload = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium">Genre:</label>
-            <input
-              type="text"
-              value={genre}
-              onChange={(e) => setGenre(e.target.value)}
-              disabled={isLoading}
-              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
-            />
-          </div>
-
-          <div>
-            <label className="block text-gray-700 font-medium">Mood:</label>
-            <input
-              type="text"
-              value={mood}
-              onChange={(e) => setMood(e.target.value)}
-              disabled={isLoading}
-              className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
-            />
-          </div>
-
+  <label className="block text-gray-700 font-medium">Genre:</label>
+  <select
+    value={genre}
+    onChange={(e) => setGenre(e.target.value)}
+    disabled={isLoading}
+    className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
+  >
+    <option value="">Select Genre</option>
+    {Genre.map((g) => (
+      <option key={g.id} value={g.label}>
+        {g.label}
+      </option>
+    ))}
+  </select>
+</div>
+<div>
+  <label className="block text-gray-700 font-medium">Mood:</label>
+  <select
+    value={mood}
+    onChange={(e) => setMood(e.target.value)}
+    disabled={isLoading}
+    className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
+  >
+    <option value="">Select Mood</option>
+    {Mood.map((m) => (
+      <option key={m.id} value={m.label}>
+        {m.label}
+      </option>
+    ))}
+  </select>
+</div>
           <div>
             <label className="block text-gray-700 font-medium">BPM:</label>
             <input
