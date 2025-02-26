@@ -24,7 +24,7 @@ const userAuth = async (req, res, next) => {
         }
 
         req.user = { id: decoded.id }; // Store user data in `req.user`
-        next(); // Proceed to the next middleware or route handler
+        next(); 
     } catch (error) {
         return res.status(401).json({ success: false, message: 'Authentication failed. Please log in again.' });
     }

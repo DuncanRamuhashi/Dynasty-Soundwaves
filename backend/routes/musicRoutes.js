@@ -7,7 +7,7 @@ const musicRouter = express.Router();
 musicRouter.post('/upload-music',userAuth, rolesAuth('seller'),uploadMusic);
 musicRouter.get('/get-music/:id/:token',userAuth, rolesAuth('seller','user'),getMusicById);
 musicRouter.get('/get-all-music',getAllMusic);
-musicRouter.get('/get-audio/track',getAudio);
+musicRouter.get('/get-audio/:track',getAudio);
 musicRouter.put('/update-music/:id',updateMusic);
 musicRouter.delete('/delete-music/:id/:token',userAuth, rolesAuth('seller'),deleteMusic);
 
