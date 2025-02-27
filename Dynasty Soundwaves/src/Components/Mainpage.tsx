@@ -233,7 +233,8 @@ const Mainpage = () => {
   console.log(musicList);
   return (
 <>
-      <div className="text-gray-100">
+<div className="min-h-screen">
+      <div className="text-gray-100 ">
         {/* Search Bar */}
         <div className="flex justify-center">
           <div className="flex items-center bg-gray-900 p-2 rounded-lg w-full max-w-lg">
@@ -357,6 +358,7 @@ const Mainpage = () => {
             playing={true}
           />
         </div>
+      </div>
       </div>
     </>
   );

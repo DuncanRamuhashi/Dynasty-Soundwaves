@@ -19,15 +19,15 @@ const Members = () => {
   const totalPages = Math.ceil(members.length / membersPerPage);
 
   return (
-    <div className="bg-gray-100 min-h-screen flex justify-center p-6">
-      <div className="bg-white shadow-lg rounded-lg w-full max-w-4xl p-8">
+    <div className="bg-gray-900 min-h-screen flex justify-center p-6">
+      <div className="bg-gray-100 shadow-lg rounded-lg w-full max-w-4xl p-8">
         <h2 className="text-3xl font-semibold text-gray-900 mb-6 text-center"> Members</h2>
 
         {/* Table Format */}
         <div className="overflow-x-auto">
           <table className="w-full border-collapse border border-gray-300">
             <thead>
-              <tr className="bg-gray-100">
+              <tr className="bg-gray-900 text-gray-100">
                 <th className="border border-gray-300 px-4 py-2">Email</th>
                 <th className="border border-gray-300 px-4 py-2">Name</th>
                 <th className="border border-gray-300 px-4 py-2">Role</th>

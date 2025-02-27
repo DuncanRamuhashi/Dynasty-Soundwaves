@@ -21,7 +21,7 @@ const UpdateTerms = () => {
   };
 
   return (
-    <div className="bg-gray-100 py-5 px-6 md:px-12 ">
+    <div className="bg-gray-900 py-5 px-6 md:px-12 ">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
         <div className="md:flex">
           <div className="w-[600px]  p-6 bg-gray-200">
