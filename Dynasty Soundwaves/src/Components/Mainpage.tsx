@@ -86,6 +86,7 @@ const Mainpage = () => {
   const [playImage, setPlyImage] = useState("");
   const [playAudioTrack, setPlayAudioTrack] = useState("");
   const [playTime, setPlayTime] = useState(Number);
+  
      // for seting the id to play audio
 
 
@@ -260,11 +261,11 @@ const Mainpage = () => {
     <a onClick={() =>playAudio(music._id,music.title,music.sellerName,music.image,music.audio,music.duration)} key={music._id} className="flex text-gray-100 hover:bg-gray-600 transition-colors">
        <div className="w-1/5 p-4 text-center">{music?.sellerName}</div>
       <div className="w-1/5 p-4 text-center">{music?.title}</div>
-      <div className="w-1/5 p-4 text-center">{formatDuration((music.duration))} min</div>
+      <div className="w-1/5 p-4 text-center">{formatDuration((music.duration))} </div>
       <div className="w-1/5 p-4 text-center">{music?.bpm}</div>
       <div className="w-1/5 p-4 text-center">{music?.mood}</div>
       <div className="w-1/5 p-4 text-center flex justify-center gap-2">
-        <span className="text-sm">R{music?.price}.00</span>
+        <span className="text-sm">R {music?.price}.00</span>
         <FaShoppingCart className="text-xl cursor-pointer hover:text-gray-400" />
       </div>
     </a>
@@ -283,7 +284,8 @@ const Mainpage = () => {
           artistName= {playName}
           image= {playImage}
           audioTrack= {playAudioTrack}
-           time = {playTime}
+           
+           playing = {true}
         />
         </div>
       </div>
