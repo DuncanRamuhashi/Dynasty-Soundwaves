@@ -117,6 +117,22 @@ const Player: React.FC<PlayerProps> = ({ songID, title, artistName, image, audio
       setCurrentTime(newTime);
     }
   };
+   
+// Playing next
+const handleNext = (index: number, playNumber: number, totalNumber: number) => {
+  let n = playNumber + 1;  // Increment playNumber to move to the next item
+  if (n >= totalNumber) n = 0;  
+  sessionStorage.setItem('indexSong', n.toString());  
+}
+
+// Playing previous
+const handlePrev = (index: number, playNumber: number, totalNumber: number) => {
+  let n = playNumber - 1;  
+  if (n < 0) n = totalNumber - 1; 
+  sessionStorage.setItem('indexSong', n.toString()); 
+}
+
+
 
   return (
     <div className="bg-gray-900 p-2 shadow-lg w-full">
@@ -130,14 +146,14 @@ const Player: React.FC<PlayerProps> = ({ songID, title, artistName, image, audio
 
       <div className="flex items-center mb-4 justify-between">
         <div className="ml-4">
-          <p className="text-white text-lg font-medium">{title}</p>
+          <p className="text-gray-100 text-lg font-medium">{title}</p>
           <p className="text-gray-400 text-sm">{artistName}</p>
         </div>
 
         <div className="flex items-center gap-10">
           <button
             onClick={skipBackward}
-            className="text-white hover:text-gray-300 transition-colors"
+            className="text-gray-100 hover:text-gray-300 transition-colors"
             aria-label="Skip backward"
           >
             <FaStepBackward className="h-5 w-5" />
@@ -145,7 +161,7 @@ const Player: React.FC<PlayerProps> = ({ songID, title, artistName, image, audio
           
           <button
             onClick={togglePlay}
-            className="text-white hover:text-gray-300 transition-colors"
+            className="text-gray-100 hover:text-gray-300 transition-colors"
             aria-label={isPlaying ? "Pause" : "Play"}
           >
             {isPlaying ? <FaPause className="h-8 w-8" /> : <FaPlay className="h-8 w-8" />}
@@ -153,7 +169,7 @@ const Player: React.FC<PlayerProps> = ({ songID, title, artistName, image, audio
           
           <button
             onClick={skipForward}
-            className="text-white hover:text-gray-300 transition-colors"
+            className="text-gray-100 hover:text-gray-300 transition-colors"
             aria-label="Skip forward"
           >
             <FaStepForward className="h-5 w-5" />
@@ -180,7 +196,7 @@ const Player: React.FC<PlayerProps> = ({ songID, title, artistName, image, audio
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="text-white">
+          <div className="text-gray-100">
             {volume > 0 ? <FaVolumeUp className="h-5 w-5" /> : <FaVolumeDown className="h-5 w-5" />}
           </div>
           <input
