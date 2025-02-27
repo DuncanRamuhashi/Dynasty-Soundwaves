@@ -59,11 +59,12 @@ const Mood = [
     sellerID: string;
     tags: string[];
     image: string;
+    sellerName: string;
 }
 
 
 const Mainpage = () => {
-  const [playID, setPlayID] = useState("");
+ 
   const [selectedMood, setSelectedMood] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
   const [selectedBPM, setSelectedBPM] = useState("");
@@ -77,10 +78,50 @@ const Mainpage = () => {
     const remainingSeconds = Math.round(seconds % 60);
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
+
+
+  const [playID, setPlayID] = useState("");
+  const [playTitle, setPlayTitle] = useState("");
+  const [playName, setPlayName] = useState("");
+  const [playImage, setPlyImage] = useState("");
+  const [playAudioTrack, setPlayAudioTrack] = useState("");
+  const [playTime, setPlayTime] = useState(Number);
      // for seting the id to play audio
-      const  playAudio = (id: string) => {
-         setPlayID(playID);
-      };
+
+
+
+
+     const playAudio = async (trackID: string, title: string, name: string, image: string, audio: string, time: number) => {
+      
+      try {
+          const res = await fetch(`http://localhost:5000/api/music/get-audio/${trackID}`,{
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",  
+          })
+          const data = await res.json();
+         
+          if (data?.success) {
+            setPlayID(trackID);
+            setPlayTitle(title);
+            setPlayName(name);
+            setPlyImage(image);
+            setPlayAudioTrack(data.data.audio);
+            setPlayTime(time);
+         
+       } else {
+         alert(data.message || "Update failed, please try again.");
+       }
+      } catch (error) {
+            console.error("Error getting music:", error);
+       alert("An error occurred. Please try again.");
+      }
+      
+
+    };
+    
   useEffect(() => {
     const getMusic = async  () => {
       try {
@@ -94,10 +135,10 @@ const Mainpage = () => {
         });
   
         const data = await response.json();
-        console.log(data);
+    
         if (data?.success) {
              setMusicList(data.data)
-             
+          
         } else {
           alert(data.message || "Update failed, please try again.");
         }
@@ -107,8 +148,9 @@ const Mainpage = () => {
       }
     };
     getMusic();
+    
   },[]);
-
+  console.log(musicList);
   return (
     <>
      
@@ -202,6 +244,7 @@ const Mainpage = () => {
         {/* Music Table */}
         <div className="flex flex-col bg-gray-900 py-3 px-3 mx-52 rounded-lg shadow-lg">
           <div className="flex bg-gray-800 text-gray-100 font-semibold">
+          <div className="w-1/5 p-4 text-center">Name</div>
             <div className="w-1/5 p-4 text-center">TITLE</div>
             <div className="w-1/5 p-4 text-center">TIME</div>
             <div className="w-1/5 p-4 text-center">BPM</div>
@@ -214,13 +257,14 @@ const Mainpage = () => {
   </p>
 ) : (
   musicList.map((music) => (
-    <a onClick={() =>playAudio(music._id)} key={music._id} className="flex text-gray-100 hover:bg-gray-600 transition-colors">
+    <a onClick={() =>playAudio(music._id,music.title,music.sellerName,music.image,music.audio,music.duration)} key={music._id} className="flex text-gray-100 hover:bg-gray-600 transition-colors">
+       <div className="w-1/5 p-4 text-center">{music?.sellerName}</div>
       <div className="w-1/5 p-4 text-center">{music?.title}</div>
       <div className="w-1/5 p-4 text-center">{formatDuration((music.duration))} min</div>
       <div className="w-1/5 p-4 text-center">{music?.bpm}</div>
       <div className="w-1/5 p-4 text-center">{music?.mood}</div>
       <div className="w-1/5 p-4 text-center flex justify-center gap-2">
-        <span className="text-sm">R{ music?.price}</span>
+        <span className="text-sm">R{music?.price}.00</span>
         <FaShoppingCart className="text-xl cursor-pointer hover:text-gray-400" />
       </div>
     </a>
@@ -231,11 +275,15 @@ const Mainpage = () => {
 
         </div>
 
-        {/* Pass the props to Player component */}
+       
         <div className="flex fixed bottom-0 left-0 right-0 z-50 "> 
         <Player
           songID={playID}
-        
+          title= {playTitle}
+          artistName= {playName}
+          image= {playImage}
+          audioTrack= {playAudioTrack}
+           time = {playTime}
         />
         </div>
       </div>

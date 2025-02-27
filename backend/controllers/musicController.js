@@ -1,5 +1,5 @@
 import Music from "../models/music.js";
-
+import User from "../models/User.js";
 // ✅ Upload Music
 export const uploadMusic = async (req, res) => {
   try {
@@ -20,19 +20,36 @@ export const uploadMusic = async (req, res) => {
   }
 };
 
-// ✅ Get All Music (excluding downloadable tracks)
 export const getAllMusic = async (req, res) => {
   try {
-    const music = await Music.find({ downloadable: { $ne: true } }) // Exclude downloadable tracks
-      .sort({ createdAt: -1 }) // Sort by newest first
-      .select("_id title genre bpm mood duration tags image");
+    const music = await Music.find({ downloadable: { $ne: true } })
+      .sort({ createdAt: -1 }) // Sort by createdAt descending (newest first)
+      .select('_id title genre bpm mood duration tags image price sellerID');
 
-    res.status(200).json({ success: true, data: music });
+    const populatedMusic = []; // To store music with seller names
+
+    // Use a for loop to iterate through the music array
+    for (let i = 0; i < music.length; i++) {
+      const track = music[i];
+
+      // Find the user by sellerID
+      const user = await User.findById(track.sellerID);
+
+      // Add the seller name to the track object
+      populatedMusic.push({
+        ...track.toObject(), // Convert track to plain object
+        sellerName: user ? user.name : '' // Add the seller name or empty string if no user
+      });
+    }
+
+    // Send the response with the populated music data
+    res.status(200).json({ success: true, data: populatedMusic });
   } catch (error) {
     console.error("Get All Music Error:", error);
     res.status(500).json({ success: false, message: "Server Error", error: error.message });
   }
 };
+
 
 // ✅ Get Audio By ID
 export const getAudio = async (req, res) => {

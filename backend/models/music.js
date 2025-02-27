@@ -17,7 +17,7 @@ const MusicSchema = new mongoose.Schema({
     image: { type: String, required: true },
     downloadable: { type: Boolean, default: false },
     userID:{ type: String, required: false },
-    
+
 }, { timestamps: true });
 
 MusicSchema.pre('save', async function(next) {
