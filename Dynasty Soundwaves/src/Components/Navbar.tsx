@@ -71,6 +71,9 @@ const Navbar = () => {
                     setCartNumber(0);
                 } else {
                     setCartNumber(data.data.musicIDS?.length || 0);
+                    sessionStorage.setItem('musicIDDS',JSON.stringify(data.data.musicIDS));
+               
+                
                 }
             } catch (error) {
                 console.error("Error getting cart:", error);

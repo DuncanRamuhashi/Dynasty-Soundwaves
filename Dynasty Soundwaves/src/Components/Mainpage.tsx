@@ -222,6 +222,8 @@ const Mainpage = () => {
         if (data?.success) {
              setMusicList(data.data)
              sessionStorage.setItem('totalSongs', data.data.length);  
+            
+             sessionStorage.setItem('music',JSON.stringify(data.data));
         } else {
           alert(data.message || "Update failed, please try again.");
         }
@@ -238,7 +240,7 @@ const Mainpage = () => {
 // adding to cart
 const user = JSON.parse(sessionStorage.getItem("user") || "null");
 const [cart, setCart] = useState<Cart>({
-  userID:  user._id, // If user is null or undefined, set empty string
+  userID: user?._id || "", // Ensure it's a valid string
   musicIDS: [],
 });
 
