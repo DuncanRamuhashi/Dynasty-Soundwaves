@@ -61,7 +61,10 @@ const Mood = [
     image: string;
     sellerName: string;
 }
-
+interface Cart {
+  userID: string;
+  musicIDS: string[];
+}
 
 const Mainpage = () => {
  //    filtering
@@ -231,10 +234,81 @@ const Mainpage = () => {
     
   },[]);
   console.log(musicList);
-
+  const token = sessionStorage.getItem("token");
 // adding to cart
+const user = JSON.parse(sessionStorage.getItem("user") || "null");
+const [cart, setCart] = useState<Cart>({
+  userID:  user._id, // If user is null or undefined, set empty string
+  musicIDS: [],
+});
 
 
+
+const handleExistingCart = async (id: string) => {
+  try {
+    const res = await fetch(`http://localhost:5000/api/cart/add-to-cart/${user._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: "include",
+      body: JSON.stringify({ musicID: id }),
+    });
+
+    const data = await res.json();
+
+    if (data?.success) {
+      alert(data.message || "Music added to cart successfully.");
+    } else {
+      alert(data.message || "Failed to add to cart, please try again.");
+    }
+  } catch (error) {
+    console.error("Error adding to existing cart:", error);
+    alert("An error occurred while updating the cart.");
+  }
+};
+
+const handleCart = async (id: string) => {
+  if (!user || !token) {
+    alert("Login first");
+    return;
+  }
+
+  const userIDDS = user._id;
+  const updatedCart = cart && cart.musicIDS
+    ? { ...cart, musicIDS: [...new Set([...cart.musicIDS, id])] } // Prevent duplicates
+    : { userID: userIDDS, musicIDS: [id] };
+
+  setCart(updatedCart);
+  console.log(updatedCart);
+
+  try {
+    const response = await fetch(`http://localhost:5000/api/cart/create-cart`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: "include",
+      body: JSON.stringify(updatedCart),
+    });
+
+    const data = await response.json();
+
+    if (data?.success) {
+      alert(data.message || "Music added to cart successfully.");
+    } else {
+      alert(data.message || "Failed to add to cart, please try again.");
+      if (data.message === "exits") {
+        await handleExistingCart(id);
+      }
+    }
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+    alert("An error occurred. Please try again.");
+  }
+};
 
 
   return (
@@ -347,7 +421,7 @@ const Mainpage = () => {
                 <div className="w-1/5 p-4 text-center">{music?.mood}</div>
                 <div className="w-1/5 p-4 text-center flex justify-center gap-2">
                   <span className="text-sm">R {music?.price}.00</span>
-                  <FaShoppingCart className="text-xl cursor-pointer hover:text-gray-400" />
+                  <FaShoppingCart onClick={()=>handleCart(music._id)} className="text-xl cursor-pointer hover:text-gray-400" />
                 </div>
               </a>
             ))

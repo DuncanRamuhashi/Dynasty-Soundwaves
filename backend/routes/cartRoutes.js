@@ -5,10 +5,10 @@ import userAuth from '../middleware/userAuth.js';
 
 const cartRouter = express.Router();
 
-cartRouter.post('/create-cart',userAuth, rolesAuth('user'),createCart);
-cartRouter.put('/add-to-cart/:id',userAuth, rolesAuth('user'),addToCart);
-cartRouter.get('/get-cart/:id', rolesAuth('user'),getCart);
-cartRouter.put('/remove-from-cart/:id',userAuth,rolesAuth('user'),removeFromCart);
-cartRouter.delete('/delete-cart/:id',userAuth,rolesAuth('user'),deleteCart);
+cartRouter.post('/create-cart', rolesAuth('user'),createCart);
+cartRouter.put('/add-to-cart/:userID', rolesAuth('user'),addToCart);
+cartRouter.get('/get-cart/:userID', rolesAuth('user'),getCart);
+cartRouter.put('/remove-from-cart/:userID',rolesAuth('user'),removeFromCart);
+cartRouter.delete('/delete-cart/:userID',rolesAuth('user'),deleteCart);
 
 export default cartRouter;

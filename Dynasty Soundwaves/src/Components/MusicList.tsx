@@ -11,11 +11,15 @@ interface Music {
   image: string;
   bought: boolean;
 }
-
+interface Cart {
+  userID: string;
+  musicIDS: string[];
+}
 
 const MusicList: React.FC = () => {
   const user = JSON.parse(sessionStorage.getItem("user") || "null");
   const [musicList, setMusicList] = useState<Music[]>([]);
+  
   const navigate = useNavigate();
   
      useEffect(() => {
@@ -93,6 +97,9 @@ const formatDuration = (seconds: number): string => {
     }
   };
 
+
+ 
+  
   return (
     <div className="min-h-screen bg-gray-100 py-10">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 ">

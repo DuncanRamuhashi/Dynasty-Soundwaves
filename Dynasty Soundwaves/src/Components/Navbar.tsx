@@ -66,11 +66,11 @@ const Navbar = () => {
                 });
 
                 const data = await response.json();
-                
+                console.log(data.data);
                 if (data?.message === "none") {
                     setCartNumber(0);
                 } else {
-                    setCartNumber(data.cart?.length || 0);
+                    setCartNumber(data.data.musicIDS?.length || 0);
                 }
             } catch (error) {
                 console.error("Error getting cart:", error);
@@ -96,11 +96,12 @@ const Navbar = () => {
             if (data.success) {
                 setIsLoggedIn(true);
                 setIsLoginOpen(false);
-                setUser(data.user);
-                sessionStorage.setItem('user', JSON.stringify(data.user));
+                setUser(data.user.user);
+                sessionStorage.setItem('user', JSON.stringify(data.user.user));
                 sessionStorage.setItem('token', data.token); // Token is already a string
                 setEmail("");
                 setPassword("");
+                console.log(data.user.user);
             } else {
                 if (data.message === "Please verify your email address.") {
                     setIsOtpOpen(true);

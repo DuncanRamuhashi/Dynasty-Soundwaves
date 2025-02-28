@@ -13,7 +13,7 @@ export const createCart = async (req, res) => {
     // Check if a cart already exists for this user
     const existingCart = await Cart.findOne({ userID });
     if (existingCart) {
-      return res.status(400).json({ success: false, message: 'Cart already exists for this user' });
+      return res.status(400).json({ success: false, message: 'exits' });
     }
 
     // Create a new cart with musicIDS defaulting to empty array if not provided
