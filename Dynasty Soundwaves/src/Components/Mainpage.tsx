@@ -231,6 +231,12 @@ const Mainpage = () => {
     
   },[]);
   console.log(musicList);
+
+// adding to cart
+
+
+
+
   return (
 <>
 <div className="min-h-screen">

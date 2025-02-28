@@ -39,7 +39,7 @@ router.put('/update-profile/:id', userAuth, updateUser);
 router.delete('/delete-profile/:id', userAuth, deleteUser);
 
 // Admin Only - Get All Users
-router.get('/users', userAuth, rolesAuth('admin'), getAllUsers);
+router.get('/users/:token', userAuth, rolesAuth('admin'), getAllUsers);
 
 // Forgot Password (Send OTP to email)
 router.post('/forgot-password', forgotPassword);
