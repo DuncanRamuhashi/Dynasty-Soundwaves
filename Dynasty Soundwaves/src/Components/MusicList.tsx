@@ -44,7 +44,7 @@ useEffect(() => {
       console.log(data);
       if (data?.success) {
            setMusicList(data.data)
-           
+           sessionStorage.setItem("music", JSON.stringify(musicList));
       } else {
         alert(data.message || "Update failed, please try again.");
       }

@@ -34,17 +34,52 @@ const Navbar = () => {
     const [otp, setOtp] = useState("");
     const [userType, setUserType] = useState<"user" | "seller" | "">("");
     const [isOtpSent, setIsOtpSent] = useState(false);
-    const navigate = useNavigate();
+    const [cartNumber, setCartNumber] = useState<number>(0);
     const [user, setUser] = useState<User | null>(null);
-    const storedUser = JSON.parse(sessionStorage.getItem('user') || 'null');
-    // Check if user is logged and  in on component mount
+    
+    const navigate = useNavigate();
+
+    // Check if user is logged in on component mount
     useEffect(() => {
-      
+        const storedUser = JSON.parse(sessionStorage.getItem('user') || 'null');
         if (storedUser) {
             setUser(storedUser);
             setIsLoggedIn(true);
         }
-    }, storedUser);
+    }, []); // Empty dependency array since this only runs once on mount
+
+    // Fetch cart items
+    useEffect(() => {
+        const storedUser = JSON.parse(sessionStorage.getItem("user") || "null");
+        const token = sessionStorage.getItem("token");
+        
+        if (!storedUser?._id || !token) return;
+
+        const getCart = async () => {
+            try {
+                const response = await fetch(`http://localhost:5000/api/cart/get-cart/${storedUser._id}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                });
+
+                const data = await response.json();
+                
+                if (data?.message === "none") {
+                    setCartNumber(0);
+                } else {
+                    setCartNumber(data.cart?.length || 0);
+                }
+            } catch (error) {
+                console.error("Error getting cart:", error);
+                alert("An error occurred while fetching cart.");
+            }
+        };
+
+        getCart();
+    }, [isLoggedIn]); // Depend on isLoggedIn to refresh cart when login status changes
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -62,9 +97,8 @@ const Navbar = () => {
                 setIsLoggedIn(true);
                 setIsLoginOpen(false);
                 setUser(data.user);
-                sessionStorage.setItem('user', JSON.stringify(data.user.user));
-                
-                sessionStorage.setItem('token', JSON.stringify(data.token));
+                sessionStorage.setItem('user', JSON.stringify(data.user));
+                sessionStorage.setItem('token', data.token); // Token is already a string
                 setEmail("");
                 setPassword("");
             } else {
@@ -88,17 +122,16 @@ const Navbar = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({email, otp}),
+                body: JSON.stringify({ email, otp }),
             });
             const data = await response.json();
 
             if (data.success) {
                 alert("OTP verified successfully!");
-                setIsOtpOpen(false)
+                setIsOtpOpen(false);
                 setOtp("");
                 setIsLoginOpen(true);
                 setUser(data.user);
-               
                 setEmail("");
                 setPassword("");
             } else {
@@ -112,6 +145,10 @@ const Navbar = () => {
 
     const handleRegistration = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!userType) {
+            alert("Please select a user type");
+            return;
+        }
         try {
             const response = await fetch("http://localhost:5000/api/auth/register", {
                 method: "POST",
@@ -128,7 +165,7 @@ const Navbar = () => {
                 setIsOtpOpen(true);
                 setIsOtpSent(true);
                 setName("");
-               
+                setEmail(""); // Clear email field
                 setPassword("");
                 setUserType("");
             } else {
@@ -141,13 +178,17 @@ const Navbar = () => {
     };
 
     const handleResendOtp = async () => {
+        if (!email) {
+            alert("Please enter your email first");
+            return;
+        }
         try {
             const response = await fetch("http://localhost:5000/api/auth/resend-otp", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({email}),
+                body: JSON.stringify({ email }),
             });
             const data = await response.json();
 
@@ -173,10 +214,10 @@ const Navbar = () => {
             const data = await response.json();
 
             if (data.success) {
-                sessionStorage.removeItem('user');
-                sessionStorage.removeItem('token');
+                sessionStorage.clear(); // Clear all session storage
                 setIsLoggedIn(false);
                 setUser(null);
+                setCartNumber(0);
                 alert("Logged out successfully");
                 navigate('/home');
             } else {
@@ -187,7 +228,6 @@ const Navbar = () => {
             alert("Error logging out");
         }
     };
-
     return (
         <nav className="flex items-center justify-between px-8 py-4 text-gray-900 bg-white shadow-md">
             {/* Logo */}
@@ -202,7 +242,7 @@ const Navbar = () => {
                         <Link to="/cart" className="relative">
                             <FaShoppingCart className="text-xl cursor-pointer hover:text-gray-400" />
                             <span className="absolute -top-4 -right-3 bg-gray-900 text-gray-100 text-xs font-bold px-2 py-1 rounded-full">
-                                5
+                                {cartNumber}
                             </span>
                         </Link>
                         <span className="text-sm">R0.00</span>
