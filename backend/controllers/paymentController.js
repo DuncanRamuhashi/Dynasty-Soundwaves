@@ -3,14 +3,13 @@ import Payment from "../models/payment.js";
 // Create a new Payment
 export const createPayment = async (req, res) => {
   try {
-    const { userID,sellerID, fullamount,  } = req.body;
+    const { userID, sellerID, fullamount } = req.body;
 
     // Create a new payment entry
     const newPayment = new Payment({
       userID,
       sellerID,
       fullamount,
-     
     });
 
     // Save the payment to the database
@@ -18,46 +17,63 @@ export const createPayment = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: 'Payment created successfully',
-      data: newPayment
+      message: "Payment created successfully",
+      data: newPayment,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+    res
+      .status(500)
+      .json({ success: false, message: "Server Error", error: error.message });
   }
 };
 
-// Get a single Payment by ID for seller
-export const getsellerPayment = async (req, res) => {
+// Get a single Payment by sellerID
+export const getSellerPayment = async (req, res) => {
   try {
     const { sellerID } = req.params;
-   // Find the payment by its ID
-    const payment = await Payment.findById(sellerID);
+
+    // Find the payment by sellerID
+    const payment = await Payment.findOne({ sellerID });
+
     if (!payment) {
-      return res.status(404).json({ success: false, message: 'Payment not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Payment not found" });
     }
+
     res.status(200).json({
       success: true,
-      data: payment
+      data: payment,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+    res
+      .status(500)
+      .json({ success: false, message: "Server Error", error: error.message });
   }
 };
-// Get a single Payment by ID for seller
-export const getuserPayment = async (req, res) => {
+
+// Get a single Payment by userID
+export const getUserPayment = async (req, res) => {
   try {
     const { userID } = req.params;
-   // Find the payment by its ID
-    const payment = await Payment.findById(sellerID);
+
+    // Find the payment by userID
+    const payment = await Payment.findOne({ userID });
+
     if (!payment) {
-      return res.status(404).json({ success: false, message: 'Payment not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Payment not found" });
     }
+
     res.status(200).json({
       success: true,
-      data: payment
+      data: payment,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+    res
+      .status(500)
+      .json({ success: false, message: "Server Error", error: error.message });
   }
 };
 
@@ -69,10 +85,12 @@ export const getAllPayments = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: payments
+      data: payments,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+    res
+      .status(500)
+      .json({ success: false, message: "Server Error", error: error.message });
   }
 };
 
@@ -85,14 +103,18 @@ export const deletePayment = async (req, res) => {
     const deletedPayment = await Payment.findByIdAndDelete(paymentID);
 
     if (!deletedPayment) {
-      return res.status(404).json({ success: false, message: 'Payment not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Payment not found" });
     }
 
     res.status(200).json({
       success: true,
-      message: 'Payment deleted successfully'
+      message: "Payment deleted successfully",
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+    res
+      .status(500)
+      .json({ success: false, message: "Server Error", error: error.message });
   }
 };
