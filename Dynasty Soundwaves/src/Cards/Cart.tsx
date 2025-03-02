@@ -34,6 +34,7 @@ const Cart: React.FC = () => {
           );
           
           setCartItems(filteredMusic);
+         
         } else {
           throw new Error("Invalid cart data format");
         }
@@ -87,6 +88,7 @@ const Cart: React.FC = () => {
   };
 
   const proceedToCheckout = () => {
+    sessionStorage.setItem('buyItems',JSON.stringify(cartItems));
     navigate("/termsandconditions");
   };
 

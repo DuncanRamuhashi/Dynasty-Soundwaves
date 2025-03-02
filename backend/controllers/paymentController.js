@@ -3,14 +3,14 @@ import Payment from "../models/payment.js";
 // Create a new Payment
 export const createPayment = async (req, res) => {
   try {
-    const { userID,sellerID, fullamount, statu } = req.body;
+    const { userID,sellerID, fullamount,  } = req.body;
 
     // Create a new payment entry
     const newPayment = new Payment({
       userID,
       sellerID,
       fullamount,
-      status
+     
     });
 
     // Save the payment to the database
@@ -26,10 +26,27 @@ export const createPayment = async (req, res) => {
   }
 };
 
-// Get a single Payment by ID
-export const getPayment = async (req, res) => {
+// Get a single Payment by ID for seller
+export const getsellerPayment = async (req, res) => {
   try {
     const { sellerID } = req.params;
+   // Find the payment by its ID
+    const payment = await Payment.findById(sellerID);
+    if (!payment) {
+      return res.status(404).json({ success: false, message: 'Payment not found' });
+    }
+    res.status(200).json({
+      success: true,
+      data: payment
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+  }
+};
+// Get a single Payment by ID for seller
+export const getuserPayment = async (req, res) => {
+  try {
+    const { userID } = req.params;
    // Find the payment by its ID
     const payment = await Payment.findById(sellerID);
     if (!payment) {

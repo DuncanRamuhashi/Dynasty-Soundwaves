@@ -4,7 +4,7 @@ const PaymentSchema = new mongoose.Schema({
     userID: { type: String, required: true }, 
     sellerID: { type: String, required: true }, 
     fullamount: { type: Number, required: true },  
-    status: { type: String, required: true }, 
+   
 },{timestamps: true});
 
 PaymentSchema.pre('save', async function(next) {
