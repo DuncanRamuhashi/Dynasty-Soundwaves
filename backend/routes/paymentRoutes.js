@@ -4,9 +4,9 @@ import {createPayment,getSellerPayment,getUserPayment,getAllPayments,deletePayme
 const paymentRouter = express.Router();
 
 paymentRouter.post('/create-payment',userAuth,createPayment);
-paymentRouter.get('/get-seller-payment/:id',userAuth,getSellerPayment);
-paymentRouter.get('/get-user-payment/:id',userAuth,getUserPayment);
+paymentRouter.get('/get-seller-payment/:sellerID/:token',userAuth,getSellerPayment);
+paymentRouter.get('/get-user-payment/:userID/:token',userAuth,getUserPayment);
 paymentRouter.get('/get-all-payments',userAuth,getAllPayments);
-paymentRouter.delete('/delete-payment/:id',userAuth,deletePayment);
+paymentRouter.delete('/delete-payment/:userID',userAuth,deletePayment);
 
 export default paymentRouter;

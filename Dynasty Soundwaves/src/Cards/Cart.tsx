@@ -8,6 +8,8 @@ interface CartItem {
   price: number;
   license: string;
   image: string;
+  sellerID: string
+
 }
 
 const Cart: React.FC = () => {

@@ -1,17 +1,69 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook from React Router
-import { FaCcVisa, FaCcMastercard, FaCcAmex, FaCcDiscover } from 'react-icons/fa';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaCcVisa, FaCcMastercard, FaCcAmex, FaCcDiscover } from "react-icons/fa";
 
-const Payment = () => {
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [securityCode, setSecurityCode] = useState('');
-  const navigate = useNavigate(); // Initialize useNavigate
+// Define types
+interface User {
+  _id: string;
+}
 
-  const handlePayment = () => {
-    // Here you would handle the payment logic (e.g., API call)
-    // After successful payment, navigate to the payment report page
-    navigate('/usereport'); // Redirect to the 'Usereport' page after payment
+interface CartItem {
+  _id: string;
+  price: number;
+  sellerID: string;
+}
+
+const Payment: React.FC = () => {
+  const [cardNumber, setCardNumber] = useState<string>("");
+  const [expiryDate, setExpiryDate] = useState<string>("");
+  const [securityCode, setSecurityCode] = useState<string>("");
+
+  const navigate = useNavigate();
+  const token = sessionStorage.getItem("token");
+  // Safely retrieve session storage data
+  const getSessionData = <T,>(key: string): T | null => {
+    try {
+      const data = sessionStorage.getItem(key);
+      return data ? JSON.parse(data) : null;
+    } catch (error) {
+      console.error(`Error parsing session data for ${key}:`, error);
+      return null;
+    }
+  };
+
+  const storedUser: User | null = getSessionData<User>("user");
+  const cart: CartItem[] | null = getSessionData<CartItem[]>("buyItems");
+
+  const handlePayment = async () => {
+    if (!storedUser || !cart || cart.length === 0) {
+      alert("User or cart data is missing.");
+      return;
+    }
+
+    const musicIDs = cart.map((item) => item._id);
+    const fullAmount = cart.reduce((total, item) => total + item.price, 0);
+    const sellerID = cart[0]?.sellerID;
+
+    try {
+      const response = await fetch("http://localhost:5000/api/payment/create-payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userID: storedUser._id, sellerID, fullAmount, musicIDs,token }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert("Payment successful! Your music is now downloadable.");
+        navigate("/usereport");
+      } else {
+        alert(data.message || "Payment failed.");
+      }
+    } catch (error) {
+      console.error("Error in payment:", error);
+      alert("An error occurred while processing payment.");
+    }
   };
 
   return (
@@ -20,7 +72,9 @@ const Payment = () => {
         <h2 className="text-3xl font-semibold text-gray-900 text-center mb-8">Payment</h2>
 
         <div className="mb-6">
-          <label htmlFor="card" className="block text-gray-900 font-medium mb-2">Card Information</label>
+          <label htmlFor="card" className="block text-gray-900 font-medium mb-2">
+            Card Information
+          </label>
           <input
             type="text"
             id="card"
@@ -55,7 +109,7 @@ const Payment = () => {
               <FaCcDiscover className="text-3xl text-orange-500" />
             </div>
             <button
-              onClick={handlePayment} // Trigger handlePayment on button click
+              onClick={handlePayment}
               className="bg-gray-900 text-white px-6 py-3 rounded-md font-semibold hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900"
             >
               Pay
