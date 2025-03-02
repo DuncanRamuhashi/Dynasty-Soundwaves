@@ -395,7 +395,6 @@ const handleCart = async (id: string) => {
           </div>
         </div>
 
-        {/* Music Table */}
         <div className="flex flex-col bg-gray-900 py-3 px-3 mx-52 rounded-lg shadow-lg">
           <div className="flex bg-gray-800 text-gray-100 font-semibold">
             <div className="w-1/5 p-4 text-center">Name</div>
