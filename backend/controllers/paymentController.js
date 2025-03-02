@@ -1,6 +1,6 @@
 import Payment from "../models/payment.js";
 import Music from "../models/music.js"; // Import Music model
-
+import User from "../models/User.js"
 // Create a new Payment and update downloadable status
 export const createPayment = async (req, res) => {
   try {
@@ -51,13 +51,14 @@ export const createPayment = async (req, res) => {
   }
 };
 
-
-// Get payments for a specific seller
 export const getSellerPayment = async (req, res) => {
   try {
     const { sellerID } = req.params;
 
-    const payments = await Payment.find({ "payments.sellerID": sellerID });
+    // Fetch payments related to the seller and populate user and music data
+    const payments = await Payment.find({ "payments.sellerID": sellerID })
+      .populate("userID", "name email") // Ensure this is correctly referencing the User model
+      .populate("payments.musicIDs", "title"); // Populate the music title field
 
     if (!payments.length) {
       return res.status(404).json({
@@ -66,8 +67,16 @@ export const getSellerPayment = async (req, res) => {
       });
     }
 
+    // Format seller payments
     const sellerPayments = payments.flatMap((payment) =>
-      payment.payments.filter((p) => p.sellerID === sellerID)
+      payment.payments
+        .filter((p) => p.sellerID === sellerID)
+        .map((p) => ({
+          userEmail: payment.userID?.email || "N/A", // Access populated user data
+          userName: payment.userID?.name || "N/A",   // Access populated user data
+          songNames: p.musicIDs.map((music) => music.title).join(", ") || "N/A", // Access populated music data
+          amount: p.fullAmount,
+        }))
     );
 
     res.status(200).json({

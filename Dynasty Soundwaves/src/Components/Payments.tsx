@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const Payments = () => {
+interface Payment {
+  userEmail: string;
+  userName: string;
+  songNames: string;
+  amount: number;
+}
+
+const Payments: React.FC = () => {
   const payments = [
-    { email: 'user1@example.com', name: 'John Doe', song: 'Melody Vibes', amount: 'R1,500.00', date: '2025-02-21', method: 'Visa', status: 'Completed' },
-    { email: 'user2@example.com', name: 'Jane Smith', song: 'Beats & Bass', amount: 'R800.00', date: '2025-02-20', method: 'Mastercard', status: 'Failed' },
-    { email: 'user3@example.com', name: 'Mike Johnson', song: 'Chill Waves', amount: 'R2,200.00', date: '2025-02-19', method: 'Amex', status: 'Pending' },
-    { email: 'user4@example.com', name: 'Emily Davis', song: 'Urban Flow', amount: 'R950.00', date: '2025-02-18', method: 'PayPal', status: 'Completed' },
-    { email: 'user5@example.com', name: 'Chris Brown', song: 'Groove Nation', amount: 'R3,500.00', date: '2025-02-17', method: 'Visa', status: 'Completed' },
+    { email: 'user1@example.com', name: 'John Doe', song: 'Melody Vibes', amount: 1500, date: '2025-02-21', method: 'Visa', status: 'Completed' },
+    { email: 'user2@example.com', name: 'Jane Smith', song: 'Beats & Bass', amount: 800, date: '2025-02-20', method: 'Mastercard', status: 'Failed' },
+    { email: 'user3@example.com', name: 'Mike Johnson', song: 'Chill Waves', amount: 2200, date: '2025-02-19', method: 'Amex', status: 'Pending' },
+    { email: 'user4@example.com', name: 'Emily Davis', song: 'Urban Flow', amount: 950, date: '2025-02-18', method: 'PayPal', status: 'Completed' },
+    { email: 'user5@example.com', name: 'Chris Brown', song: 'Groove Nation', amount: 3500, date: '2025-02-17', method: 'Visa', status: 'Completed' },
   ];
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const paymentsPerPage = 2;
 
   const indexOfLastPayment = currentPage * paymentsPerPage;
@@ -17,6 +24,36 @@ const Payments = () => {
   const currentPayments = payments.slice(indexOfFirstPayment, indexOfLastPayment);
 
   const totalPages = Math.ceil(payments.length / paymentsPerPage);
+  const storedUser = JSON.parse(sessionStorage.getItem("user") || "null");
+  const token = sessionStorage.getItem("token");
+  const [trans, setTrans] = useState<Payment[]>([]);
+
+  useEffect(() => {
+    if (!storedUser?._id || !token) return;
+    let sellerID = storedUser._id;
+
+    const getPAYMENT = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/payment/get-seller-payment/${sellerID}/${token}`,
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          }
+        );
+
+        const data = await response.json();
+        console.log(data);
+        setTrans(data.data || []);
+      } catch (error) {
+        console.error("Error getting payments:", error);
+        alert("An error occurred while fetching payments.");
+      }
+    };
+
+    getPAYMENT();
+  }, [storedUser?._id, token]);
 
   return (
     <div className="bg-gray-100 min-h-screen flex justify-center items-center p-6">
@@ -25,33 +62,23 @@ const Payments = () => {
 
         {/* List of Payments */}
         <div className="space-y-6">
-          {currentPayments.map((payment, index) => (
+          {trans.map((payment, index) => (
             <div key={index} className="bg-gray-50 p-6 rounded-lg shadow-sm">
               <div className="flex justify-between text-gray-900 mb-2">
                 <span className="font-medium">User Email:</span>
-                <span>{payment.email}</span>
+                <span>{payment.userEmail}</span>
               </div>
               <div className="flex justify-between text-gray-900 mb-2">
                 <span className="font-medium">User Name:</span>
-                <span>{payment.name}</span>
+                <span>{payment.userName}</span>
               </div>
               <div className="flex justify-between text-gray-900 mb-2">
-                <span className="font-medium">Song Name:</span>
-                <span>{payment.song}</span>
+                <span className="font-medium">Song Names:</span>
+                <span>{payment.songNames}</span>
               </div>
               <div className="flex justify-between text-gray-900 mb-2">
                 <span className="font-medium">Amount:</span>
-                <span>{payment.amount}</span>
-              </div>
-              <div className="flex justify-between text-gray-900 mb-2">
-                <span className="font-medium">Payment Method:</span>
-                <span>{payment.method}</span>
-              </div>
-              <div className="flex justify-between text-gray-900 mb-2">
-                <span className="font-medium">Status:</span>
-                <span className={payment.status === 'Completed' ? 'text-green-500' : payment.status === 'Pending' ? 'text-yellow-500' : 'text-red-500'}>
-                  {payment.status}
-                </span>
+                <span>R {payment.amount}.00</span>
               </div>
             </div>
           ))}

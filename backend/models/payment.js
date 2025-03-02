@@ -2,12 +2,13 @@ import mongoose from 'mongoose';
 
 const PaymentSchema = new mongoose.Schema(
   {
-    userID: { type: String, required: true },
+    // Change userID to ObjectId to properly reference the User model
+    userID: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, 
     payments: [
       {
         sellerID: { type: String, required: true },
         fullAmount: { type: Number, required: true },
-        musicIDs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Music' }], // Assuming 'Music' is the referenced model
+        musicIDs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Music' }], // References to Music model
       },
     ],
   },
