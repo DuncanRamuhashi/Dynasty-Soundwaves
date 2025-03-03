@@ -23,26 +23,25 @@ export const uploadMusic = async (req, res) => {
 export const getAllMusic = async (req, res) => {
   try {
     const music = await Music.find({ downloadable: { $ne: true } })
-      .sort({ createdAt: -1 }) // Sort by createdAt descending (newest first)
+      .sort({ createdAt: -1 })
       .select('_id title genre bpm mood duration tags image price sellerID');
+   console.log(music);
+    // Fetch all seller details in parallel
+    const sellerIds = music.map(track => track.sellerID);
+    const sellers = await User.find({ _id: { $in: sellerIds } }).select('_id name');
 
-    const populatedMusic = []; // To store music with seller names
+    // Convert seller array into a lookup object for quick access
+    const sellerMap = sellers.reduce((acc, seller) => {
+      acc[seller._id] = seller.name;
+      return acc;
+    }, {});
 
-    // Use a for loop to iterate through the music array
-    for (let i = 0; i < music.length; i++) {
-      const track = music[i];
+    // Attach sellerName to each track
+    const populatedMusic = music.map(track => ({
+      ...track.toObject(),
+      sellerName: sellerMap[track.sellerID] || '' // Default to empty string if seller not found
+    }));
 
-      // Find the user by sellerID
-      const user = await User.findById(track.sellerID);
-
-      // Add the seller name to the track object
-      populatedMusic.push({
-        ...track.toObject(), // Convert track to plain object
-        sellerName: user ? user.name : '' // Add the seller name or empty string if no user
-      });
-    }
-
-    // Send the response with the populated music data
     res.status(200).json({ success: true, data: populatedMusic });
   } catch (error) {
     console.error("Get All Music Error:", error);

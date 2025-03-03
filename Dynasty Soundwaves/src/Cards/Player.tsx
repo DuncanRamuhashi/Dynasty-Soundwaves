@@ -146,17 +146,17 @@ const handlePrev = (index: number, playNumber: number, totalNumber: number) => {
 
       <div className="flex items-center mb-4 justify-between">
         <div className="ml-4">
-          <p className="text-gray-100 text-lg font-medium">{title}</p>
+          <p className="text-gray-100 text-base md:text-lg font-medium">{title}</p>
           <p className="text-gray-400 text-sm">{artistName}</p>
         </div>
 
-        <div className="flex items-center gap-10">
+        <div className="flex  md:flex-row items-center gap-10">
           <button
             onClick={skipBackward}
             className="text-gray-100 hover:text-gray-300 transition-colors"
             aria-label="Skip backward"
           >
-            <FaStepBackward className="h-5 w-5" />
+            <FaStepBackward className="h-4 w-4 md:h-5 md:w-5" />
           </button>
           
           <button
@@ -172,14 +172,14 @@ const handlePrev = (index: number, playNumber: number, totalNumber: number) => {
             className="text-gray-100 hover:text-gray-300 transition-colors"
             aria-label="Skip forward"
           >
-            <FaStepForward className="h-5 w-5" />
+            <FaStepForward className="h-4 w-4 md:h-5 md:w-5" />
           </button>
         </div>
 
         <img src={image || artwork} alt="Album cover" className="h-12 w-12 object-cover rounded-md" />
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center  gap-10 md:gap-4">
         <div className="flex-1">
           <input
             type="range"
@@ -197,7 +197,7 @@ const handlePrev = (index: number, playNumber: number, totalNumber: number) => {
 
         <div className="flex items-center gap-2">
           <div className="text-gray-100">
-            {volume > 0 ? <FaVolumeUp className="h-5 w-5" /> : <FaVolumeDown className="h-5 w-5" />}
+            {volume > 0 ? <FaVolumeUp className="h-3 w-3 md:h-5 md:w-5" /> : <FaVolumeDown className="h-5 w-5" />}
           </div>
           <input
             type="range"

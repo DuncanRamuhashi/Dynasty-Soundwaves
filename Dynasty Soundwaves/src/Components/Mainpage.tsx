@@ -270,7 +270,6 @@ const handleExistingCart = async (id: string) => {
     alert("An error occurred while updating the cart.");
   }
 };
-
 const handleCart = async (id: string) => {
   if (!user || !token) {
     alert("Login first");
@@ -315,133 +314,134 @@ const handleCart = async (id: string) => {
 
   return (
 <>
-<div className="min-h-screen">
-      <div className="text-gray-100 ">
-        {/* Search Bar */}
-        <div className="flex justify-center">
-          <div className="flex items-center bg-gray-900 p-2 rounded-lg w-full max-w-lg">
-            <input
-              type="text"
-              placeholder="What are you looking for?"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="flex-1 p-2  outline-none bg-transparent text-gray-100 placeholder-gray-400"
-            />
-   
-          </div>
-        </div>
-
-        {/* Filter Section */}
-        <div className="flex py-6 px-52 justify-center gap-2">
-          <div className="bg-gray-900 p-2 rounded-lg w-96 flex h-10 justify-between">
-            <select
-              aria-label="Select Mood"
-              value={selectedMood}
-              onChange={handleFilterChange(setSelectedMood)}
-              className="bg-gray-900 text-gray-100 w-full"
-            >
-              <option value="">All Moods</option>
-              {Mood.map((mood) => (
-                <option key={mood.id} value={mood.label}>
-                  {mood.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="text-gray-100 bg-gray-900 p-2 rounded-lg w-96 max-w-xs flex h-10 justify-between">
-            <select
-              value={selectedGenre}
-              onChange={handleFilterChange(setSelectedGenre)}
-              className="bg-gray-900 text-gray-100 w-full"
-            >
-              <option value="">All Genres</option>
-              {Genre.map((genre) => (
-                <option key={genre.id} value={genre.label}>
-                  {genre.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="text-gray-100 bg-gray-900 p-2 rounded-lg w-96 max-w-xs flex h-10">
-            <select
-              value={selectedBPM}
-              onChange={handleFilterChange(setSelectedBPM)}
-              className="bg-gray-900 text-gray-100 w-full"
-            >
-              <option value="">All BPMs</option>
-              {BPM.map((bpm) => (
-                <option key={bpm.id} value={bpm.label}>
-                  {bpm.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="text-gray-100 bg-gray-900 p-2 rounded-lg w-96 max-w-xs flex h-10">
-            <select
-              value={selectedPrice}
-              onChange={handleFilterChange(setSelectedPrice)}
-              className="bg-gray-900 text-gray-100 w-full"
-            >
-              <option value="">All Prices</option>
-              {Price.map((price) => (
-                <option key={price.id} value={price.label}>
-                  {price.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="flex flex-col bg-gray-900 py-3 px-3 mx-52 rounded-lg shadow-lg">
-          <div className="flex bg-gray-800 text-gray-100 font-semibold">
-            <div className="w-1/5 p-4 text-center">Name</div>
-            <div className="w-1/5 p-4 text-center">TITLE</div>
-            <div className="w-1/5 p-4 text-center">TIME</div>
-            <div className="w-1/5 p-4 text-center">BPM</div>
-            <div className="w-1/5 p-4 text-center">MOOD</div>
-            <div className="w-1/5 p-4 text-center">PRICE</div>
-          </div>
-          {filteredMusicList.length === 0 ? (
-            <p className="text-center text-gray-500 text-lg">
-              No music matches your filters!
-            </p>
-          ) : (
-            filteredMusicList.map((music) => (
-              <a
-                onClick={() => playAudio(music._id, music.title, music.sellerName, music.image, music.duration)}
-                key={music._id}
-                className="flex text-gray-100 hover:bg-gray-600 transition-colors"
-              >
-                <div className="w-1/5 p-4 text-center">{music?.sellerName}</div>
-                <div className="w-1/5 p-4 text-center">{music?.title}</div>
-                <div className="w-1/5 p-4 text-center">{formatDuration(music.duration)}</div>
-                <div className="w-1/5 p-4 text-center">{music?.bpm}</div>
-                <div className="w-1/5 p-4 text-center">{music?.mood}</div>
-                <div className="w-1/5 p-4 text-center flex justify-center gap-2">
-                  <span className="text-sm">R {music?.price}.00</span>
-                  <FaShoppingCart onClick={()=>handleCart(music._id)} className="text-xl cursor-pointer hover:text-gray-400" />
-                </div>
-              </a>
-            ))
-          )}
-        </div>
-
-        <div className="flex fixed bottom-0 left-0 right-0 z-50">
-          <Player
-            songID={playID}
-            title={playTitle}
-            artistName={playName}
-            image={playImage}
-            audioTrack={playAudioTrack}
-            playing={true}
+  <div className="min-h-screen">
+    <div className="text-gray-100">
+      {/* Search Bar */}
+      <div className="flex justify-center p-4">
+        <div className="flex items-center bg-gray-900 p-2 rounded-lg w-full max-w-lg">
+          <input
+            type="text"
+            placeholder="What are you looking for?"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="flex-1 p-2 outline-none bg-transparent text-gray-100 placeholder-gray-400"
           />
         </div>
       </div>
+
+      {/* Filter Section */}
+      <div className="flex flex-col   lg:flex-row gap-2 justify-center px-4 md:px-10 lg:px-32 py-4">
+        {[ 
+          { state: selectedMood, setter: setSelectedMood, options: Mood, label: "All Moods" },
+          { state: selectedGenre, setter: setSelectedGenre, options: Genre, label: "All Genres" },
+          { state: selectedBPM, setter: setSelectedBPM, options: BPM, label: "All BPMs" },
+          { state: selectedPrice, setter: setSelectedPrice, options: Price, label: "All Prices" },
+        ].map(({ state, setter, options, label }, index) => (
+          <div key={index} className="bg-gray-900 p-2 rounded-lg w-full  flex h-10">
+            <select
+              value={state}
+              onChange={handleFilterChange(setter)}
+              className="bg-gray-900 text-gray-100 w-full"
+            >
+              <option value="">{label}</option>
+              {options.map((opt) => (
+                <option key={opt.id} value={opt.label}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        ))}
       </div>
-    </>
+
+{/* Music List */}
+<div className="bg-gray-900 py-3 px-2 sm:px-4 md:px-6 lg:mx-20 rounded-lg shadow-lg overflow-x-auto">
+  <div className="w-full">
+    {/* Header - Hidden on mobile, flex on tablet+ */}
+    <div className="hidden sm:flex bg-gray-800 text-gray-100 font-semibold">
+      {["Name", "Title", "Time", "BPM", "Mood", "Price"].map((header, index) => (
+        <div key={index} className="flex-1 min-w-[100px] p-3 sm:p-4 text-center">{header}</div>
+      ))}
+    </div>
+
+    {filteredMusicList.length === 0 ? (
+      <p className="text-center text-gray-500 text-base sm:text-lg py-4">No music matches your filters!</p>
+    ) : (
+      filteredMusicList.map((music) => (
+        <a
+          key={music._id}
+          onClick={() => playAudio(music._id, music.title, music.sellerName, music.image, music.duration)}
+          className="block sm:flex text-gray-100 hover:bg-gray-600 transition-colors border-b  border-gray-700 p-3"
+        >
+{/* Mobile layout - stacked */}
+<div className="sm:hidden space-y-4 bg-gray-800 rounded-lg p-6 shadow-lg">
+  <div className="flex items-center gap-4">
+    <img
+      src={music?.image}
+      alt={music?.title}
+      className="h-16 w-16 rounded-lg object-cover border-2 border-gray-700"
+    />
+    <div className="flex-1">
+      <h3 className="font-semibold text-lg text-gray-100 truncate">{music?.title}</h3>
+      <p className="text-sm text-gray-400">{music?.sellerName}</p>
+    </div>
+  </div>
+
+  <div className="grid grid-cols-2 gap-4 text-sm">
+    <div className="flex flex-col">
+      <span className="text-gray-400">Duration</span>
+      <span className="text-gray-100">{formatDuration(music.duration)}</span>
+    </div>
+
+    <div className="flex items-center gap-2">
+      <span className="text-gray-400">Price</span>
+      <span className="text-gray-100 font-medium">R{music?.price}.00</span>
+      <button
+        onClick={() => handleCart(music._id)}
+        className="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors"
+      >
+        <FaShoppingCart className="text-xl text-gray-100 hover:text-gray-300" />
+      </button>
+    </div>
+  </div>
+</div>
+
+          {/* Tablet/Desktop layout - grid */}
+          <div className="hidden sm:flex w-full flex-1">
+            <div className="flex-1 min-w-[100px] p-2 text-center">{music?.sellerName}</div>
+            <div className="flex-1 min-w-[100px] p-2 text-center">{music?.title}</div>
+            <div className="flex-1 min-w-[100px] p-2 text-center">{formatDuration(music.duration)}</div>
+            <div className="flex-1 min-w-[100px] p-2 text-center">{music?.bpm}</div>
+            <div className="flex-1 min-w-[100px] p-2 text-center">{music?.mood}</div>
+            <div className="flex-1 min-w-[100px] p-2 text-center flex items-center justify-center gap-2">
+              <span className="text-sm">R {music?.price}.00</span>
+              <FaShoppingCart 
+                onClick={() => handleCart(music._id)} 
+                className="text-xl cursor-pointer hover:text-gray-400" 
+              />
+            </div>
+          </div>
+        </a>
+      ))
+    )}
+  </div>
+</div>
+
+      {/* Music Player */}
+      <div className="fixed bottom-0 left-0 right-0 z-50">
+        <Player
+          songID={playID}
+          title={playTitle}
+          artistName={playName}
+          image={playImage}
+          audioTrack={playAudioTrack}
+          playing={true}
+        />
+      </div>
+    </div>
+  </div>
+</>
+
   );
 };
 

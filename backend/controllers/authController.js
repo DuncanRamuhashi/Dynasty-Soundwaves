@@ -117,7 +117,7 @@ The Dynasty Soundwave Team`,
 // Verify email after registration
 export const verifyEmail = async (req, res) => {
     const { email, otp } = req.body;
-
+   console.log(email);
     // Validate input
     if (!email || !otp) {
         return res.status(400).json({ success: false, message: 'Missing details:  OTP is required.' });

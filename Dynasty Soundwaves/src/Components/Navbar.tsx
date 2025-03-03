@@ -128,6 +128,7 @@ const Navbar = () => {
                 },
                 body: JSON.stringify({ email, otp }),
             });
+
             const data = await response.json();
 
             if (data.success) {
@@ -169,7 +170,6 @@ const Navbar = () => {
                 setIsOtpOpen(true);
                 setIsOtpSent(true);
                 setName("");
-                setEmail(""); // Clear email field
                 setPassword("");
                 setUserType("");
             } else {
