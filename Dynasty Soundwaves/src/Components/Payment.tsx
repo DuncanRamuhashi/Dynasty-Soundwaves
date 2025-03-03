@@ -39,18 +39,19 @@ const Payment: React.FC = () => {
       alert("User or cart data is missing.");
       return;
     }
-
+    
     const musicIDs = cart.map((item) => item._id);
     const fullAmount = cart.reduce((total, item) => total + item.price, 0);
     const sellerID = cart[0]?.sellerID;
-
+  const  cartID  =  sessionStorage.getItem('cartID');
+  console.log(cartID);
     try {
       const response = await fetch("http://localhost:5000/api/payment/create-payment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userID: storedUser._id, sellerID, fullAmount, musicIDs,token }),
+        body: JSON.stringify({ userID: storedUser._id, sellerID, fullAmount, musicIDs,token,cartID }),
       });
 
       const data = await response.json();

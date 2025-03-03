@@ -36,7 +36,9 @@ const Cart: React.FC = () => {
           );
           
           setCartItems(filteredMusic);
-         
+           navigate('/cart');
+           
+           
         } else {
           throw new Error("Invalid cart data format");
         }
@@ -86,6 +88,7 @@ const Cart: React.FC = () => {
   };
 
   const calculateTotal = () => {
+    navigate('/cart');
     return cartItems.reduce((total, item) => total + item.price, 0).toFixed(2);
   };
 

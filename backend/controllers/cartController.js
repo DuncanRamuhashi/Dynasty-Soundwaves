@@ -39,9 +39,9 @@ export const createCart = async (req, res) => {
 export const getCart = async (req, res) => {
   try {
     const { userID } = req.params;
-
-    const cart = await Cart.findOne({ userID });
-
+    console.log("id",userID);
+    const cart = await Cart.findOne({"userID": userID });
+    
     if (!cart) {
       return res.status(200).json({ success: true, message: 'none'});
     }

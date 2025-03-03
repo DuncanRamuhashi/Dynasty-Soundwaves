@@ -56,54 +56,56 @@ const Payments: React.FC = () => {
   }, [storedUser?._id, token]);
 
   return (
-    <div className="bg-gray-100 min-h-screen flex justify-center items-center p-6">
-      <div className="bg-white shadow-lg rounded-lg w-full max-w-4xl p-8">
-        <h2 className="text-3xl font-semibold text-gray-900 mb-6 text-center">Payment Transactions</h2>
-
-        {/* List of Payments */}
-        <div className="space-y-6">
-          {trans.map((payment, index) => (
-            <div key={index} className="bg-gray-50 p-6 rounded-lg shadow-sm">
-              <div className="flex justify-between text-gray-900 mb-2">
-                <span className="font-medium">User Email:</span>
-                <span>{payment.userEmail}</span>
-              </div>
-              <div className="flex justify-between text-gray-900 mb-2">
-                <span className="font-medium">User Name:</span>
-                <span>{payment.userName}</span>
-              </div>
-              <div className="flex justify-between text-gray-900 mb-2">
-                <span className="font-medium">Song Names:</span>
-                <span>{payment.songNames}</span>
-              </div>
-              <div className="flex justify-between text-gray-900 mb-2">
-                <span className="font-medium">Amount:</span>
-                <span>R {payment.amount}.00</span>
-              </div>
+    <div className="bg-gray-100 min-h-screen flex justify-center  p-4 sm:p-6 md:p-8">
+    <div className="bg-white shadow-lg rounded-lg w-full max-w-full sm:max-w-lg md:max-w-2xl lg:max-w-4xl p-6 sm:p-8">
+      <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-4 sm:mb-6 text-center">Payment Transactions</h2>
+  
+      {/* List of Payments */}
+      <div className="space-y-4 sm:space-y-6">
+        {trans.map((payment, index) => (
+          <div key={index} className="bg-gray-50 p-4 sm:p-6 rounded-lg shadow-sm">
+            <div className="flex justify-between text-gray-900 mb-2">
+              <span className="font-medium">User Email:</span>
+              <span>{payment.userEmail}</span>
             </div>
-          ))}
-        </div>
-
-        {/* Pagination Controls */}
-        <div className="flex justify-center space-x-4 mt-6">
-          <button
-            className={`px-4 py-2 rounded-lg text-white ${currentPage === 1 ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-900 hover:bg-gray-600'}`}
-            onClick={() => setCurrentPage(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-          <span className="px-4 py-2 bg-gray-200 rounded-lg">Page {currentPage} of {totalPages}</span>
-          <button
-            className={`px-4 py-2 rounded-lg text-white ${currentPage === totalPages ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-900 hover:bg-gray-600'}`}
-            onClick={() => setCurrentPage(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
-        </div>
+            <div className="flex justify-between text-gray-900 mb-2">
+              <span className="font-medium">User Name:</span>
+              <span>{payment.userName}</span>
+            </div>
+            <div className="flex justify-between text-gray-900 mb-2">
+              <span className="font-medium">Song Names:</span>
+              <span>{payment.songNames}</span>
+            </div>
+            <div className="flex justify-between text-gray-900 mb-2">
+              <span className="font-medium">Amount:</span>
+              <span>R {payment.amount}.00</span>
+            </div>
+          </div>
+        ))}
+      </div>
+  
+      {/* Pagination Controls */}
+      <div className="flex justify-center space-x-4 mt-4 sm:mt-6">
+        <button
+          className={`px-4 py-2 rounded-lg text-white ${currentPage === 1 ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-900 hover:bg-gray-600'}`}
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span className="px-4 py-2 bg-gray-200 rounded-lg">Page {currentPage} of {totalPages}</span>
+        <button
+          className={`px-4 py-2 rounded-lg text-white ${currentPage === totalPages ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-900 hover:bg-gray-600'}`}
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
       </div>
     </div>
+  </div>
+  
+  
   );
 };
 

@@ -1,11 +1,14 @@
 import Payment from "../models/payment.js";
-import Music from "../models/music.js"; // Import Music model
-import User from "../models/User.js"
-// Create a new Payment and update downloadable status
+import Music from "../models/music.js";
+import User from "../models/User.js";
+import Cart from '../models/cart.js';
+
+// Create a new Payment and update downloadable status, then remove items from the cart
 export const createPayment = async (req, res) => {
   try {
-    const { userID, sellerID, fullAmount, musicIDs } = req.body; 
+    const { userID, sellerID, fullAmount, musicIDs, cartID } = req.body;
 
+    // Find existing payment for the user
     let payment = await Payment.findOne({ userID });
 
     if (payment) {
@@ -37,9 +40,20 @@ export const createPayment = async (req, res) => {
       { $set: { downloadable: true, userID: userID } } // Update fields
     );
 
+    // Remove items from the cart after payment
+    if (cartID) {
+      console.log('Deleting cart with ID:', cartID); // Debugging
+      const deletedCart = await Cart.findByIdAndDelete(cartID);
+      if (!deletedCart) {
+        console.log('No cart found with that ID');
+      } else {
+        console.log('Cart deleted successfully');
+      }
+    }
+
     res.status(201).json({
       success: true,
-      message: "Payment created successfully, music is now downloadable",
+      message: "Payment created successfully, music is now downloadable, and cart has been cleared",
       data: payment,
     });
   } catch (error) {
@@ -92,20 +106,21 @@ export const getSellerPayment = async (req, res) => {
   }
 };
 
-// Get all payments for a user
 export const getUserPayment = async (req, res) => {
   try {
     const { userID } = req.params;
-  console.log('userid',userID);
-    const payment = await Payment.findOne({ userID });
+    console.log('userid', userID);
 
-    if (!payment) {
+    const payment = await Payment.find({"userID": userID });
+
+    if (payment.length === 0) {
       return res.status(404).json({
         success: false,
         message: "No payments found for this user",
       });
     }
 
+    console.log(payment);
     res.status(200).json({
       success: true,
       data: payment,

@@ -54,10 +54,12 @@ const Navbar = () => {
         const token = sessionStorage.getItem("token");
         
         if (!storedUser?._id || !token) return;
-
+  
+    const userID = storedUser._id;
         const getCart = async () => {
+            console.log(userID);
             try {
-                const response = await fetch(`http://localhost:5000/api/cart/get-cart/${storedUser._id}`, {
+                const response = await fetch(`http://localhost:5000/api/cart/get-cart/${userID}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -66,23 +68,25 @@ const Navbar = () => {
                 });
 
                 const data = await response.json();
-                console.log(data.data);
+                console.log("why ",data);
+                sessionStorage.setItem('cartID',data.data._id);
                 if (data?.message === "none") {
                     setCartNumber(0);
                 } else {
-                    setCartNumber(data.data.musicIDS?.length || 0);
+
+                    setCartNumber(data.data.musicIDS?.length || 1);
                     sessionStorage.setItem('musicIDDS',JSON.stringify(data.data.musicIDS));
                
                 
                 }
             } catch (error) {
                 console.error("Error getting cart:", error);
-                alert("An error occurred while fetching cart.");
+              
             }
         };
 
         getCart();
-    }, [isLoggedIn]); // Depend on isLoggedIn to refresh cart when login status changes
+    }); // Depend on isLoggedIn to refresh cart when login status changes
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -105,6 +109,7 @@ const Navbar = () => {
                 setEmail("");
                 setPassword("");
                 console.log(data.user.user);
+                navigate("/");
             } else {
                 if (data.message === "Please verify your email address.") {
                     setIsOtpOpen(true);
@@ -224,6 +229,7 @@ const Navbar = () => {
                 setCartNumber(0);
                 alert("Logged out successfully");
                 navigate('/home');
+                sessionStorage.clear();
             } else {
                 alert(data.message);
             }

@@ -25,7 +25,7 @@ export const getAllMusic = async (req, res) => {
     const music = await Music.find({ downloadable: { $ne: true } })
       .sort({ createdAt: -1 })
       .select('_id title genre bpm mood duration tags image price sellerID');
-   console.log(music);
+ 
     // Fetch all seller details in parallel
     const sellerIds = music.map(track => track.sellerID);
     const sellers = await User.find({ _id: { $in: sellerIds } }).select('_id name');

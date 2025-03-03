@@ -59,88 +59,104 @@ const Profile: React.FC = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto mt-10 p-6 bg-gray-50 shadow-lg rounded-lg">
-      <h2 className="text-2xl font-bold text-center text-gray-800  mb-4">Edit Profile</h2>
-
-      <div className="space-y-4 ">
-        <div>
-          <label className="block font-medium text-gray-800">Name</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-800"
-          />
-        </div>
-
-        <div>
-          <label className="block font-medium text-gray-800">Email</label>
-          <input
-            type="email"
-            value={email}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600"
-            readOnly
-          />
-        </div>
-
-        <div>
-          <label className="block font-medium text-gray-800">Password</label>
-          <input
-            type="password"
-            placeholder="New password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-800"
-          />
-        </div>
-
-        <div>
-          <label className="block font-medium text-gray-800">Bio</label>
-          <textarea
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-800"
-          />
-        </div>
-
-        <div>
-          <label className="block font-medium text-gray-800">Facebook</label>
-          <input
-            type="text"
-            value={facebook}
-            onChange={(e) => setFacebook(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-800"
-          />
-        </div>
-
-        <div>
-          <label className="block font-medium text-gray-800">Instagram</label>
-          <input
-            type="text"
-            value={instagram}
-            onChange={(e) => setInstagram(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-800"
-          />
-        </div>
-
-        <div>
-          <label className="block font-medium text-gray-800">X (Twitter)</label>
-          <input
-            type="text"
-            value={x}
-            onChange={(e) => setX(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-800"
-          />
-        </div>
-
-        <button
-          onClick={handleUpdate}
-          className="w-full bg-gray-800 text-white py-2 rounded-md hover:bg-gray-700"
-        >
-          Update Profile
-        </button>
+    <div className="max-w-lg mx-auto mt-6 sm:mt-8 md:mt-10 px-4 sm:px-6 md:p-6 bg-gray-50 shadow-lg rounded-lg">
+    <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-800 mb-4 sm:mb-6">
+      Edit Profile
+    </h2>
+  
+    <div className="space-y-4 sm:space-y-5">
+      <div>
+        <label className="block font-medium text-gray-800 text-sm sm:text-base">
+          Name
+        </label>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-800 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-400"
+        />
       </div>
+  
+      <div>
+        <label className="block font-medium text-gray-800 text-sm sm:text-base">
+          Email
+        </label>
+        <input
+          type="email"
+          value={email}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600 text-sm sm:text-base cursor-not-allowed"
+          readOnly
+        />
+      </div>
+  
+      <div>
+        <label className="block font-medium text-gray-800 text-sm sm:text-base">
+          Password
+        </label>
+        <input
+          type="password"
+          placeholder="New password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-800 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-400"
+        />
+      </div>
+  
+      <div>
+        <label className="block font-medium text-gray-800 text-sm sm:text-base">
+          Bio
+        </label>
+        <textarea
+          value={bio}
+          onChange={(e) => setBio(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-800 text-sm sm:text-base h-24 resize-y focus:outline-none focus:ring-2 focus:ring-gray-400"
+        />
+      </div>
+  
+      <div>
+        <label className="block font-medium text-gray-800 text-sm sm:text-base">
+          Facebook
+        </label>
+        <input
+          type="text"
+          value={facebook}
+          onChange={(e) => setFacebook(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-800 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-400"
+        />
+      </div>
+  
+      <div>
+        <label className="block font-medium text-gray-800 text-sm sm:text-base">
+          Instagram
+        </label>
+        <input
+          type="text"
+          value={instagram}
+          onChange={(e) => setInstagram(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-800 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-400"
+        />
+      </div>
+  
+      <div>
+        <label className="block font-medium text-gray-800 text-sm sm:text-base">
+          X (Twitter)
+        </label>
+        <input
+          type="text"
+          value={x}
+          onChange={(e) => setX(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-800 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-400"
+        />
+      </div>
+  
+      <button
+        onClick={handleUpdate}
+        className="w-full bg-gray-800 text-white py-2 sm:py-3 rounded-md hover:bg-gray-700 transition-colors text-sm sm:text-base font-medium"
+      >
+        Update Profile
+      </button>
     </div>
+  </div>
   );
 };
 

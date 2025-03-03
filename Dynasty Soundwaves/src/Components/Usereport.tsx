@@ -14,9 +14,11 @@ const Usereport = () => {
   const token = sessionStorage.getItem("token");
 
   useEffect(() => {
+    // Check if storedUser._id and token are available
     if (!storedUser?._id || !token) return;
-    let userID = storedUser._id;
-
+  
+    const userID = storedUser._id;
+  
     const getPAYMENT = async () => {
       try {
         const response = await fetch(
@@ -27,17 +29,20 @@ const Usereport = () => {
             credentials: "include",
           }
         );
-
+  
         const data = await response.json();
-        setPayments(data.data.payments || []);
+        
+        // Make sure the API response is structured as expected
+        setPayments(data.data?.payments || []);
       } catch (error) {
         console.error("Error getting payments:", error);
         alert("An error occurred while fetching payments.");
       }
     };
-
+  
     getPAYMENT();
-  }, []);
+  }, [storedUser?._id, token]); // Dependency array to trigger effect when these values change
+  
 
   const totalPages = Math.ceil(payments.length / reportsPerPage);
   const indexOfLastReport = currentPage * reportsPerPage;
@@ -45,7 +50,7 @@ const Usereport = () => {
   const currentReports = payments.slice(indexOfFirstReport, indexOfLastReport);
 
   return (
-    <div className="bg-gray-100 min-h-screen flex justify-center items-center p-6">
+    <div className="bg-gray-100 min-h-screen flex justify-center  p-6">
       <div className="bg-white shadow-lg rounded-lg w-full max-w-4xl p-8">
         <h2 className="text-3xl font-semibold text-gray-900 mb-6 text-center">
           Payment Reports

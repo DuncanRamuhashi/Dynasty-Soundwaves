@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaArrowDown, FaShoppingCart } from "react-icons/fa";
 import Navbar from "./Navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Player from "../Cards/Player";
 const Mood = [
     { id: 1, label: "Happy" },
@@ -262,6 +262,7 @@ const handleExistingCart = async (id: string) => {
 
     if (data?.success) {
       alert(data.message || "Music added to cart successfully.");
+      navigate("/cart");
     } else {
       alert(data.message || "Failed to add to cart, please try again.");
     }
@@ -270,7 +271,11 @@ const handleExistingCart = async (id: string) => {
     alert("An error occurred while updating the cart.");
   }
 };
+
+
+const navigate = useNavigate();
 const handleCart = async (id: string) => {
+  console.log(user);
   if (!user || !token) {
     alert("Login first");
     return;
@@ -299,6 +304,7 @@ const handleCart = async (id: string) => {
 
     if (data?.success) {
       alert(data.message || "Music added to cart successfully.");
+      navigate("/cart");
     } else {
       alert(data.message || "Failed to add to cart, please try again.");
       if (data.message === "exits") {
@@ -355,7 +361,7 @@ const handleCart = async (id: string) => {
       </div>
 
 {/* Music List */}
-<div className="bg-gray-900 py-3 px-2 sm:px-4 md:px-6 lg:mx-20 rounded-lg shadow-lg overflow-x-auto">
+<div className="bg-gray-900 py-3 px-2 sm:px-4 md:px-6 lg:mx-20 md:rounded-lg shadow-lg overflow-x-auto">
   <div className="w-full">
     {/* Header - Hidden on mobile, flex on tablet+ */}
     <div className="hidden sm:flex bg-gray-800 text-gray-100 font-semibold">
@@ -393,7 +399,7 @@ const handleCart = async (id: string) => {
       <span className="text-gray-100">{formatDuration(music.duration)}</span>
     </div>
 
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 justify-end">
       <span className="text-gray-400">Price</span>
       <span className="text-gray-100 font-medium">R{music?.price}.00</span>
       <button

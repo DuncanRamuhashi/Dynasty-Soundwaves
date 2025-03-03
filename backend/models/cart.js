@@ -1,8 +1,14 @@
 import mongoose from 'mongoose';
 
-const Cart = new mongoose.Schema({
-    musicIDS: { type: [String], default: [] },  
-    userID: { type: String, required: true ,unique: true},
-},{timestamps:true});
+const CartSchema = new mongoose.Schema(
+  {
 
-export default mongoose.model('Cart', Cart);
+    musicIDS: { type: [mongoose.Schema.Types.ObjectId], ref: 'Music', default: [] },
+    
+
+    userID: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, unique: true },
+  },
+  { timestamps: true }
+);
+
+export default mongoose.model('Cart', CartSchema);
