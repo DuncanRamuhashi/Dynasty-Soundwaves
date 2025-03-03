@@ -86,7 +86,7 @@ const Navbar = () => {
         };
 
         getCart();
-    }); // Depend on isLoggedIn to refresh cart when login status changes
+    },[]); // Depend on isLoggedIn to refresh cart when login status changes
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
