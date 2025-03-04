@@ -20,6 +20,7 @@
     "concurrently": "^9.1.2",
     "debug": "^4.4.0",
     "emoji-regex": "^8.0.0",
+    "env": "^0.0.2",
     "escalade": "^3.2.0",
     "fill-range": "^7.1.1",
     "get-caller-file": "^2.0.5",
@@ -60,7 +61,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon backend/server.js",
-    "client": "npm run dev --prefix Dynasty Soundwaves",
+    "client": "npm run dev --prefix dynasty-soundwaves",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
