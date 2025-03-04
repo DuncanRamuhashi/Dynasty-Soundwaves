@@ -12,7 +12,7 @@ const Reports = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:5000/api/payment/get-all-payments/${token}`,
+          `${import.meta.env.BACKENDURL}/payment/get-all-payments/${token}`,
           {
             method: "GET",
             headers: {

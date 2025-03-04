@@ -42,7 +42,7 @@ const Members = () => {
 
       setIsLoading(true);
       try {
-        const response = await fetch(`http://localhost:5000/api/auth/users/${token}` , {
+        const response = await fetch(`${import.meta.env.BACKENDURL}/auth/users/${token}` , {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

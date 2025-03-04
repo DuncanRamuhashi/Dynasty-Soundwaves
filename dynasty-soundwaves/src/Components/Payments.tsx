@@ -35,7 +35,7 @@ const Payments: React.FC = () => {
     const getPAYMENT = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/payment/get-seller-payment/${sellerID}/${token}`,
+          `${import.meta.env.BACKENDURL}/payment/get-seller-payment/${sellerID}/${token}`,
           {
             method: "GET",
             headers: { "Content-Type": "application/json" },

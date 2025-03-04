@@ -63,7 +63,7 @@ const Cart: React.FC = () => {
 
       if (storedUser?._id) {
         const response = await fetch(
-          `http://localhost:5000/api/cart/remove-from-cart/${storedUser._id}`,
+          `${import.meta.env.BACKENDURL}/cart/remove-from-cart/${storedUser._id}`,
           {
             method: "PUT",
             headers: {

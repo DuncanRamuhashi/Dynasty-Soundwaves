@@ -19,7 +19,7 @@ const UpdateTerms = () => {
   useEffect(() => {
     const fetchTermsAndConditions = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/tsandcs/get-tsandcs", {
+        const response = await fetch(`${import.meta.env.BACKENDURL}/tsandcs/get-tsandcs`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -50,7 +50,7 @@ const UpdateTerms = () => {
   // Handle saving updated terms & conditions
   const handleSave = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/tsandcs/update-tsandcs", {
+      const response = await fetch(`${import.meta.env.BACKENDURL}/tsandcs/update-tsandcs`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

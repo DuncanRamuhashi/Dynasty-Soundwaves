@@ -35,7 +35,7 @@ const Profile: React.FC = () => {
       const updatedData: any = { name, email, bio, social: { facebook, instagram, x },token };
       if (password.trim() !== "") updatedData.password = password;
 
-      const response = await fetch(`http://localhost:5000/api/auth/update-profile/${user._id}`, {
+      const response = await fetch(`${import.meta.env.BACKENDURL}/auth/update-profile/${user._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
