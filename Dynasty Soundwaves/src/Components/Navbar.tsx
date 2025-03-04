@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { FaSearch, FaShoppingCart, FaRegUser, FaUser, FaRegListAlt, FaListAlt, FaMoneyBillWave, FaPeopleCarry, FaUpload, FaBook, FaMusic, FaHome } from "react-icons/fa";
+import React, { useState, useEffect, useRef } from "react";
+import { FaSearch, FaShoppingCart, FaRegUser, FaUser, FaRegListAlt, FaMoneyBillWave, FaPeopleCarry, FaUpload, FaBook, FaMusic, FaHome } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/ddddd-removebg-preview.png";
 import { HiMenu, HiX } from "react-icons/hi";
+
 interface User {
-    _id:string;
+    _id: string;
     name: string;
     email: string;
     password: string;
@@ -24,17 +25,8 @@ interface User {
 }
 
 const Navbar = () => {
-
-    const [menuOpen, setMenuOpen] = useState(false); // Initially closed
-
-    const toggleMenu = () => {
-      setMenuOpen(prevMenuOpen => !prevMenuOpen);
-      if (!menuOpen) {
-        setTimeout(() => {
-          setMenuOpen(false);
-        }, 10000); // 10 seconds
-      }
-    };
+    const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null); // Ref to detect outside clicks
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isRegOpen, setIsRegOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -47,28 +39,44 @@ const Navbar = () => {
     const [isOtpSent, setIsOtpSent] = useState(false);
     const [cartNumber, setCartNumber] = useState<number>(0);
     const [user, setUser] = useState<User | null>(null);
-    
+
     const navigate = useNavigate();
+
+    // Toggle menu and remove auto-close timer
+    const toggleMenu = () => {
+        setMenuOpen((prev) => !prev);
+    };
+
+    // Close menu when clicking outside (optional enhancement)
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node) && menuOpen) {
+                setMenuOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [menuOpen]);
 
     // Check if user is logged in on component mount
     useEffect(() => {
-        const storedUser = JSON.parse(sessionStorage.getItem('user') || 'null');
+        const storedUser = JSON.parse(sessionStorage.getItem("user") || "null");
         if (storedUser) {
             setUser(storedUser);
             setIsLoggedIn(true);
         }
-    }, []); // Empty dependency array since this only runs once on mount
+    }, []);
 
     // Fetch cart items
     useEffect(() => {
         const storedUser = JSON.parse(sessionStorage.getItem("user") || "null");
         const token = sessionStorage.getItem("token");
-        
         if (!storedUser?._id || !token) return;
-  
-    const userID = storedUser._id;
+
+        const userID = storedUser._id;
         const getCart = async () => {
-            console.log(userID);
             try {
                 const response = await fetch(`http://localhost:5000/api/cart/get-cart/${userID}`, {
                     method: "GET",
@@ -77,49 +85,38 @@ const Navbar = () => {
                     },
                     credentials: "include",
                 });
-
                 const data = await response.json();
-                console.log("why ",data);
-                sessionStorage.setItem('cartID',data.data._id);
+                sessionStorage.setItem("cartID", data.data._id);
                 if (data?.message === "none") {
                     setCartNumber(0);
                 } else {
-
                     setCartNumber(data.data.musicIDS?.length || 1);
-                    sessionStorage.setItem('musicIDDS',JSON.stringify(data.data.musicIDS));
-               
-                
+                    sessionStorage.setItem("musicIDDS", JSON.stringify(data.data.musicIDS));
                 }
             } catch (error) {
                 console.error("Error getting cart:", error);
-              
             }
         };
-
         getCart();
-    },[isLoggedIn]); // Depend on isLoggedIn to refresh cart when login status changes
+    }, [isLoggedIn]);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             const response = await fetch("http://localhost:5000/api/auth/login", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
             });
             const data = await response.json();
-            
             if (data.success) {
                 setIsLoggedIn(true);
                 setIsLoginOpen(false);
                 setUser(data.user.user);
-                sessionStorage.setItem('user', JSON.stringify(data.user.user));
-                sessionStorage.setItem('token', data.token); // Token is already a string
+                sessionStorage.setItem("user", JSON.stringify(data.user.user));
+                sessionStorage.setItem("token", data.token);
                 setEmail("");
                 setPassword("");
-                console.log(data.user.user);
                 navigate("/");
             } else {
                 if (data.message === "Please verify your email address.") {
@@ -139,14 +136,10 @@ const Navbar = () => {
         try {
             const response = await fetch("http://localhost:5000/api/auth/verify-email", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, otp }),
             });
-
             const data = await response.json();
-
             if (data.success) {
                 alert("OTP verified successfully!");
                 setIsOtpOpen(false);
@@ -173,13 +166,10 @@ const Navbar = () => {
         try {
             const response = await fetch("http://localhost:5000/api/auth/register", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, email, password, role: userType }),
             });
             const data = await response.json();
-            
             if (data.success) {
                 alert("Registration successful, please check your email for the OTP!");
                 setIsRegOpen(false);
@@ -205,13 +195,10 @@ const Navbar = () => {
         try {
             const response = await fetch("http://localhost:5000/api/auth/resend-otp", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),
             });
             const data = await response.json();
-
             if (data.success) {
                 alert("OTP resent successfully!");
             } else {
@@ -227,20 +214,16 @@ const Navbar = () => {
         try {
             const response = await fetch("http://localhost:5000/api/auth/logout", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
             });
             const data = await response.json();
-
             if (data.success) {
-                sessionStorage.clear(); // Clear all session storage
+                sessionStorage.clear();
                 setIsLoggedIn(false);
                 setUser(null);
                 setCartNumber(0);
                 alert("Logged out successfully");
-                navigate('/home');
-                sessionStorage.clear();
+                navigate("/home");
             } else {
                 alert(data.message);
             }
@@ -249,92 +232,98 @@ const Navbar = () => {
             alert("Error logging out");
         }
     };
+
     return (
         <nav className="flex items-center justify-between px-4 py-3 md:px-8 md:py-4 text-gray-900 bg-gray-100 shadow-md">
             {/* Logo */}
             <Link to="/home">
                 <img src={logo} alt="Logo" className="h-10 md:h-14 w-auto" />
             </Link>
+
+            {/* Burger Menu Button */}
             <button
-  className="text-gray-900 text-3xl md:hidden focus:outline-none"
-  onClick={toggleMenu}
-  aria-expanded={menuOpen}
-  aria-controls="nav-menu"
->
-  {menuOpen ? <HiX /> : <HiMenu />}
-</button>
+                className="text-gray-900 text-3xl md:hidden focus:outline-none"
+                onClick={toggleMenu}
+                aria-expanded={menuOpen}
+                aria-controls="nav-menu"
+            >
+                {menuOpen ? <HiX /> : <HiMenu />}
+            </button>
 
-<div
-  id="nav-menu"
-  className={`${
-    menuOpen ? 'block' : 'hidden'
-  } md:flex md:flex-row list-none items-center space-y-4 md:space-y-0 md:space-x-6 absolute md:static top-full left-0 right-0 bg-gray-100 md:bg-transparent p-4 md:p-0 z-40`}
->
-  {user?.role === "user" && (
-    <>
-      <Link to="/cart" className="relative flex items-center" onClick={() => setMenuOpen(false)}>
-        <FaShoppingCart className="text-xl md:text-2xl cursor-pointer hover:text-gray-400" />
-        <span className="absolute -top-4 -right-3 bg-gray-900 text-gray-100 text-xs font-bold px-2 py-1 rounded-full">
-          {cartNumber}
-        </span>
-      </Link>
-      <span className="text-sm">R0.00</span>
-      <Link to="/usereport" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
-        <FaRegListAlt className="text-xl md:text-2xl" />
-      </Link>
-    </>
-  )}
+            {/* Navigation Menu */}
+            <div
+                ref={menuRef}
+                id="nav-menu"
+                className={`${
+                    menuOpen ? "block" : "hidden"
+                } md:flex md:flex-row list-none items-center space-y-4 md:space-y-0 md:space-x-6 absolute md:static top-full left-0 right-0 bg-gray-100 md:bg-transparent p-4 md:p-0 z-40 transition-all duration-300 ease-in-out`}
+            >
+                {user?.role === "user" && (
+                    <>
+                        <Link to="/cart" className="relative flex items-center" onClick={() => setMenuOpen(false)}>
+                            <FaShoppingCart className="text-xl md:text-2xl cursor-pointer hover:text-gray-400" />
+                            <span className="absolute -top-4 -right-3 bg-gray-900 text-gray-100 text-xs font-bold px-2 py-1 rounded-full">
+                                {cartNumber}
+                            </span>
+                        </Link>
+                        <span className="text-sm">R0.00</span>
+                        <Link to="/usereport" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
+                            <FaRegListAlt className="text-xl md:text-2xl" />
+                        </Link>
+                    </>
+                )}
 
-  {user?.role === "admin" && (
-    <>
-      <Link to="/members" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
-        <FaPeopleCarry className="text-xl md:text-2xl" />
-      </Link>
-      <Link to="/termsandcondition" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
-        <FaBook className="text-xl md:text-2xl" />
-      </Link>
-    </>
-  )}
+                {user?.role === "admin" && (
+                    <>
+                        <Link to="/members" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
+                            <FaPeopleCarry className="text-xl md:text-2xl" />
+                        </Link>
+                        <Link to="/termsandcondition" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
+                            <FaBook className="text-xl md:text-2xl" />
+                        </Link>
+                    </>
+                )}
 
-  {user?.role === "seller" && (
-    <>
-      <Link to="/upload" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
-        <FaUpload className="text-xl md:text-2xl" />
-      </Link>
-      <Link to="/artistmusic" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
-        <FaMusic className="text-xl md:text-2xl" />
-      </Link>
-      <Link to="/payments" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
-        <FaMoneyBillWave className="text-xl md:text-2xl" />
-      </Link>
-    </>
-  )}
+                {user?.role === "seller" && (
+                    <>
+                        <Link to="/upload" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
+                            <FaUpload className="text-xl md:text-2xl" />
+                        </Link>
+                        <Link to="/artistmusic" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
+                            <FaMusic className="text-xl md:text-2xl" />
+                        </Link>
+                        <Link to="/payments" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
+                            <FaMoneyBillWave className="text-xl md:text-2xl" />
+                        </Link>
+                    </>
+                )}
 
-  {isLoggedIn ? (
-    <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
-      <Link to="/profile" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
-        <FaUser className="text-xl md:text-2xl" />
-      </Link>
-      <button
-        className="bg-red-500 text-white px-4 py-1 rounded text-sm hover:bg-red-600 transition-colors"
-        onClick={() => {
-          handleLogOut();
-          setMenuOpen(false);
-        }}
-      >
-        Logout
-      </button>
-    </div>
-  ) : (
-    <FaRegUser
-      className="text-xl md:text-2xl cursor-pointer hover:text-gray-400"
-      onClick={() => {
-        setIsLoginOpen(true);
-        setMenuOpen(false);
-      }}
-    />
-  )}
-</div>
+                {isLoggedIn ? (
+                    <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+                        <Link to="/profile" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
+                            <FaUser className="text-xl md:text-2xl" />
+                        </Link>
+                        <button
+                            className="bg-red-500 text-white px-4 py-1 rounded text-sm hover:bg-red-600 transition-colors"
+                            onClick={() => {
+                                handleLogOut();
+                                setMenuOpen(false);
+                            }}
+                        >
+                            Logout
+                        </button>
+                    </div>
+                ) : (
+                    <FaRegUser
+                        className="text-xl md:text-2xl cursor-pointer hover:text-gray-400"
+                        onClick={() => {
+                            setIsLoginOpen(true);
+                            setMenuOpen(false);
+                        }}
+                    />
+                )}
+            </div>
+
             {/* Login Modal */}
             {isLoginOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">

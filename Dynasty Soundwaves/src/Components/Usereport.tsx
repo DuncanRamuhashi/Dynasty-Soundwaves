@@ -78,7 +78,7 @@ const Usereport = () => {
             <p className="text-gray-600 text-center">No payment reports available</p>
           ) : (
             currentReports.map((report) => (
-              <div key={report._id} className="bg-gray-50 p-4 sm:p-6 rounded-lg shadow-sm">
+              <div key={report._id} className="bg-gray-100 p-4 sm:p-6 rounded-lg shadow-sm">
                 <div className="flex flex-col sm:flex-row justify-between text-gray-900 mb-2">
                   <span className="font-medium">Transaction ID:</span>
                   <span>{report._id}</span>

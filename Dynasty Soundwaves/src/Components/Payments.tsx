@@ -63,7 +63,7 @@ const Payments: React.FC = () => {
       {/* List of Payments */}
       <div className="space-y-4 sm:space-y-6">
         {trans.map((payment, index) => (
-          <div key={index} className="bg-gray-50 p-4 sm:p-6 rounded-lg shadow-sm">
+          <div key={index} className="bg-gray-100 p-4 sm:p-6 rounded-lg shadow-sm">
             <div className="flex justify-between text-gray-900 mb-2">
               <span className="font-medium">User Email:</span>
               <span>{payment.userEmail}</span>

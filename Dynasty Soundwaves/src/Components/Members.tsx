@@ -77,73 +77,73 @@ const Members = () => {
   const totalPages = Math.max(1, Math.ceil(members.length / membersPerPage));
 
   return (
-    <div className="bg-gray-900 min-h-screen flex justify-center p-6">
-      <div className="bg-gray-100 shadow-lg rounded-lg w-full max-w-4xl p-8">
-        <h2 className="text-3xl font-semibold text-gray-900 mb-6 text-center">
-          Members
-        </h2>
+<div className="bg-gray-900 min-h-screen flex justify-center p-6">
+  <div className="bg-gray-100 shadow-lg rounded-lg w-full max-w-4xl p-8">
+    <h2 className="text-3xl font-semibold text-gray-900 mb-6 text-center">
+      Members
+    </h2>
 
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300">
-            <thead>
-              <tr className="bg-gray-900 text-gray-100">
-                <th className="border border-gray-300 px-4 py-2">Email</th>
-                <th className="border border-gray-300 px-4 py-2">Name</th>
-                <th className="border border-gray-300 px-4 py-2">Role</th>
-                <th className="border border-gray-300 px-4 py-2">Verification</th>
-                 
+    <div className="overflow-x-auto">
+      <table className="w-full border-collapse border border-gray-300">
+        <thead>
+          <tr className="bg-gray-900 text-gray-100">
+            <th className="border border-gray-300 px-4 py-2 text-sm sm:text-base">Email</th>
+            <th className="border border-gray-300 px-4 py-2 text-sm sm:text-base">Name</th>
+            <th className="border border-gray-300 px-4 py-2 text-sm sm:text-base">Role</th>
+            <th className="border border-gray-300 px-4 py-2 text-sm sm:text-base">Verification</th>
+          </tr>
+        </thead>
+        <tbody>
+          {isLoading ? (
+            <tr>
+              <td colSpan={4} className="text-center py-4">Loading...</td>
+            </tr>
+          ) : currentMembers.length > 0 ? (
+            currentMembers.map((member) => (
+              <tr key={member._id} className="text-center bg-white">
+                <td className="border border-gray-200 px-4 py-2 text-sm sm:text-base">{member.email}</td>
+                <td className="border border-gray-200 px-4 py-2 text-sm sm:text-base">{member.name}</td>
+                <td className="border border-gray-200 px-4 py-2 text-sm sm:text-base">{member.role}</td>
+                <td className={`border border-gray-200 px-4 py-2 text-sm sm:text-base ${member.isAccountVerified ? "text-green-500" : "text-red-500"}`}>
+                  {member.isAccountVerified ? "Active" : "Pending"}
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {isLoading ? (
-                <tr>
-                  <td colSpan={4} className="text-center py-4">Loading...</td>
-                </tr>
-              ) : currentMembers.length > 0 ? (
-                currentMembers.map((member) => (
-                  <tr key={member._id} className="text-center bg-white">
-                    <td className="border border-gray-200 px-4 py-2">{member.email}</td>
-                    <td className="border border-gray-200 px-4 py-2">{member.name}</td>
-                    <td className="border border-gray-200 px-4 py-2">{member.role}</td>
-                    <td className={`border border-gray-200 px-4 py-2 ${member.isAccountVerified ? "text-green-500" : "text-red-500"}`}>
-                      {member.isAccountVerified ? "Active" : "Pending"}
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={4} className="border border-gray-200 px-4 py-2">
-                    No members found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {!isLoading && members.length > 0 && (
-          <div className="flex justify-center space-x-4 mt-6">
-            <button
-              className={`px-4 py-2 rounded-lg text-white ${currentPage === 1 ? "bg-gray-400 cursor-not-allowed" : "bg-gray-900 hover:bg-gray-500"}`}
-              onClick={() => setCurrentPage(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <span className="px-4 py-2 bg-gray-100 rounded-lg">
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              className={`px-4 py-2 rounded-lg text-white ${currentPage === totalPages ? "bg-gray-400 cursor-not-allowed" : "bg-gray-900 hover:bg-gray-500"}`}
-              onClick={() => setCurrentPage(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-          </div>
-        )}
-      </div>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={4} className="border border-gray-200 px-4 py-2">
+                No members found
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
+
+    {!isLoading && members.length > 0 && (
+      <div className="flex flex-col sm:flex-row justify-center space-x-4 mt-6">
+        <button
+          className={`px-4 py-2 rounded-lg text-white ${currentPage === 1 ? "bg-gray-400 cursor-not-allowed" : "bg-gray-900 hover:bg-gray-500"}`}
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span className="px-4 py-2 bg-gray-100 rounded-lg text-sm sm:text-base">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          className={`px-4 py-2 rounded-lg text-white ${currentPage === totalPages ? "bg-gray-400 cursor-not-allowed" : "bg-gray-900 hover:bg-gray-500"}`}
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
+    )}
+  </div>
+</div>
+
   );
 };
 
