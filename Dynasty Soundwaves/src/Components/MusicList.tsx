@@ -9,7 +9,7 @@ interface Music {
   bpm: number;
   duration: string;
   image: string;
-  bought: boolean;
+  downloadable: boolean;
 }
 interface Cart {
   userID: string;
@@ -138,10 +138,10 @@ const formatDuration = (seconds: number): string => {
                   {/* Status (Bought or Not Bought) */}
                   <p
                     className={`text-sm font-medium mt-4 ${
-                      music.bought ? "text-green-600" : "text-red-600"
+                      music.downloadable ? "text-green-600" : "text-red-600"
                     }`}
                   >
-                    {music.bought ? "Bought " : "Not Bought "}
+                    {music.downloadable ? "Bought " : "Not Bought "}
                   </p>
                   {/* Delete Button */}
                   <div className="mt-4 flex justify-between">

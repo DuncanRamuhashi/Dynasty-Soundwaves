@@ -71,8 +71,8 @@ export const getSellerPayment = async (req, res) => {
 
     // Fetch payments related to the seller and populate user and music data
     const payments = await Payment.find({ "payments.sellerID": sellerID })
-      .populate("userID", "name email") // Ensure this is correctly referencing the User model
-      .populate("payments.musicIDs", "title"); // Populate the music title field
+      .populate("userID", "name email") 
+      .populate("payments.musicIDs", "title"); 
 
     if (!payments.length) {
       return res.status(404).json({
