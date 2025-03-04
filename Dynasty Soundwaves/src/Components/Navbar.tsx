@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaSearch, FaShoppingCart, FaRegUser, FaUser, FaRegListAlt, FaListAlt, FaMoneyBillWave, FaPeopleCarry, FaUpload, FaBook, FaMusic, FaHome } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/ddddd-removebg-preview.png";
-
+import { HiMenu, HiX } from "react-icons/hi";
 interface User {
     _id:string;
     name: string;
@@ -24,6 +24,17 @@ interface User {
 }
 
 const Navbar = () => {
+
+    const [menuOpen, setMenuOpen] = useState(false); // Initially closed
+
+    const toggleMenu = () => {
+      setMenuOpen(prevMenuOpen => !prevMenuOpen);
+      if (!menuOpen) {
+        setTimeout(() => {
+          setMenuOpen(false);
+        }, 10000); // 10 seconds
+      }
+    };
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isRegOpen, setIsRegOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -239,79 +250,91 @@ const Navbar = () => {
         }
     };
     return (
-        <nav className="flex items-center justify-between px-8 py-4 text-gray-900 bg-white shadow-md">
+        <nav className="flex items-center justify-between px-4 py-3 md:px-8 md:py-4 text-gray-900 bg-gray-100 shadow-md">
             {/* Logo */}
             <Link to="/home">
-                <img src={logo} alt="Logo" className="h-14 w-auto" />
+                <img src={logo} alt="Logo" className="h-10 md:h-14 w-auto" />
             </Link>
+            <button
+  className="text-gray-900 text-3xl md:hidden focus:outline-none"
+  onClick={toggleMenu}
+  aria-expanded={menuOpen}
+  aria-controls="nav-menu"
+>
+  {menuOpen ? <HiX /> : <HiMenu />}
+</button>
 
-            {/* Search Bar & Icons */}
-            <div className="flex items-center space-x-6">
-                {user?.role === "user" && (
-                    <>
-                        <Link to="/cart" className="relative">
-                            <FaShoppingCart className="text-xl cursor-pointer hover:text-gray-400" />
-                            <span className="absolute -top-4 -right-3 bg-gray-900 text-gray-100 text-xs font-bold px-2 py-1 rounded-full">
-                                {cartNumber}
-                            </span>
-                        </Link>
-                        <span className="text-sm">R0.00</span>
-                        <Link to='/usereport' className="hover:text-gray-400">
-                            <FaRegListAlt className="text-xl" />
-                        </Link>
-                    </>
-                )}
+<div
+  id="nav-menu"
+  className={`${
+    menuOpen ? 'block' : 'hidden'
+  } md:flex md:flex-row list-none items-center space-y-4 md:space-y-0 md:space-x-6 absolute md:static top-full left-0 right-0 bg-gray-100 md:bg-transparent p-4 md:p-0 z-40`}
+>
+  {user?.role === "user" && (
+    <>
+      <Link to="/cart" className="relative flex items-center" onClick={() => setMenuOpen(false)}>
+        <FaShoppingCart className="text-xl md:text-2xl cursor-pointer hover:text-gray-400" />
+        <span className="absolute -top-4 -right-3 bg-gray-900 text-gray-100 text-xs font-bold px-2 py-1 rounded-full">
+          {cartNumber}
+        </span>
+      </Link>
+      <span className="text-sm">R0.00</span>
+      <Link to="/usereport" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
+        <FaRegListAlt className="text-xl md:text-2xl" />
+      </Link>
+    </>
+  )}
 
-                {user?.role === "admin" && (
-                    <>
-                        <Link to='/allreport' className="hover:text-gray-400">
-                            <FaListAlt className="text-xl" />
-                        </Link>
-                       
-                        <Link to='/members' className="hover:text-gray-400">
-                            <FaPeopleCarry className="text-xl" />
-                        </Link>
-                        <Link to='/termsandcondition' className="hover:text-gray-400">
-                            <FaBook className="text-xl" />
-                        </Link>
-                    </>
-                )}
+  {user?.role === "admin" && (
+    <>
+      <Link to="/members" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
+        <FaPeopleCarry className="text-xl md:text-2xl" />
+      </Link>
+      <Link to="/termsandcondition" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
+        <FaBook className="text-xl md:text-2xl" />
+      </Link>
+    </>
+  )}
 
-                {user?.role === "seller" && (
-                    <>
-                        <Link to='/upload' className="hover:text-gray-400">
-                            <FaUpload className="text-xl" />
-                        </Link>
-                        <Link to='/artistmusic' className="hover:text-gray-400">
-                            <FaMusic className="text-xl" />
-                        </Link>
-                        <Link to='/payments' className="hover:text-gray-400">
-                            <FaMoneyBillWave className="text-xl" />
-                        </Link>
-                    </>
-                )}
+  {user?.role === "seller" && (
+    <>
+      <Link to="/upload" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
+        <FaUpload className="text-xl md:text-2xl" />
+      </Link>
+      <Link to="/artistmusic" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
+        <FaMusic className="text-xl md:text-2xl" />
+      </Link>
+      <Link to="/payments" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
+        <FaMoneyBillWave className="text-xl md:text-2xl" />
+      </Link>
+    </>
+  )}
 
-                {/* User Icon & Logout Button */}
-                {isLoggedIn ? (
-                    <div className="flex items-center space-x-4">
-                        <Link to='/profile' className="hover:text-gray-400">
-                            <FaUser className="text-xl" />
-                        </Link>
-                        <button
-                            className="bg-red-500 text-white px-4 py-1 rounded text-sm hover:bg-red-600 transition-colors"
-                            onClick={handleLogOut}
-                        >
-                            Logout
-                        </button>
-                    </div>
-                ) : (
-                    <FaRegUser
-                        className="text-xl cursor-pointer hover:text-gray-400"
-                        onClick={() => setIsLoginOpen(true)}
-                    />
-                )}
-            </div>
-
+  {isLoggedIn ? (
+    <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+      <Link to="/profile" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
+        <FaUser className="text-xl md:text-2xl" />
+      </Link>
+      <button
+        className="bg-red-500 text-white px-4 py-1 rounded text-sm hover:bg-red-600 transition-colors"
+        onClick={() => {
+          handleLogOut();
+          setMenuOpen(false);
+        }}
+      >
+        Logout
+      </button>
+    </div>
+  ) : (
+    <FaRegUser
+      className="text-xl md:text-2xl cursor-pointer hover:text-gray-400"
+      onClick={() => {
+        setIsLoginOpen(true);
+        setMenuOpen(false);
+      }}
+    />
+  )}
+</div>
             {/* Login Modal */}
             {isLoginOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
