@@ -12,7 +12,7 @@ const Reports = () => {
 
       try {
         const response = await fetch(
-          `${import.meta.env.BACKENDURL}/payment/get-all-payments/${token}`,
+          `${import.meta.env.VITE_BACKENDURL}/payment/get-all-payments/${token}`,
           {
             method: "GET",
             headers: {

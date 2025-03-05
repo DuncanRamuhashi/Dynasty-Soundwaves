@@ -167,7 +167,7 @@ const Upload = () => {
         role: user.role,
       };
 
-      const response = await fetch(`${import.meta.env.BACKENDURL}/music/upload-music`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/music/upload-music`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

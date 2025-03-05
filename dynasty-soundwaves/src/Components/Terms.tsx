@@ -12,7 +12,7 @@ const Terms = () => {
   useEffect(() => {
     const fetchTermsAndConditions = async () => {
       try {
-        const response = await fetch(`${import.meta.env.BACKENDURL}/tsandcs/get-tsandcs`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/tsandcs/get-tsandcs`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

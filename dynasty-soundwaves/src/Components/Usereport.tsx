@@ -29,7 +29,7 @@ const Usereport = () => {
     const getPayment = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.BACKENDURL}/payment/get-user-payment/${userID}/${token}`,
+          `${import.meta.env.VITE_BACKENDURL}/payment/get-user-payment/${userID}/${token}`,
           {
             method: "GET",
             headers: {

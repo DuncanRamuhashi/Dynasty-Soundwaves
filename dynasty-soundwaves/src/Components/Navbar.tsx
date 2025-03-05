@@ -78,7 +78,7 @@ const Navbar = () => {
         const userID = storedUser._id;
         const getCart = async () => {
             try {
-                const response = await fetch(`${import.meta.env.BACKENDURL}/cart/get-cart/${userID}`, {
+                const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/cart/get-cart/${userID}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -103,7 +103,7 @@ const Navbar = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${import.meta.env.BACKENDURL}/api/auth/login`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
@@ -134,7 +134,7 @@ const Navbar = () => {
     const handleOtpVerification = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${import.meta.env.BACKENDURL}/auth/verify-email`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/auth/verify-email`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, otp }),
@@ -164,7 +164,7 @@ const Navbar = () => {
             return;
         }
         try {
-            const response = await fetch(`${import.meta.env.BACKENDURL}/auth/register`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/auth/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, email, password, role: userType }),
@@ -193,7 +193,7 @@ const Navbar = () => {
             return;
         }
         try {
-            const response = await fetch(`${import.meta.env.BACKENDURL}/auth/resend-otp`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/auth/resend-otp`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),
@@ -212,7 +212,7 @@ const Navbar = () => {
 
     const handleLogOut = async () => {
         try {
-            const response = await fetch(`${import.meta.env.BACKENDURL}/auth/logout`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/auth/logout`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
             });

@@ -152,7 +152,7 @@ const Mainpage = () => {
      const playAudio = async (trackID: string, title: string, name: string, image: string, time: number) => {
       
       try {
-          const res = await fetch(`${import.meta.env.BACKENDURL}/music/get-audio/${trackID}`,{
+          const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/music/get-audio/${trackID}`,{
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -205,10 +205,12 @@ const Mainpage = () => {
       playNextorPrev(currentIndex);
     },[currentIndex]);
   console.log(currentIndex);
+  console.log("env",import.meta.env.VITE_BACKENDURL);
   useEffect(() => {
     const getMusic = async  () => {
+      
       try {
-        const response = await fetch(`${import.meta.env.BACKENDURL}/music/get-all-music`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/music/get-all-music`, {
           method: "GET", 
           headers: {
             "Content-Type": "application/json",
@@ -248,7 +250,7 @@ const [cart, setCart] = useState<Cart>({
 
 const handleExistingCart = async (id: string) => {
   try {
-    const res = await fetch(`${import.meta.env.BACKENDURL}/cart/add-to-cart/${user._id}`, {
+    const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/cart/add-to-cart/${user._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -290,7 +292,7 @@ const handleCart = async (id: string) => {
   console.log(updatedCart);
 
   try {
-    const response = await fetch(`${import.meta.env.BACKENDURL}/cart/create-cart`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/cart/create-cart`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
