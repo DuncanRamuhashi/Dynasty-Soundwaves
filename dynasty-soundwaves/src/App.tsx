@@ -14,6 +14,7 @@ import Upload from './Components/Upload';
 import MusicList from './Components/MusicList';
 import UpdateTerms from './Components/UpdateTerms';
 import Reports from './Components/Reports';
+import dotenv from 'dotenv';
 
 
 const App: React.FC = () => {

@@ -20,7 +20,7 @@ db();
 app.use(express.json());
 app.use(
     cors({
-      origin: "http://localhost:5173", // Change this to your frontend URL
+      origin: process.env.FRONTENDURL, // Change this to your frontend URL
       credentials: true, // Allow sending cookies and authentication headers
     })
   );
