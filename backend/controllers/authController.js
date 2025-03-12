@@ -1,13 +1,13 @@
 import User from "../models/User.js";
-
+import userValidation from '../validators/userValidation.js'
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import transporter from '../config/nodemailer.js';
 import asyncHandler from '../middleware/asyncHandler.js';
 import { generateToken } from "../utils/TokenGenerating.js";
+import { STATUS_CODES } from '../constants/constants.js';
 
-
-export const registerUser = async (req, res) => {
+export const registerUser =asyncHandler( async (req, res) => {
     try {
         const { name, email, password, role } = req.body;
       
@@ -50,7 +50,7 @@ The Dynasty Soundwave Team`,
         console.error('Error during registration:', error);
         res.status(500).json({ success: false, message: 'Server Error' });
     }
-};
+});
 
 //resend otp this isa sub  method just in case 
 export const resendOtp = async (req, res) => {
