@@ -1,5 +1,5 @@
 import User from "../models/User.js";
-import userValidation from '../validators/userValidation.js'
+import {registerUserSchemaZod} from '../validators/userValidation.js'
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import transporter from '../config/nodemailer.js';
