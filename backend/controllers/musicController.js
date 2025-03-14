@@ -1,16 +1,12 @@
 import Music from "../models/music.js";
 import User from "../models/User.js";
+import { uploadMusicSchemaZod } from '../validators/musicValidation.js'
 // ✅ Upload Music
 export const uploadMusic = async (req, res) => {
   try {
-    const { title, duration, genre, bpm, mood, price, audio, sellerID, tags, image } = req.body;
+    const validatedData = uploadMusicSchemaZod.parse(req.body);
 
-    // Validate required fields
-    if (!title || !duration || !genre || !bpm || !mood || !price || !audio || !sellerID || !tags || !image) {
-      return res.status(400).json({ success: false, message: "All required fields must be filled" });
-    }
-
-    const newMusic = new Music({ title, duration, genre, bpm, mood, price, audio, sellerID, tags, image });
+    const newMusic = new Music(validatedData);
     await newMusic.save();
 
     res.status(201).json({ success: true, message: "Music uploaded successfully", data: newMusic });
