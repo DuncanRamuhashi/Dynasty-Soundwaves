@@ -1,12 +1,13 @@
 import Music from "../models/music.js";
 import User from "../models/User.js";
-import { uploadMusicSchemaZod } from '../validators/musicValidation.js'
+
 // ✅ Upload Music
 export const uploadMusic = async (req, res) => {
   try {
-    const validatedData = uploadMusicSchemaZod.parse(req.body);
+    const { title, duration, genre, bpm, mood, price, audio, sellerID, tags, image } = req.body;
 
-    const newMusic = new Music(validatedData);
+
+    const newMusic = new Music({ title, duration, genre, bpm, mood, price, audio, sellerID, tags, image });
     await newMusic.save();
 
     res.status(201).json({ success: true, message: "Music uploaded successfully", data: newMusic });
