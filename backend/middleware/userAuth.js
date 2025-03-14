@@ -16,7 +16,7 @@ const userAuth = async (req, res, next) => {
             return res.status(401).json({ success: false, message: 'Not Authorized. Please log in again.' });
         }
 
-        // Verify the token using JWT secret
+       
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         if (!decoded?.id) {
