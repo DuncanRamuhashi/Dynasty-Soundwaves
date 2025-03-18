@@ -14,17 +14,18 @@ import {
 } from '../controllers/authController.js';
 import { rolesAuth } from '../middleware/rolesAuth.js';
 import userAuth from '../middleware/userAuth.js';
-
+import validate from '../middleware/validateMiddleware.js';
+import { loginUserSchemaZod,registerUserSchemaZod } from '../validators/userValidation.js';
 const router = express.Router();
 
 
-router.post('/register', registerUser);
+router.post('/register',validate(registerUserSchemaZod), registerUser);
 
 //Sub Method 
 router.post('/resend-otp',resendOtp)
 router.post('/verify-email', verifyEmail); 
 
-router.post('/login', loginUser);
+router.post('/login',validate(loginUserSchemaZod), loginUser);
 
 
 router.post('/logout', logoutUser);

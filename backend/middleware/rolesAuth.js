@@ -1,3 +1,4 @@
+import { STATUS_CODES } from '../constants/constants.js';
 export const rolesAuth = (...allowedRoles) => {
     return (req, res, next) => {
       const role = req.body.role; // Get role from request body
@@ -6,7 +7,7 @@ export const rolesAuth = (...allowedRoles) => {
       console.log("Allowed Roles:", allowedRoles);
   
       if (role === !allowedRoles.includes(role)) {
-        return res.status(403).json({ success: false, message: "Access Denied" });
+        return res.status(STATUS_CODES.FORBIDDEN).json({ success: false, message: "Access Denied" });
       }
   
       next();
