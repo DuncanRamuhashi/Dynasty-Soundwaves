@@ -2,21 +2,21 @@ import User from "../models/User.js";
 import {registerUserSchemaZod} from '../validators/userValidation.js'
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import asyncHandler from 'express-async-handler'
 import transporter from '../config/nodemailer.js';
 import asyncHandler from '../middleware/asyncHandler.js';
 import { generateToken } from "../utils/TokenGenerating.js";
 import { STATUS_CODES } from '../constants/constants.js';
+import HttpError from "../middleware/errorHandler.js";
 
-export const registerUser =  asyncHandler (async (req, res) => {
-    try {
-        const { name, email, password, role } = req.body;
-      
-    if (!name || !email || !password || !role) {
-    return res.status(400).json({ message: 'Name, email, and password are required.' });
-  }
+export const serviceRegisterUser =async (userData) => {
+
+        
+    const { name, email, password, role } = userData;
+    if (!userData) {
+        throw new  HttpError("Name, email, and password are required.",STATUS_CODES.BAD_REQUEST);
+    }
         if (await User.findOne({ email })) {
-            return res.status(400).json({ success: false, message: 'User already exists' });
+            throw new HttpError("User already exists",STATUS_CODES.BAD_REQUEST);
         }
 
         const newUser = await User.create({ name, email, password, role, isAccountVerified: false });
@@ -45,26 +45,24 @@ The Dynasty Soundwave Team`,
         };
 
         await transporter.sendMail(mailOptions);
-
-        res.status(201).json({ success: true, message: 'User registered successfully. Please verify your email.' });
-    } catch (error) {
-        console.error('Error during registration:', error);
-        res.status(500).json({ success: false, message: 'Server Error' });
-    }
-});
+       
+    
+};
 
 //resend otp this isa sub  method just in case 
-export const resendOtp = async (req, res) => {
-    try {
-        const { email } = req.body;
+export const serviceResendOtp = async (email) => {
+   
+        
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
+            throw new HttpError("User not found",STATUS_CODES.NOT_FOUND);
+            
         }
 
         if (user.isAccountVerified) {
-            return res.status(400).json({ success: false, message: 'Account already verified' });
+            throw new HttpError("Account already verified",STATUS_CODES.BAD_REQUEST);
+        
         }
 
         // Check if OTP has expired
@@ -92,40 +90,40 @@ The Dynasty Soundwave Team`,
         };
 
         await transporter.sendMail(mailOptions);
-            return res.status(200).json({ success: true, message: 'New OTP sent successfully' });
+            return res.status(STATUS_CODES.OK).json({ success: true, message: 'New OTP sent successfully' });
         }
 
-        res.status(400).json({ success: false, message: 'Current OTP is still valid' });
-    } catch (error) {
-        console.error('Error during OTP resend:', error);
-        res.status(500).json({ success: false, message: 'Server Error' });
-    }
+       
+        throw new HttpError("Current OTP is still valid",STATUS_CODES.BAD_REQUEST);
 };
 
 // Verify email after registration
-export const verifyEmail = async (req, res) => {
-    const { email, otp } = req.body;
-   console.log(email);
-    // Validate input
+export const serviceVerifyEmail = async (email,otp) => {
+   
+
     if (!email || !otp) {
-        return res.status(400).json({ success: false, message: 'Missing details:  OTP is required.' });
+        throw new HttpError("Missing details:  OTP is required.",STATUS_CODES.BAD_REQUEST);
+        
     }
 
-    try {
+    
         const user = await User.findOne({email});
 
         // Check if the user exists
         if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found.' });
+            throw new HttpError("User not found.",STATUS_CODES.NOT_FOUND);
+        
         }
 
         // Check if the OTP matches and is not expired
         if (!user.verifyOtp || user.verifyOtp !== otp) {
-            return res.status(400).json({ success: false, message: 'Invalid OTP.' });
+            throw new HttpError("Invalid Otp",STATUS_CODES.BAD_REQUEST);
+        
         }
 
         if (user.verifyOtpExpireAt < Date.now()) {
-            return res.status(400).json({ success: false, message: 'OTP has expired.' });
+            throw new HttpError("OTP has expired.",STATUS_CODES.BAD_REQUEST)
+         
         }
 
         // Mark account as verified
@@ -157,72 +155,47 @@ const mailOptions = {
         // Send JWT token after email verification
         generateToken(res, user);
 
-        return res.status(200).json({ success: true, message: 'Email verified successfully.' });
-    } catch (error) {
-        console.error('Error verifying email:', error);
-        return res.status(500).json({ success: false, message: 'Server error: ' + error.message });
-    }
+        
+
 };
 
 // Login user with email verification check
-export const loginUser = async (req, res) => {
-    try {
-        const { email, password } = req.body;
+export const loginUser = async (userData) => {
+
+        const { email, password } = userData;
         const user = await User.findOne({ email });
 
         if (!user || !(await user.matchPassword(password))) {
-            return res.status(401).json({ success: false, message: 'Invalid email or password' });
+            throw new HttpError("Invalid email or password",STATUS_CODES.UNAUTHORIZED);
+
         }
 
         if (!user.isAccountVerified) {
-            return res.status(400).json({ success: false, message: 'Please verify your email address.' });
+            throw new HttpError("Please verify your email address.",STATUS_CODES.BAD_REQUEST);
+           
         }
 
         const token = generateToken(res, user);
-     res.status(200).json({ 
-         success: true, 
-         user: { user },
-         token // Include the token in the response body
-     });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Server Error' });
-    }
+     return user;
+ 
 };
 
-// Logout User
-export const logoutUser = (req, res) => {
-    res.cookie('token', '', { expires: new Date(0) });
-    res.json({ success: true, message: 'Logged out' });
-};
-
-// Get User Profile (Protected)  (for normal user to see the profile of Seller maybe some fan things)
-export const getUserProfile = async (req, res) => {
-    res.json({ success: true, user: req.user });
-};
-
-// Admin Only - Get All Users
-export const getAllUsers = async (req, res) => {
-    const users = await User.find({});
-    res.json({ success: true, users });
-};
 
 // Update User Profile
-export const updateUser = async (req, res) => {
-    try {
-        const { name, email, password, bio, social } = req.body;
-        const userId = req.params.id;
+// user from userId  from params
+export const updateUser = async (userData,userId) => {
+   
+        const { name, email, password, bio, social } = userData;
+        
 
         // Check if user exists
         let user = await User.findById(userId);
         if (!user) {
-            return res.status(404).json({ success: false, message: "User not found" });
+            throw new HttpError("User not found",STATUS_CODES.NOT_FOUND);
+         
         }
 
-        // Ensure only the user or an admin can update the profile
-        if (req.user.id !== userId && req.user.role !== "admin") {
-            return res.status(403).json({ success: false, message: "Unauthorized action" });
-        }
-
+       
         // Update fields
         if (name) user.name = name;
         if (email) user.email = email;
@@ -235,35 +208,32 @@ export const updateUser = async (req, res) => {
         }
 
         await user.save();
-        res.status(200).json({ success: true, message: "User updated successfully", user });
-    } catch (error) {
-        console.error("Update Error:", error.message);
-        res.status(500).json({ success: false, message: "Server Error" });
-    }
+        let updatedUser = await User.findById(userId);
+        return updatedUser;
+        
+    
 };
 
 // Delete User (Self or Admin)
-export const deleteUser = async (req, res) => {
-    try {
-        const userId = req.params.id;
+export const deleteUser = async (id) => {
+
+        const userId = id;
 
         // Check if user exists
         const user = await User.findById(userId);
         if (!user) {
-            return res.status(404).json({ success: false, message: "User not found" });
+            throw new HttpError("User not found",STATUS_CODES.NOT_FOUND);
+   
         }
 
         // only the user or an admin can delete the profile
         if (req.user.id !== userId && req.user.role !== "admin") {
-            return res.status(403).json({ success: false, message: "Unauthorized action" });
+            throw new HttpError("Unauthorized action",STATUS_CODES.FORBIDDEN);
         }
 
         await User.findByIdAndDelete(userId);
-        res.status(200).json({ success: true, message: "User deleted successfully" });
-    } catch (error) {
-        console.error("Delete Error:", error.message);
-        res.status(500).json({ success: false, message: "Server Error" });
-    }
+        
+
 };
 
 // Forgot Password (Send OTP to email)

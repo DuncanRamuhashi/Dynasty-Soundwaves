@@ -1,5 +1,4 @@
 
-
 class HttpError extends Error {
     constructor(message,statusCode){
         super(message);
