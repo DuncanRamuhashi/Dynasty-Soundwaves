@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import asyncHandler from 'express-async-handler'
 import transporter from '../config/nodemailer.js';
-import asyncHandler from '../middleware/asyncHandler.js';
+
 import { generateToken } from "../utils/TokenGenerating.js";
 import { STATUS_CODES } from '../constants/constants.js';
 

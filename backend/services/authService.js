@@ -13,10 +13,10 @@ export const serviceRegisterUser =async (userData) => {
         
     const { name, email, password, role } = userData;
     if (!userData) {
-        throw new  HttpError("Name, email, and password are required.",STATUS_CODES.BAD_REQUEST);
+        return new  HttpError("Name, email, and password are required.",STATUS_CODES.BAD_REQUEST);
     }
         if (await User.findOne({ email })) {
-            throw new HttpError("User already exists",STATUS_CODES.BAD_REQUEST);
+            return new HttpError("User already exists",STATUS_CODES.BAD_REQUEST);
         }
 
         const newUser = await User.create({ name, email, password, role, isAccountVerified: false });
@@ -56,12 +56,12 @@ export const serviceResendOtp = async (email) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            throw new HttpError("User not found",STATUS_CODES.NOT_FOUND);
+            return new HttpError("User not found",STATUS_CODES.NOT_FOUND);
             
         }
 
         if (user.isAccountVerified) {
-            throw new HttpError("Account already verified",STATUS_CODES.BAD_REQUEST);
+            return new HttpError("Account already verified",STATUS_CODES.BAD_REQUEST);
         
         }
 
@@ -94,7 +94,7 @@ The Dynasty Soundwave Team`,
         }
 
        
-        throw new HttpError("Current OTP is still valid",STATUS_CODES.BAD_REQUEST);
+        return new HttpError("Current OTP is still valid",STATUS_CODES.BAD_REQUEST);
 };
 
 // Verify email after registration
@@ -102,7 +102,7 @@ export const serviceVerifyEmail = async (email,otp) => {
    
 
     if (!email || !otp) {
-        throw new HttpError("Missing details:  OTP is required.",STATUS_CODES.BAD_REQUEST);
+        return new HttpError("Missing details:  OTP is required.",STATUS_CODES.BAD_REQUEST);
         
     }
 
@@ -111,18 +111,18 @@ export const serviceVerifyEmail = async (email,otp) => {
 
         // Check if the user exists
         if (!user) {
-            throw new HttpError("User not found.",STATUS_CODES.NOT_FOUND);
+            return new HttpError("User not found.",STATUS_CODES.NOT_FOUND);
         
         }
 
         // Check if the OTP matches and is not expired
         if (!user.verifyOtp || user.verifyOtp !== otp) {
-            throw new HttpError("Invalid Otp",STATUS_CODES.BAD_REQUEST);
+            return new HttpError("Invalid Otp",STATUS_CODES.BAD_REQUEST);
         
         }
 
         if (user.verifyOtpExpireAt < Date.now()) {
-            throw new HttpError("OTP has expired.",STATUS_CODES.BAD_REQUEST)
+            return new HttpError("OTP has expired.",STATUS_CODES.BAD_REQUEST)
          
         }
 
@@ -166,12 +166,12 @@ export const loginUser = async (userData) => {
         const user = await User.findOne({ email });
 
         if (!user || !(await user.matchPassword(password))) {
-            throw new HttpError("Invalid email or password",STATUS_CODES.UNAUTHORIZED);
+            return new HttpError("Invalid email or password",STATUS_CODES.UNAUTHORIZED);
 
         }
 
         if (!user.isAccountVerified) {
-            throw new HttpError("Please verify your email address.",STATUS_CODES.BAD_REQUEST);
+            return new HttpError("Please verify your email address.",STATUS_CODES.BAD_REQUEST);
            
         }
 
@@ -191,7 +191,7 @@ export const updateUser = async (userData,userId) => {
         // Check if user exists
         let user = await User.findById(userId);
         if (!user) {
-            throw new HttpError("User not found",STATUS_CODES.NOT_FOUND);
+            return new HttpError("User not found",STATUS_CODES.NOT_FOUND);
          
         }
 
@@ -222,13 +222,13 @@ export const deleteUser = async (id) => {
         // Check if user exists
         const user = await User.findById(userId);
         if (!user) {
-            throw new HttpError("User not found",STATUS_CODES.NOT_FOUND);
+            return new HttpError("User not found",STATUS_CODES.NOT_FOUND);
    
         }
 
         // only the user or an admin can delete the profile
         if (req.user.id !== userId && req.user.role !== "admin") {
-            throw new HttpError("Unauthorized action",STATUS_CODES.FORBIDDEN);
+            return new HttpError("Unauthorized action",STATUS_CODES.FORBIDDEN);
         }
 
         await User.findByIdAndDelete(userId);
