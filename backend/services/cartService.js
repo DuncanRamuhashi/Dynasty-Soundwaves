@@ -3,7 +3,7 @@ import Cart from "../models/cart.js";
 import { STATUS_CODES } from "../constants/constants.js";
 
 // Create a new Cart
-export const createCart = async (cartData) => {
+export const servicecreateCart = async (cartData) => {
 
     const { userID, musicIDS } = cartData;
 
@@ -33,7 +33,7 @@ export const createCart = async (cartData) => {
 };
 
 // Get a Cart by user ID
-export const getCart = async (id) => {
+export const servicegetCart = async (id) => {
 
     const userID  = id;
 
@@ -47,7 +47,7 @@ export const getCart = async (id) => {
 };
 
 // Add music ID to Cart
-export const addToCart = async (userIdP, musicIdb) => {
+export const serviceaddToCart = async (userIdP, musicIdb) => {
 
     const  userID  = userIdP;
     const musicID  = musicIdb;
@@ -82,7 +82,7 @@ export const addToCart = async (userIdP, musicIdb) => {
 };
 
 // Remove music ID from Cart
-export const removeFromCart = async (userIdP, musicIdb) => {
+export const serviceremoveFromCart = async (userIdP, musicIdb) => {
   
     const  userID  = userIdP;
     const musicID  = musicIdb;
@@ -113,7 +113,7 @@ export const removeFromCart = async (userIdP, musicIdb) => {
 };
 
 // Delete entire Cart
-export const deleteCart = async (id) => {
+export const servicedeleteCart = async (id) => {
 
     const  userID  = id;
 
