@@ -160,7 +160,7 @@ const mailOptions = {
 };
 
 // Login user with email verification check
-export const loginUser = async (userData) => {
+export const serviceLoginUser = async (userData) => {
 
         const { email, password } = userData;
         const user = await User.findOne({ email });
@@ -183,7 +183,7 @@ export const loginUser = async (userData) => {
 
 // Update User Profile
 // user from userId  from params
-export const updateUser = async (userData,userId) => {
+export const serviceUpdateUser = async (userData,userId) => {
    
         const { name, email, password, bio, social } = userData;
         
@@ -215,7 +215,7 @@ export const updateUser = async (userData,userId) => {
 };
 
 // Delete User (Self or Admin)
-export const deleteUser = async (id) => {
+export const serviceDeleteUser = async (id) => {
 
         const userId = id;
 
@@ -237,18 +237,20 @@ export const deleteUser = async (id) => {
 };
 
 // Forgot Password (Send OTP to email)
-export const forgotPassword = async (req, res) => {
-    const { email } = req.body;
+export const serviceForgotPassword = async (email) => {
+    
 
     if (!email) {
-        return res.status(400).json({ success: false, message: "Email is required." });
+        return new HttpError("Email is required.",STATUS_CODES.BAD_REQUEST);
+        
     }
 
-    try {
+
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(404).json({ success: false, message: "User not found" });
+       
+            return new HttpError("User not found.",STATUS_CODES.NOT_FOUND);
         }
 
         // Generate OTP for password reset
@@ -275,35 +277,35 @@ The Dynasty Soundwave Team`,
         };
 
         await transporter.sendMail(mailOptions);
-        res.status(200).json({ success: true, message: 'OTP sent to your email for password reset.' });
-    } catch (error) {
-        console.error("Error sending OTP:", error.message);
-        res.status(500).json({ success: false, message: "Server Error" });
-    }
+       
 };
 
 // Reset Password using OTP
-export const resetPassword = async (req, res) => {
-    const { userId, otp, newPassword } = req.body;
+export const serviceResetPassword = async (data) => {
+    const { userId, otp, newPassword } = data;
 
     if (!userId || !otp || !newPassword) {
-        return res.status(400).json({ success: false, message: "User ID, OTP, and new password are required." });
+        return new HttpError("User ID, OTP, and new password are required.",STATUS_CODES.BAD_REQUEST);
+       
     }
 
-    try {
+
         const user = await User.findById(userId);
 
         if (!user) {
-            return res.status(404).json({ success: false, message: "User not found" });
+            return new HttpError("User not found.",STATUS_CODES.NOT_FOUND);
+            
         }
 
         // Check if OTP is valid
         if (!user.resetPasswordOtp || user.resetPasswordOtp !== otp) {
-            return res.status(400).json({ success: false, message: 'Invalid OTP.' });
+            return new HttpError("User not found.",STATUS_CODES.BAD_REQUEST);
+            
         }
 
         if (user.resetPasswordOtpExpireAt < Date.now()) {
-            return res.status(400).json({ success: false, message: 'OTP has expired.' });
+            return new HttpError("OTP has expired.",STATUS_CODES.BAD_REQUEST);
+        
         }
 
         // Update password
@@ -312,11 +314,8 @@ export const resetPassword = async (req, res) => {
         user.resetPasswordOtpExpireAt = null;
         await user.save();
 
-        res.status(200).json({ success: true, message: 'Password reset successfully.' });
-    } catch (error) {
-        console.error("Error resetting password:", error.message);
-        res.status(500).json({ success: false, message: "Server Error" });
-    }
+       
+
 };
 
 
