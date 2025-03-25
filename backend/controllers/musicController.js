@@ -2,8 +2,8 @@ import Music from "../models/music.js";
 import User from "../models/User.js";
 import { STATUS_CODES } from "../constants/constants.js";
 import asyncHandler from 'express-async-handler';
-import { servicegetAllMusic, servicegetAudio, servicegetMusicById, serviceupdateMusic, serviceuploadMusic } from "../services/musicService.js";
-// ✅ Upload Music
+import { servicedeleteMusic, servicegetAllMusic, servicegetAudio, servicegetMusicById, serviceupdateMusic, serviceuploadMusic } from "../services/musicService.js";
+
 export const uploadMusic =asyncHandler( async (req, res) => {
 
     const newMusic = serviceuploadMusic(req.body);
@@ -21,7 +21,7 @@ export const getAllMusic =asyncHandler( async (req, res) => {
 });
 
 
-// ✅ Get Audio By ID
+
 export const getAudio =asyncHandler( async (req, res) => {
 
     const songID = req.params.track;
@@ -32,7 +32,7 @@ export const getAudio =asyncHandler( async (req, res) => {
     res.status(STATUS_CODES.OK).json({ success: true, data: song });
 
 });
-// ✅ Get Music By User ID with specific fields
+
 export const getMusicById =asyncHandler( async (req, res) => {
  
     const  userId  = req.params.id;
