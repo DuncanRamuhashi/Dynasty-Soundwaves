@@ -8,7 +8,7 @@ import { generateToken } from "../utils/TokenGenerating.js";
 import { STATUS_CODES } from '../constants/constants.js';
 import HttpError from "../middleware/errorHandler.js";
 
-export const serviceRegisterUser =async (userData) => {
+export const serviceRegisterUser = async (userData) => {
 
         
     const { name, email, password, role } = userData;

@@ -2,7 +2,7 @@ import User from "../models/User.js";
 import {registerUserSchemaZod} from '../validators/userValidation.js'
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import asyncHandler from 'express-async-handler'
+import asyncHandler from 'express-async-handler';
 import transporter from '../config/nodemailer.js';
 
 import { generateToken } from "../utils/TokenGenerating.js";
