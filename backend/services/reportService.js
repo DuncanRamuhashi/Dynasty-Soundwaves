@@ -22,7 +22,7 @@ export const servicegetReport = async (id) => {
 };
 
 // Get all Reports
-export const servicegetAllReports = async (req, res) => {
+export const servicegetAllReports = async () => {
 
     const reports = await Report.find();
     return reports;
