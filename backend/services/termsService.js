@@ -1,7 +1,7 @@
 import Terms from "../models/terms.js";
 // return new HttpError("No payments found for this seller",STATUS_CODES.NOT_FOUND);
 // Create Terms and Conditions
-export const createTandC = async (data) => {
+export const servicecreateTandC = async (data) => {
  
     const { terms, conditions } = data;
     const newCandT = new Terms({ terms, conditions });
@@ -12,7 +12,7 @@ export const createTandC = async (data) => {
 };
 
 // Get Terms and Conditions
-export const getTandC = async (req, res) => {
+export const servicegetTandC = async (req, res) => {
  
     const tandC = await Terms.findOne(); // Assuming you have one set of terms and conditions
     if (!tandC) {
@@ -25,7 +25,7 @@ export const getTandC = async (req, res) => {
 };
 
 // Update Terms and Conditions
-export const updateTandC = async (req, res) => {
+export const servicefupdateTandC = async (req, res) => {
 
     const { terms, conditions } = req.body;
     const updatedTandC = await Terms.findOneAndUpdate({}, { terms, conditions }, { new: true });
