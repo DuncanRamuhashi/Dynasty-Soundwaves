@@ -1,5 +1,6 @@
 import Invoice from "../models/invoice.js";
 import { STATUS_CODES } from "../constants/constants.js";
+import asyncHandler from 'express-async-handler';
 // Create a new Invoice
 export const createInvoice = async (req, res) => {
   try {

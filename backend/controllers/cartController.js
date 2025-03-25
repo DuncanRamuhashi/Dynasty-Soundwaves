@@ -1,6 +1,7 @@
 import Cart from "../models/cart.js";
 import { STATUS_CODES } from "../constants/constants.js";
 // Create a new Cart
+import asyncHandler from 'express-async-handler';
 export const createCart = async (req, res) => {
   try {
     const { userID, musicIDS } = req.body;

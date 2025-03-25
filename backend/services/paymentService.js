@@ -58,7 +58,7 @@ export const servicecreatePayment = async (data) => {
 
 export const servicegetSellerPayment = async (id) => {
 
-    const { sellerID } = id;
+    const  sellerID  = id;
 
    
     const payments = await Payment.find({ "payments.sellerID": sellerID })
@@ -86,7 +86,7 @@ export const servicegetSellerPayment = async (id) => {
 }
 export const servicegetUserPayment = async (id) => {
 
-    const { userID } = id;
+    const  userID  = id;
   
 
     const payment = await Payment.find({"userID": userID });
@@ -101,7 +101,7 @@ export const servicegetUserPayment = async (id) => {
 };
 
 // Get all Payments
-export const servicegetAllPayments = async (req, res) => {
+export const servicegetAllPayments = async () => {
  
     const payments = await Payment.find();
 
@@ -112,7 +112,7 @@ export const servicegetAllPayments = async (req, res) => {
 // Delete a specific payment from a user's payments array
 export const servicedeletePayment = async (id) => {
 
-    const { paymentID } = id;
+    const  paymentID  = id;
 
     const payment = await Payment.findOneAndUpdate(
       { "payments._id": paymentID },

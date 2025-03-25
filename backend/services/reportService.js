@@ -11,7 +11,7 @@ export const servicecreateReport = async (data) => {
 // Get a single Report by ID
 export const servicegetReport = async (id) => {
   
-    const { userID } = id;
+    const  userID  = id;
     const report = await Report.findOne({userID});
     if (!report) {
       
@@ -32,7 +32,7 @@ export const servicegetAllReports = async () => {
 // Update a Report by ID
 export const serviceupdateReport = async (idp,useridb,total) => {
 
-    const { id } =idp;
+    const id  =idp;
     const  userid = useridb ;
     const totalrevenue  = total;
 
@@ -48,7 +48,7 @@ export const serviceupdateReport = async (idp,useridb,total) => {
 // Delete a Report by ID
 export const servicedeleteReport = async (idp) => {
 
-    const { id } = idp;
+    const  id  = idp;
     const report = await Report.findByIdAndDelete(id);
     if (!report) {
         return new HttpError("Report not found",STATUS_CODES.NOT_FOUND);

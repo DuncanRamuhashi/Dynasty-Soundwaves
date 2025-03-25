@@ -14,7 +14,7 @@ export const serviceuploadMusic = async (data) => {
 
 };
 //  return new HttpError("Invoice not found",STATUS_CODES.NOT_FOUND);
-export const servicegetAllMusic = async (req, res) => {
+export const servicegetAllMusic = async () => {
 
     const music = await Music.find({ downloadable: { $ne: true } })
       .sort({ createdAt: -1 })
@@ -84,7 +84,7 @@ export const servicegetMusicById = async (id) => {
       return new HttpError("No music found for this user",STATUS_CODES.NOT_FOUND);
     }
       
-    res.status(200).json({ 
+    res.status(STATUS_CODES.OK).json({ 
       success: true, 
       data: musics,
       count: musics.length 
