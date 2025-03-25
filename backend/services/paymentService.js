@@ -5,7 +5,7 @@ import Cart from '../models/cart.js';
 import { STATUS_CODES } from "../constants/constants.js";
 
 
-export const createPayment = async (data) => {
+export const servicecreatePayment = async (data) => {
 
     const { userID, sellerID, fullAmount, musicIDs, cartID } = data;
 
@@ -56,7 +56,7 @@ export const createPayment = async (data) => {
 
 };
 
-export const getSellerPayment = async (id) => {
+export const servicegetSellerPayment = async (id) => {
 
     const { sellerID } = id;
 
@@ -84,7 +84,7 @@ export const getSellerPayment = async (id) => {
   return sellerPayments;
 
 }
-export const getUserPayment = async (id) => {
+export const servicegetUserPayment = async (id) => {
 
     const { userID } = id;
   
@@ -101,7 +101,7 @@ export const getUserPayment = async (id) => {
 };
 
 // Get all Payments
-export const getAllPayments = async (req, res) => {
+export const servicegetAllPayments = async (req, res) => {
  
     const payments = await Payment.find();
 
@@ -110,7 +110,7 @@ export const getAllPayments = async (req, res) => {
 };
 
 // Delete a specific payment from a user's payments array
-export const deletePayment = async (id) => {
+export const servicedeletePayment = async (id) => {
 
     const { paymentID } = id;
 
