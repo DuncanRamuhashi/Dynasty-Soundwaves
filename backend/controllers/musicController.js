@@ -16,7 +16,7 @@ export const uploadMusic =asyncHandler( async (req, res) => {
 export const getAllMusic =asyncHandler( async (req, res) => {
 
     const populatedMusic = await servicegetAllMusic();
-  console.log(populatedMusic);
+
     res.status(STATUS_CODES.OK).json({ success: true, data: populatedMusic });
 });
 

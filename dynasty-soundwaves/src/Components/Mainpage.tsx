@@ -185,7 +185,8 @@ const Mainpage = () => {
     // play for next
     useEffect(() => {
       const playNextorPrev = (number: number) => {
-        const totalSongs = JSON.parse(sessionStorage.getItem('totalSongs') || '[]');
+        const totalSongs = JSON.parse(sessionStorage.getItem('totalSongs') ?? '[]');
+
         let newIndex = number;
   
         // Handle next or prev logic
@@ -205,10 +206,11 @@ const Mainpage = () => {
       playNextorPrev(currentIndex);
     },[currentIndex]);
   console.log(currentIndex);
-  console.log("env",import.meta.env.VITE_BACKENDURL);
+  console.log( "env",`${import.meta.env.VITE_BACKENDURL}/music/get-all-music`) ;
   useEffect(() => {
     const getMusic = async  () => {
-      
+        console.log("why cant i get music ");
+        console.log("useEffect triggered!");
       try {
         const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/music/get-all-music`, {
           method: "GET", 
@@ -218,7 +220,7 @@ const Mainpage = () => {
           credentials: "include",  
          
         });
-  
+      
         const data = await response.json();
     
         if (data?.success) {
@@ -226,6 +228,7 @@ const Mainpage = () => {
              sessionStorage.setItem('totalSongs', data.data.length);  
             
              sessionStorage.setItem('music',JSON.stringify(data.data));
+           
         } else {
           alert(data.message || "Update failed, please try again.");
         }
@@ -237,9 +240,9 @@ const Mainpage = () => {
     getMusic();
     
   },[]);
-  console.log(musicList);
+
   const token = sessionStorage.getItem("token");
-// adding to cart
+// adding to cartdfgd
 const user = JSON.parse(sessionStorage.getItem("user") || "null");
 const [cart, setCart] = useState<Cart>({
   userID: user?._id || "", // Ensure it's a valid string

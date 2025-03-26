@@ -123,6 +123,7 @@ const Navbar = () => {
                     setIsOtpOpen(true);
                     setIsOtpSent(true);
                 }
+                setIsLoggedIn(false);
                 alert(data.message);
             }
         } catch (error) {

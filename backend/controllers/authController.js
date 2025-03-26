@@ -33,20 +33,18 @@ export const verifyEmail = async (req, res) => {
 };
 
 // Login user with email verification check
-export const loginUser = async (req, res) => {
+export const loginUser = async (req, res,next) => {
     
         
         const user =await serviceLoginUser(req.body);
-
- 
+        console.log(user);
+        const token =await  generateToken(res, user);
      res.status(STATUS_CODES.OK).json({ 
          success: true, 
          user: { user },
          token // Include the token in the response body
-     });
-   
+     });   
 };
-
 // Logout User
 export const logoutUser = (req, res) => {
     res.cookie('token', '', { expires: new Date(0) });

@@ -175,7 +175,7 @@ export const serviceLoginUser = async (userData) => {
            
         }
 
-        const token = generateToken(res, user);
+      
      return user;
  
 };
