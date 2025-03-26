@@ -6,17 +6,17 @@ import transporter from '../config/nodemailer.js';
 import asyncHandler from '../middleware/asyncHandler.js';
 import { generateToken } from "../utils/TokenGenerating.js";
 import { STATUS_CODES } from '../constants/constants.js';
-import HttpError from "../middleware/errorHandler.js";
+import HttpError from "../utils/HttpError.js";
 
 export const serviceRegisterUser = async (userData) => {
 
         
     const { name, email, password, role } = userData;
     if (!userData) {
-        return new  HttpError("Name, email, and password are required.",STATUS_CODES.BAD_REQUEST);
+        throw new  HttpError("Name, email, and password are required.",STATUS_CODES.BAD_REQUEST);
     }
         if (await User.findOne({ email })) {
-            return new HttpError("User already exists",STATUS_CODES.BAD_REQUEST);
+            throw  new HttpError("User already exists",STATUS_CODES.BAD_REQUEST);
         }
 
         const newUser = await User.create({ name, email, password, role, isAccountVerified: false });
@@ -56,12 +56,12 @@ export const serviceResendOtp = async (email) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            return new HttpError("User not found",STATUS_CODES.NOT_FOUND);
+            throw new HttpError("User not found",STATUS_CODES.NOT_FOUND);
             
         }
 
         if (user.isAccountVerified) {
-            return new HttpError("Account already verified",STATUS_CODES.BAD_REQUEST);
+            throw new HttpError("Account already verified",STATUS_CODES.BAD_REQUEST);
         
         }
 
@@ -94,7 +94,7 @@ The Dynasty Soundwave Team`,
         }
 
        
-        return new HttpError("Current OTP is still valid",STATUS_CODES.BAD_REQUEST);
+        throw new HttpError("Current OTP is still valid",STATUS_CODES.BAD_REQUEST);
 };
 
 // Verify email after registration
@@ -102,7 +102,7 @@ export const serviceVerifyEmail = async (email,otp) => {
    
 
     if (!email || !otp) {
-        return new HttpError("Missing details:  OTP is required.",STATUS_CODES.BAD_REQUEST);
+        throw new HttpError("Missing details:  OTP is required.",STATUS_CODES.BAD_REQUEST);
         
     }
 
@@ -111,18 +111,18 @@ export const serviceVerifyEmail = async (email,otp) => {
 
         // Check if the user exists
         if (!user) {
-            return new HttpError("User not found.",STATUS_CODES.NOT_FOUND);
+            throw new HttpError("User not found.",STATUS_CODES.NOT_FOUND);
         
         }
 
         // Check if the OTP matches and is not expired
         if (!user.verifyOtp || user.verifyOtp !== otp) {
-            return new HttpError("Invalid Otp",STATUS_CODES.BAD_REQUEST);
+            throw new HttpError("Invalid Otp",STATUS_CODES.BAD_REQUEST);
         
         }
 
         if (user.verifyOtpExpireAt < Date.now()) {
-            return new HttpError("OTP has expired.",STATUS_CODES.BAD_REQUEST)
+            throw new HttpError("OTP has expired.",STATUS_CODES.BAD_REQUEST)
          
         }
 
@@ -166,12 +166,12 @@ export const serviceLoginUser = async (userData) => {
         const user = await User.findOne({ email });
 
         if (!user || !(await user.matchPassword(password))) {
-            return new HttpError("Invalid email or password",STATUS_CODES.UNAUTHORIZED);
+            throw new HttpError("Invalid email or password",STATUS_CODES.UNAUTHORIZED);
 
         }
 
         if (!user.isAccountVerified) {
-            return new HttpError("Please verify your email address.",STATUS_CODES.BAD_REQUEST);
+            throw new HttpError("Please verify your email address.",STATUS_CODES.BAD_REQUEST);
            
         }
 
@@ -191,7 +191,7 @@ export const serviceUpdateUser = async (userData,userId) => {
         // Check if user exists
         let user = await User.findById(userId);
         if (!user) {
-            return new HttpError("User not found",STATUS_CODES.NOT_FOUND);
+            throw new HttpError("User not found",STATUS_CODES.NOT_FOUND);
          
         }
 
@@ -222,13 +222,13 @@ export const serviceDeleteUser = async (id) => {
         // Check if user exists
         const user = await User.findById(userId);
         if (!user) {
-            return new HttpError("User not found",STATUS_CODES.NOT_FOUND);
+            throw new HttpError("User not found",STATUS_CODES.NOT_FOUND);
    
         }
 
         // only the user or an admin can delete the profile
         if (req.user.id !== userId && req.user.role !== "admin") {
-            return new HttpError("Unauthorized action",STATUS_CODES.FORBIDDEN);
+            throw new HttpError("Unauthorized action",STATUS_CODES.FORBIDDEN);
         }
 
         await User.findByIdAndDelete(userId);
@@ -241,7 +241,7 @@ export const serviceForgotPassword = async (email) => {
     
 
     if (!email) {
-        return new HttpError("Email is required.",STATUS_CODES.BAD_REQUEST);
+        throw new HttpError("Email is required.",STATUS_CODES.BAD_REQUEST);
         
     }
 
@@ -250,7 +250,7 @@ export const serviceForgotPassword = async (email) => {
 
         if (!user) {
        
-            return new HttpError("User not found.",STATUS_CODES.NOT_FOUND);
+            throw new HttpError("User not found.",STATUS_CODES.NOT_FOUND);
         }
 
         // Generate OTP for password reset
@@ -285,24 +285,24 @@ export const serviceResetPassword = async (data) => {
     const { userId, otp, newPassword } = data;
 
     if (!userId || !otp || !newPassword) {
-        return new HttpError("User ID, OTP, and new password are required.",STATUS_CODES.BAD_REQUEST);
+        throw new HttpError("User ID, OTP, and new password are required.",STATUS_CODES.BAD_REQUEST);
        
     }
         const user = await User.findById(userId);
 
         if (!user) {
-            return new HttpError("User not found.",STATUS_CODES.NOT_FOUND);
+            throw new HttpError("User not found.",STATUS_CODES.NOT_FOUND);
             
         }
 
         // Check if OTP is valid
         if (!user.resetPasswordOtp || user.resetPasswordOtp !== otp) {
-            return new HttpError("User not found.",STATUS_CODES.BAD_REQUEST);
+            throw new HttpError("User not found.",STATUS_CODES.BAD_REQUEST);
             
         }
 
         if (user.resetPasswordOtpExpireAt < Date.now()) {
-            return new HttpError("OTP has expired.",STATUS_CODES.BAD_REQUEST);
+            throw new HttpError("OTP has expired.",STATUS_CODES.BAD_REQUEST);
         
         }
 

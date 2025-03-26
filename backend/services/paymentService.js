@@ -66,7 +66,7 @@ export const servicegetSellerPayment = async (id) => {
       .populate("payments.musicIDs", "title"); 
 
     if (!payments.length) {
-        return new HttpError("No payments found for this seller",STATUS_CODES.NOT_FOUND);
+        throw new HttpError("No payments found for this seller",STATUS_CODES.NOT_FOUND);
     }
 
 
@@ -93,7 +93,7 @@ export const servicegetUserPayment = async (id) => {
 
     if (payment.length === 0) {
 
-       return new HttpError("No payments found for this user",STATUS_CODES.NOT_FOUND);
+        throw new HttpError("No payments found for this user",STATUS_CODES.NOT_FOUND);
     }
 
  return payment;
@@ -121,7 +121,7 @@ export const servicedeletePayment = async (id) => {
     );
 
     if (!payment) {
-        return new HttpError("No payment found for this user",STATUS_CODES.NOT_FOUND);
+        throw new HttpError("No payment found for this user",STATUS_CODES.NOT_FOUND);
     }
 
  

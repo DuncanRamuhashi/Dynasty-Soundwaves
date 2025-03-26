@@ -17,7 +17,7 @@ export const servicegetTandC = async () => {
     const tandC = await Terms.findOne(); // Assuming you have one set of terms and conditions
     if (!tandC) {
      
-      return new HttpError("Terms and Conditions not found",STATUS_CODES.NOT_FOUND);
+        throw new HttpError("Terms and Conditions not found",STATUS_CODES.NOT_FOUND);
     }
     return tandC;
  
@@ -30,7 +30,7 @@ export const serviceupdateTandC = async (data) => {
     const { terms, conditions } = data;
     const updatedTandC = await Terms.findOneAndUpdate({}, { terms, conditions }, { new: true });
     if (!updatedTandC) {
-        return new HttpError("Terms and Conditions not found",STATUS_CODES.NOT_FOUND);
+        throw new HttpError("Terms and Conditions not found",STATUS_CODES.NOT_FOUND);
     }
     return updateTandC;
  

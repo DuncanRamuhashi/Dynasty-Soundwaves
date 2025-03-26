@@ -48,14 +48,14 @@ export const servicegetAudio = async (id) => {
 
     if (!songID) {
 
-      return new HttpError("Track ID is required",STATUS_CODES.BAD_REQUEST);
+        throw new HttpError("Track ID is required",STATUS_CODES.BAD_REQUEST);
     }
 
     const song = await Music.findById(songID).select("audio");
 
     if (!song) {
       
-      return new HttpError("Song not found",STATUS_CODES.NOT_FOUND);
+        throw new HttpError("Song not found",STATUS_CODES.NOT_FOUND);
     }
      return song;
     
@@ -81,7 +81,7 @@ export const servicegetMusicById = async (id) => {
 
     if (!musics || musics.length === 0) {
   
-      return new HttpError("No music found for this user",STATUS_CODES.NOT_FOUND);
+        throw new HttpError("No music found for this user",STATUS_CODES.NOT_FOUND);
     }
       
     res.status(STATUS_CODES.OK).json({ 
@@ -106,7 +106,7 @@ export const serviceupdateMusic = async (idp,useridb) => {
 
     if (!updatedMusic) {
    
-      return new HttpError("No music found",STATUS_CODES.NOT_FOUND);
+        throw new HttpError("No music found",STATUS_CODES.NOT_FOUND);
     }
     return updatedMusic;
     
@@ -123,7 +123,7 @@ export const servicedeleteMusic = async (idp) => {
     const music = await Music.findByIdAndDelete(id);
 
     if (!music) {
-        return new HttpError("No music found",STATUS_CODES.NOT_FOUND);
+        throw new HttpError("No music found",STATUS_CODES.NOT_FOUND);
     }
 
     

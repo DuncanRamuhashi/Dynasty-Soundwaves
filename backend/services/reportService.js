@@ -15,7 +15,7 @@ export const servicegetReport = async (id) => {
     const report = await Report.findOne({userID});
     if (!report) {
       
-        return new HttpError("Report not found",STATUS_CODES.NOT_FOUND);
+        throw new HttpError("Report not found",STATUS_CODES.NOT_FOUND);
     }
     return report;
 
@@ -38,7 +38,7 @@ export const serviceupdateReport = async (idp,useridb,total) => {
 
     const updatedReport = await Report.findByIdAndUpdate(id, { userid, totalrevenue }, { new: true });
     if (!updatedReport) {
-        return new HttpError("Report not found",STATUS_CODES.NOT_FOUND);
+        throw new HttpError("Report not found",STATUS_CODES.NOT_FOUND);
     }
 
     return updateReport;
@@ -51,7 +51,7 @@ export const servicedeleteReport = async (idp) => {
     const  id  = idp;
     const report = await Report.findByIdAndDelete(id);
     if (!report) {
-        return new HttpError("Report not found",STATUS_CODES.NOT_FOUND);
+        throw new HttpError("Report not found",STATUS_CODES.NOT_FOUND);
     }
     
  

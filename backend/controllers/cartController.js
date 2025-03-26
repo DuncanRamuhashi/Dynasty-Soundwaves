@@ -3,7 +3,7 @@ import { STATUS_CODES } from "../constants/constants.js";
 // Create a new Cart
 import asyncHandler from 'express-async-handler';
 import { serviceaddToCart, servicecreateCart, servicegetCart, serviceremoveFromCart } from "../services/cartService.js";
-export const createCart =asyncHandler( async (req, res) => {
+export const createCart = asyncHandler( async (req, res,next) => {
 
     // Create a new cart with musicIDS defaulting to empty array if not provided
     const newCart =await servicecreateCart(req.body);
@@ -17,8 +17,8 @@ export const createCart =asyncHandler( async (req, res) => {
 });
 
 // Get a Cart by user ID
-export const getCart =asyncHandler( async (req, res) => {
-
+export const getCart = asyncHandler( async (req, res) => {
+ 
     const { userID } = req.params;
   
     const cart =await servicegetCart(userID); 
@@ -33,7 +33,7 @@ export const getCart =asyncHandler( async (req, res) => {
 });
 
 // Add music ID to Cart
-export const addToCart =asyncHandler( async (req, res) => {
+export const addToCart = asyncHandler( async (req, res) => {
  
     const { userID } = req.params;
     const { musicID } = req.body;
@@ -50,7 +50,7 @@ export const addToCart =asyncHandler( async (req, res) => {
 });
 
 // Remove music ID from Cart
-export const removeFromCart =asyncHandler( async (req, res) => {
+export const removeFromCart = asyncHandler( async (req, res) => {
 
     const { userID } = req.params;
     const { musicID } = req.body;

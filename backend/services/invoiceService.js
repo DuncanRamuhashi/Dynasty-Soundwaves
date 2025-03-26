@@ -28,7 +28,7 @@ export const servicegetInvoice = async (id) => {
 
     if (!invoice) {
       
-             return new HttpError("Invoice not found",STATUS_CODES.NOT_FOUND);
+        throw new HttpError("Invoice not found",STATUS_CODES.NOT_FOUND);
             
     }
 
@@ -54,7 +54,7 @@ export const servicedeleteInvoice = async (id) => {
     const deletedInvoice = await Invoice.findOneAndDelete({ paymentID });
 
     if (!deletedInvoice) {
-           return new HttpError("Invoice not found",STATUS_CODES.NOT_FOUND);
+        throw new HttpError("Invoice not found",STATUS_CODES.NOT_FOUND);
      
     }
 

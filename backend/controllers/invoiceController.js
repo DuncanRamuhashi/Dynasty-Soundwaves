@@ -43,7 +43,7 @@ export const getAllInvoices = asyncHandler (async (req, res) => {
 });
 
 // Delete an Invoice by paymentID
-export const deleteInvoice =asyncHandler( async (req, res) => {
+export const deleteInvoice = asyncHandler( async (req, res) => {
 
     const { paymentID } = req.params;
 

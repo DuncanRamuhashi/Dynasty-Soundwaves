@@ -9,7 +9,7 @@ export const servicecreateCart = async (cartData) => {
 
     // Validate input
     if (!userID) {
-          return new HttpError("User ID is required",STATUS_CODES.BAD_REQUEST);
+        throw new HttpError("User ID is required",STATUS_CODES.BAD_REQUEST);
       
     }
 
@@ -17,7 +17,7 @@ export const servicecreateCart = async (cartData) => {
     const existingCart = await Cart.findOne({ userID });
     if (existingCart) {
      
-      return new HttpError("exits",STATUS_CODES.BAD_REQUEST);
+        throw new HttpError("exits",STATUS_CODES.BAD_REQUEST);
     }
 
     // Create a new cart with musicIDS defaulting to empty array if not provided
@@ -40,7 +40,7 @@ export const servicegetCart = async (id) => {
     const cart = await Cart.findOne({"userID": userID });
     
     if (!cart) {
-      return res.status(200).json({ success: true, message: 'none'});
+        throw res.status(200).json({ success: true, message: 'none'});
     }
 
     return cart;
@@ -53,7 +53,7 @@ export const serviceaddToCart = async (userIdP, musicIdb) => {
     const musicID  = musicIdb;
 
     if (!musicID) {
-        return new HttpError("Music ID is required",STATUS_CODES.BAD_REQUEST);
+        throw new HttpError("Music ID is required",STATUS_CODES.BAD_REQUEST);
    
     }
 
@@ -70,7 +70,7 @@ export const serviceaddToCart = async (userIdP, musicIdb) => {
       if (!cart.musicIDS.includes(musicID)) {
         cart.musicIDS.push(musicID);
       } else {
-        return new HttpError("Music ID already in cart",STATUS_CODES.BAD_REQUEST);
+        throw new HttpError("Music ID already in cart",STATUS_CODES.BAD_REQUEST);
         
       }
     }
@@ -89,14 +89,14 @@ export const serviceremoveFromCart = async (userIdP, musicIdb) => {
 
     if (!musicID) {
    
-      return new HttpError("Music ID is required",STATUS_CODES.BAD_REQUEST);
+        throw new HttpError("Music ID is required",STATUS_CODES.BAD_REQUEST);
     }
 
     const cart = await Cart.findOne({ userID });
 
     if (!cart) {
     
-      return new HttpError("Cart not found",STATUS_CODES.NOT_FOUND);
+        throw new HttpError("Cart not found",STATUS_CODES.NOT_FOUND);
     }
 
     const initialLength = cart.musicIDS.length;
@@ -104,7 +104,7 @@ export const serviceremoveFromCart = async (userIdP, musicIdb) => {
 
     if (initialLength === cart.musicIDS.length) {
      
-      return new HttpError("Music ID not found in cart",STATUS_CODES.BAD_REQUEST);
+        throw new HttpError("Music ID not found in cart",STATUS_CODES.BAD_REQUEST);
     }
 
     await cart.save();
@@ -121,7 +121,7 @@ export const servicedeleteCart = async (id) => {
 
     if (!deletedCart) {
       
-      return new HttpError("Cart not found",STATUS_CODES.NOT_FOUND);
+        throw new HttpError("Cart not found",STATUS_CODES.NOT_FOUND);
     }
 
 
