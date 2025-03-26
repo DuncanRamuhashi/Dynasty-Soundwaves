@@ -6,7 +6,7 @@ import { serviceaddToCart, servicecreateCart, servicegetCart, serviceremoveFromC
 export const createCart =asyncHandler( async (req, res) => {
 
     // Create a new cart with musicIDS defaulting to empty array if not provided
-    const newCart = servicecreateCart(req.body);
+    const newCart =await servicecreateCart(req.body);
 
     res.status(STATUS_CODES.CREATED).json({
       success: true,
@@ -21,7 +21,7 @@ export const getCart =asyncHandler( async (req, res) => {
 
     const { userID } = req.params;
   
-    const cart = servicegetCart(userID); 
+    const cart =await servicegetCart(userID); 
     
   
 
@@ -40,7 +40,7 @@ export const addToCart =asyncHandler( async (req, res) => {
 
  
 
-    let cart = serviceaddToCart(userID,musicID);
+    let cart =await serviceaddToCart(userID,musicID);
     res.status(STATUS_CODES.OK).json({
       success: true,
       message: 'Item added to cart successfully',
@@ -56,7 +56,7 @@ export const removeFromCart =asyncHandler( async (req, res) => {
     const { musicID } = req.body;
 
 
-    const cart = serviceremoveFromCart(userID,musicID);
+    const cart =await serviceremoveFromCart(userID,musicID);
 
  
 
@@ -72,7 +72,7 @@ export const removeFromCart =asyncHandler( async (req, res) => {
 export const deleteCart =asyncHandler( async (req, res) => {
  
     const { userID } = req.params;
-    servicedeleteCart(userID);
+    await servicedeleteCart(userID);
 
     res.status(STATUS_CODES.OK).json({
       success: true,

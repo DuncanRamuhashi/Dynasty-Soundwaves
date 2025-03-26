@@ -11,7 +11,7 @@ import { serviceDeleteUser, serviceForgotPassword, serviceLoginUser, serviceRegi
 
 export const registerUser =  asyncHandler (async (req, res) => {
  
-    serviceRegisterUser(req.body);
+    await serviceRegisterUser(req.body);
 
         res.status(STATUS_CODES.CREATED).json({ success: true, message: 'User registered successfully. Please verify your email.' });
  
@@ -21,7 +21,7 @@ export const registerUser =  asyncHandler (async (req, res) => {
 export const resendOtp = async (req, res) => {
    
         const { email } = req.body;
-        serviceResendOtp(email);
+        await   serviceResendOtp(email);
 
 
 };
@@ -29,14 +29,14 @@ export const resendOtp = async (req, res) => {
 // Verify email after registration
 export const verifyEmail = async (req, res) => {
     const { email, otp } = req.body;
-    serviceVerifyEmail(email,otp);
+    await  serviceVerifyEmail(email,otp);
 };
 
 // Login user with email verification check
 export const loginUser = async (req, res) => {
     
         
-        const user = serviceLoginUser(req.body);
+        const user =await serviceLoginUser(req.body);
 
  
      res.status(STATUS_CODES.OK).json({ 
@@ -71,7 +71,7 @@ export const updateUser = async (req, res) => {
         const userId = req.params.id;
 
         // Check if user exists
-        let user = serviceUpdateUser(req.body,userId);
+        let user =await serviceUpdateUser(req.body,userId);
         res.status(STATUS_CODES.OK).json({ success: true, message: "User updated successfully", user });
  
 };
@@ -80,7 +80,7 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
  
         const userId = req.params.id;
-        serviceDeleteUser(userId) ;
+        await    serviceDeleteUser(userId) ;
       
         res.status(STATUS_CODES.OK).json({ success: true, message: "User deleted successfully" });
    
@@ -89,7 +89,7 @@ export const deleteUser = async (req, res) => {
 // Forgot Password (Send OTP to email)
 export const forgotPassword = async (req, res) => {
     const { email } = req.body;
-serviceForgotPassword(email);
+    await serviceForgotPassword(email);
 
 res.status(STATUS_CODES.OK).json({ success: true, message: 'OTP sent to your email for password reset.' });
  
@@ -97,7 +97,7 @@ res.status(STATUS_CODES.OK).json({ success: true, message: 'OTP sent to your ema
 
 // Reset Password using OTP
 export const resetPassword = async (req, res) => {
-    serviceResetPassword(req.body);
+    await    serviceResetPassword(req.body);
 
 res.status(STATUS_CODES.OK).json({ success: true, message: 'Password reset successfully.' });
    

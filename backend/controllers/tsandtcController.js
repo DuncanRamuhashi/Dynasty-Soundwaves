@@ -6,7 +6,7 @@ import { STATUS_CODES } from "../constants/constants.js";
 export const createTandC = asyncHandler( async (req, res) => {
  
   
-    const newCandT = servicecreateTandC(req.body);
+    const newCandT = await servicecreateTandC(req.body);
 
     res.status(STATUS_CODES.CREATED).json({ success: true, message: 'Terms and Conditions created successfully', data: newCandT });
  
@@ -14,13 +14,13 @@ export const createTandC = asyncHandler( async (req, res) => {
 
 // Get Terms and Conditions
 export const getTandC =  asyncHandler( async (req, res) => {
-    const info = servicegetTandC();
+    const info = await servicegetTandC();
     res.status(STATUS_CODES.OK).json({ success: true, data: info});
 });
 
 // Update Terms and Conditions
 export const updateTandC = asyncHandler( async (req, res) => {
-    const updatedTandC = serviceupdateTandC(req.body);
+    const updatedTandC = await serviceupdateTandC(req.body);
     res.status(STATUS_CODES.OK).json({ success: true, message: 'Terms and Conditions updated successfully', data: updatedTandC });
 
 });

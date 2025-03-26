@@ -5,7 +5,7 @@ import { servicecreateInvoice, servicedeleteInvoice, servicegetAllInvoices, serv
 // Create a new Invoice
 export const createInvoice = asyncHandler( async (req, res) => {
    // Create a new invoice
-    const newInvoice = servicecreateInvoice(req.body);
+    const newInvoice = await servicecreateInvoice(req.body);
     res.status(STATUS_CODES.CREATED).json({
       success: true,
       message: 'Invoice created successfully',
@@ -20,7 +20,7 @@ export const getInvoice = asyncHandler( async (req, res) => {
     const { userID } = req.params;
 
     // Find the invoice by paymentID
-    const invoice = servicegetInvoice(userID); 
+    const invoice =await servicegetInvoice(userID); 
 
     res.status(STATUS_CODES.OK).json({
       success: true,
@@ -33,7 +33,7 @@ export const getInvoice = asyncHandler( async (req, res) => {
 export const getAllInvoices = asyncHandler (async (req, res) => {
  
     // Retrieve all invoices
-    const invoices = servicegetAllInvoices(); 
+    const invoices =await servicegetAllInvoices(); 
 
     res.status(STATUS_CODES.OK).json({
       success: true,
@@ -48,7 +48,7 @@ export const deleteInvoice =asyncHandler( async (req, res) => {
     const { paymentID } = req.params;
 
     // Find and delete the invoice by paymentID
-    servicedeleteInvoice(paymentID); 
+    await servicedeleteInvoice(paymentID); 
     res.status(STATUS_CODES.OK).json({
       success: true,
       message: 'Invoice deleted successfully'

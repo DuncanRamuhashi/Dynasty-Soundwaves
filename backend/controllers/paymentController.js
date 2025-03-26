@@ -7,7 +7,7 @@ import asyncHandler from 'express-async-handler';
 import { servicecreatePayment, servicedeletePayment, servicegetAllPayments, servicegetSellerPayment, servicegetUserPayment } from "../services/paymentService.js";
 // Create a new Payment and update downloadable status, then remove items from the cart
 export const createPayment = asyncHandler( async (req, res) => {
-    let payment = servicecreatePayment(req.body);
+    let payment =await servicecreatePayment(req.body);
 
     res.status(STATUS_CODES.CREATED).json({
       success: true,
@@ -22,7 +22,7 @@ export const getSellerPayment =asyncHandler( async (req, res) => {
     const { sellerID } = req.params;
 
     // Format seller payments
-    const sellerPayments = servicegetSellerPayment(sellerID) ;
+    const sellerPayments =await servicegetSellerPayment(sellerID) ;
 
     res.status(STATUS_CODES.OK).json({
       success: true,
@@ -36,7 +36,7 @@ export const getUserPayment =asyncHandler( async (req, res) => {
     const { userID } = req.params;
    
 
-    const payment = servicegetUserPayment(userID);
+    const payment =await servicegetUserPayment(userID);
 
     
 
@@ -51,7 +51,7 @@ export const getUserPayment =asyncHandler( async (req, res) => {
 // Get all Payments
 export const getAllPayments =asyncHandler( async (req, res) => {
  
-    const payments = servicegetAllPayments();
+    const payments = await servicegetAllPayments();
 
     res.status(STATUS_CODES.OK).json({
       success: true,
@@ -65,7 +65,7 @@ export const deletePayment =asyncHandler( async (req, res) => {
 
     const { paymentID } = req.params;
 
-   servicedeletePayment(paymentID); 
+    await servicedeletePayment(paymentID); 
     res.status(STATUS_CODES.OK).json({
       success: true,
       message: "Payment deleted successfully",

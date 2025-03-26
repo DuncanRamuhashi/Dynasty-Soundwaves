@@ -6,7 +6,7 @@ import { servicedeleteMusic, servicegetAllMusic, servicegetAudio, servicegetMusi
 
 export const uploadMusic =asyncHandler( async (req, res) => {
 
-    const newMusic = serviceuploadMusic(req.body);
+    const newMusic =await serviceuploadMusic(req.body);
     await newMusic.save();
 
     res.status(STATUS_CODES.CREATED).json({ success: true, message: "Music uploaded successfully", data: newMusic });
@@ -26,7 +26,7 @@ export const getAudio =asyncHandler( async (req, res) => {
 
     const songID = req.params.track;
 
-    const song = servicegetAudio(songID);
+    const song = await servicegetAudio(songID);
 
 
     res.status(STATUS_CODES.OK).json({ success: true, data: song });
@@ -37,7 +37,7 @@ export const getMusicById =asyncHandler( async (req, res) => {
  
     const  userId  = req.params.id;
    
-    servicegetMusicById(userId);
+    await servicegetMusicById(userId);
 
 });
 
@@ -47,7 +47,7 @@ export const updateMusic =asyncHandler( async (req, res) => {
     const { id } = req.params;
     const { userID } = req.body;
 
-    const updatedMusic = serviceupdateMusic(id,userID);
+    const updatedMusic =await serviceupdateMusic(id,userID);
 
     res.status(STATUS_CODES.OK).json({ success: true, message: "Music is now downloadable", data: updatedMusic });
 
@@ -57,7 +57,7 @@ export const deleteMusic =asyncHandler( async (req, res) => {
 
     const { id } = req.params;
     
-    servicedeleteMusic(id);
+    await servicedeleteMusic(id);
     res.status(STATUS_CODES.OK).json({ success: true, message: "Music deleted successfully" });
 
 });

@@ -6,7 +6,7 @@ import asyncHandler from 'express-async-handler';
 export const createReport =asyncHandler( async (req, res) => {
 
   
-    const newReport = servicecreateReport(req.body);
+    const newReport = await servicecreateReport(req.body);
     
     res.status(STATUS_CODES.CREATED).json({ success: true, message: 'Report created successfully', data: newReport });
 
@@ -16,7 +16,7 @@ export const createReport =asyncHandler( async (req, res) => {
 export const getReport =asyncHandler( async (req, res) => {
 
     const { userID } = req.params;
-    const report = servicegetReport(userID);
+    const report =await servicegetReport(userID);
   
     res.status(STATUS_CODES.OK).json({ success: true, data: report });
 
@@ -25,7 +25,7 @@ export const getReport =asyncHandler( async (req, res) => {
 // Get all Reports
 export const getAllReports =asyncHandler( async (req, res) => {
   
-    const reports = servicegetAllReports() ;
+    const reports =await servicegetAllReports() ;
     res.status(STATUS_CODES.OK).json({ success: true, data: reports });
  
 });
@@ -46,7 +46,7 @@ export const updateReport = asyncHandler( async (req, res) => {
 export const deleteReport =asyncHandler( async (req, res) => {
 
     const { id } = req.params;
-    servicedeleteReport(id);
+    await   servicedeleteReport(id);
  
     res.status(STATUS_CODES.OK).json({ success: true, message: 'Report deleted successfully' });
 
