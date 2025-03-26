@@ -288,8 +288,6 @@ export const serviceResetPassword = async (data) => {
         return new HttpError("User ID, OTP, and new password are required.",STATUS_CODES.BAD_REQUEST);
        
     }
-
-
         const user = await User.findById(userId);
 
         if (!user) {
