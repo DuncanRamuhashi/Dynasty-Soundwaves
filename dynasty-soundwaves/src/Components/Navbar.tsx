@@ -85,14 +85,18 @@ const Navbar = () => {
                     },
                     credentials: "include",
                 });
-                const data = await response.json();
-                sessionStorage.setItem("cartID", data.data._id);
-                if (data?.message === "none") {
-                    setCartNumber(0);
-                } else {
-                    setCartNumber(data.data.musicIDS?.length || 1);
-                    sessionStorage.setItem("musicIDDS", JSON.stringify(data.data.musicIDS));
+
+                if(response.ok){
+                    const data = await response.json();
+                    sessionStorage.setItem("cartID", data.data._id);
+                    if (data?.message === "none") {
+                        setCartNumber(0);
+                    } else {
+                        setCartNumber(data.data.musicIDS?.length || 1);
+                        sessionStorage.setItem("musicIDDS", JSON.stringify(data.data.musicIDS));
+                    }
                 }
+
             } catch (error) {
                 console.error("Error getting cart:", error);
             }
@@ -111,7 +115,7 @@ const Navbar = () => {
             console.log(response.status);
         
             
-           if(response.status === 401){
+           if(response.status === STATUS_CODES.UNAUTHORIZED){
             alert("incorrect password or email");
            }else{
                 const data = await response.json();
