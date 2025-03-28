@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import image from "../assets/pexels-rdne-7841424.jpg";
 import { useNavigate } from "react-router-dom";
-
+import {STATUS_CODES} from    '../constants.ts';
 const UpdateTerms = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [terms, setTerms] = useState("");

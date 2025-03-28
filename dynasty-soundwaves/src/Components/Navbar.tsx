@@ -3,7 +3,7 @@ import { FaSearch, FaShoppingCart, FaRegUser, FaUser, FaRegListAlt, FaMoneyBillW
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/ddddd-removebg-preview.png";
 import { HiMenu, HiX } from "react-icons/hi";
-
+import {STATUS_CODES} from    '../constants.ts';
 interface User {
     _id: string;
     name: string;

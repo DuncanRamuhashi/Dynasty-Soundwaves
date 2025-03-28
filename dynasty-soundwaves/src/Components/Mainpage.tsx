@@ -3,6 +3,11 @@ import { FaArrowDown, FaShoppingCart } from "react-icons/fa";
 import Navbar from "./Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import Player from "../Cards/Player";
+import {STATUS_CODES} from    '../constants.ts';
+
+
+
+
 const Mood = [
     { id: 1, label: "Happy" },
     { id: 2, label: "Sad " },
@@ -159,20 +164,27 @@ const Mainpage = () => {
             },
             credentials: "include",  
           })
-          const data = await res.json();
+          if(res.status === STATUS_CODES.BAD_REQUEST){
+            alert("Track ID is required");
+          }else if (res.status === STATUS_CODES.NOT_FOUND){
+            alert("Song not found");
+          }else{
+            const data = await res.json();
          
-          if (data?.success) {
-            setPlayID(trackID);
-            setPlayTitle(title);
-            setPlayName(name);
-            setPlyImage(image);
-            setPlayAudioTrack(data.data.audio);
-            setPlayTime(time);
-            const index = musicList.findIndex(m => m._id === trackID);
-            sessionStorage.setItem('indexSong',index.toString());
-       } else {
-         alert(data.message || "Update failed, please try again.");
-       }
+            if (data?.success) {
+              setPlayID(trackID);
+              setPlayTitle(title);
+              setPlayName(name);
+              setPlyImage(image);
+              setPlayAudioTrack(data.data.audio);
+              setPlayTime(time);
+              const index = musicList.findIndex(m => m._id === trackID);
+              sessionStorage.setItem('indexSong',index.toString());
+          }
+
+          
+         
+       } 
       } catch (error) {
             console.error("Error getting music:", error);
        alert("An error occurred. Please try again.");
