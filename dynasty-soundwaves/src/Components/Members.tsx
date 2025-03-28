@@ -50,14 +50,15 @@ const Members = () => {
           },
           credentials: "include",
         });
-
-        const data = await response.json();
+        if(response.status === STATUS_CODES.OK){
+          const data = await response.json();
          console.log(data);
-        if (data?.success) {
+
           setMembers(data.users);
-        } else {
-          alert(data.message || "Failed to fetch members");
+        }else {
+          alert("Failed to fetch members");
         }
+    
       } catch (error) {
         console.error("Error getting members:", error);
         alert("An error occurred while fetching members");

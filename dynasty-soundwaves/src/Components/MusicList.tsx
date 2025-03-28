@@ -43,7 +43,7 @@ useEffect(() => {
         credentials: "include",  
        
       });
-
+     if(response.ok){
       const data = await response.json();
       console.log(data);
       if (data?.success) {
@@ -52,6 +52,10 @@ useEffect(() => {
       } else {
         alert(data.message || "Update failed, please try again.");
       }
+     }else{
+       alert("No music found for this user");
+     }
+
     } catch (error) {
       console.error("Error getting music:", error);
       alert("An error occurred. Please try again.");
@@ -79,18 +83,18 @@ const formatDuration = (seconds: number): string => {
         credentials: "include",  
        
       });
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+       if(response.ok){
+        const data = await response.json();
+        console.log(data);
+        
+          alert(data.message || "Music deleted successfully.");
+          window.location.reload(); // Refresh the page   eish
+             
+      
+       }  else {
+        alert( "Delete failed, please try again.");
       }
-      const data = await response.json();
-      console.log(data);
-      if (data?.success) {
-        alert(data.message || "Music deleted successfully.");
-        window.location.reload(); // Refresh the page   eish
-           
-      } else {
-        alert(data.message || "Delete failed, please try again.");
-      }
+
     } catch (error) {
       console.error("Error deleting music:", error);
       alert("An error occurred. Please try again.");

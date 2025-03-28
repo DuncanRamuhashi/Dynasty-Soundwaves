@@ -217,8 +217,7 @@ const Mainpage = () => {
       // Call playNextorPrev function if sessionStorage 'indexSong' changes
       playNextorPrev(currentIndex);
     },[currentIndex]);
-  console.log(currentIndex);
-  console.log( "env",`${import.meta.env.VITE_BACKENDURL}/music/get-all-music`) ;
+
   useEffect(() => {
     const getMusic = async  () => {
         console.log("why cant i get music ");
@@ -232,18 +231,20 @@ const Mainpage = () => {
           credentials: "include",  
          
         });
-      
-        const data = await response.json();
+          if(response.status === STATUS_CODES.OK){
+            const data = await response.json();
     
-        if (data?.success) {
-             setMusicList(data.data)
-             sessionStorage.setItem('totalSongs', data.data.length);  
+          
+                 setMusicList(data.data)
+                 sessionStorage.setItem('totalSongs', data.data.length);  
+                
+                 sessionStorage.setItem('music',JSON.stringify(data.data));
+               
             
-             sessionStorage.setItem('music',JSON.stringify(data.data));
-           
-        } else {
-          alert(data.message || "Update failed, please try again.");
-        }
+          } else {
+            alert("Update failed, please try again.");
+          }
+
       } catch (error) {
        console.error("Error getting music:", error);
        alert("An error occurred. Please try again.");
@@ -274,7 +275,9 @@ const handleExistingCart = async (id: string) => {
       credentials: "include",
       body: JSON.stringify({ musicID: id }),
     });
-
+  if(res.status === STATUS_CODES.BAD_REQUEST){
+    alert("already exits");
+  }else {
     const data = await res.json();
 
     if (data?.success) {
@@ -283,6 +286,8 @@ const handleExistingCart = async (id: string) => {
     } else {
       alert(data.message || "Failed to add to cart, please try again.");
     }
+  }
+    
   } catch (error) {
     console.error("Error adding to existing cart:", error);
     alert("An error occurred while updating the cart.");
@@ -316,7 +321,9 @@ const handleCart = async (id: string) => {
       credentials: "include",
       body: JSON.stringify(updatedCart),
     });
-
+  if( response.status === STATUS_CODES.BAD_REQUEST){
+    alert("exits");
+  }else {
     const data = await response.json();
 
     if (data?.success) {
@@ -328,6 +335,8 @@ const handleCart = async (id: string) => {
         await handleExistingCart(id);
       }
     }
+  }
+
   } catch (error) {
     console.error("Error adding to cart:", error);
     alert("An error occurred. Please try again.");
