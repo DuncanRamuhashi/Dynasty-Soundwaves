@@ -1,7 +1,7 @@
 import { STATES } from "mongoose";
 import Cart from "../models/cart.js";
 import { STATUS_CODES } from "../constants/constants.js";
-
+import HttpError from "../utils/HttpError.js";
 // Create a new Cart
 export const servicecreateCart = async (cartData) => {
 
@@ -40,7 +40,7 @@ export const servicegetCart = async (id) => {
     const cart = await Cart.findOne({"userID": userID });
     
     if (!cart) {
-        throw res.status(200).json({ success: true, message: 'none'});
+        throw new HttpError("none",STATUS_CODES.NOT_FOUND);
     }
 
     return cart;

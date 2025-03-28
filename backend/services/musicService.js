@@ -1,7 +1,7 @@
 import { STATUS_CODES } from "../constants/constants.js";
 import Music from "../models/music.js";
 import User from "../models/User.js";
-
+import HttpError from "../utils/HttpError.js";
 // ✅ Upload Music
 export const serviceuploadMusic = async (data) => {
 

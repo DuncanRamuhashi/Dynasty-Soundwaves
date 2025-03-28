@@ -1,6 +1,7 @@
 import Invoice from "../models/invoice.js";
 import { STATUS_CODES } from "../constants/constants.js";
 // Create a new Invoice
+import HttpError from "../utils/HttpError.js";
 export const servicecreateInvoice = async (data) => {
 
     const { paymentID, userID, fullamount, status } = data;

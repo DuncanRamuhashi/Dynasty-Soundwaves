@@ -1,6 +1,7 @@
 import Terms from "../models/terms.js";
 // return new HttpError("No payments found for this seller",STATUS_CODES.NOT_FOUND);
 // Create Terms and Conditions
+import HttpError from "../utils/HttpError.js";
 export const servicecreateTandC = async (data) => {
  
     const { terms, conditions } = data;
