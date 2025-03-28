@@ -108,9 +108,13 @@ const Navbar = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
             });
-            console.log(response);
-            const data = await response.json();
+            console.log(response.status);
+        
             
+           if(response.status === 401){
+            alert("incorrect password or email");
+           }else{
+                const data = await response.json();
             if (data.success) {
                 setIsLoggedIn(true);
                 setIsLoginOpen(false);
@@ -126,11 +130,14 @@ const Navbar = () => {
                     setIsOtpSent(true);
                 }
                 setIsLoggedIn(false);
-                alert(data.message);
+                
             }
+           }
+
+
         } catch (error) {
             console.error("Login error:", error);
-            alert("Login failed, please try again");
+            alert("Network error occurred. Please try again later.");
         }
     };
 
