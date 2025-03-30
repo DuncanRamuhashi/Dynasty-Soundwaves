@@ -43,12 +43,17 @@ const Usereport = () => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
+        if(response.status === STATUS_CODES.NOT_FOUND){
+       alert('No payments found for this user');
+        }else{
+          const data = await response.json();
+          console.log("Payment data:", data);
+  
+          // Assuming the API returns an array of payment reports
+          setPayments(Array.isArray(data.data) ? data.data : []);
+        }
 
-        const data = await response.json();
-        console.log("Payment data:", data);
 
-        // Assuming the API returns an array of payment reports
-        setPayments(Array.isArray(data.data) ? data.data : []);
       } catch (error) {
         console.error("Error getting payments:", error);
         alert("An error occurred while fetching payments.");

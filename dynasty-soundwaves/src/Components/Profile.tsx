@@ -44,14 +44,19 @@ const Profile: React.FC = () => {
         credentials: "include",
         body: JSON.stringify(updatedData),
       });
+      if(response.status === STATUS_CODES.NOT_FOUND){
+        alert('User not found');
 
-      const data = await response.json();
+      }else{
+        const data = await response.json();
 
-      if (data?.success) {
-        alert(data.message);
-      } else {
-        alert(data.message || "Update failed, please try again.");
+        if (data?.success) {
+          alert(data.message);
+        } else {
+          alert(data.message || "Update failed, please try again.");
+        }
       }
+    
     } catch (error) {
       console.error("Update error:", error);
       alert("An error occurred. Please try again.");

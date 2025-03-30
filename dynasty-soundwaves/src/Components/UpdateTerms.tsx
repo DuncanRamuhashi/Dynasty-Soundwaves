@@ -26,14 +26,18 @@ const UpdateTerms = () => {
           },
           credentials: "include",
         });
+         if(response.status === STATUS_CODES.NOT_FOUND){
+              alert('nothing found');
+         }else{
+          const data = await response.json();
+          if (data?.success) {
+            setConditions(data.data.conditions);
+            setTerms(data.data.terms);
+          } else {
+            alert(data.message || "Update failed, please try again.");
+          }
+         }
 
-        const data = await response.json();
-        if (data?.success) {
-          setConditions(data.data.conditions);
-          setTerms(data.data.terms);
-        } else {
-          alert(data.message || "Update failed, please try again.");
-        }
       } catch (error) {
         console.error("Error fetching terms and conditions:", error);
         alert("An error occurred. Please try again.");

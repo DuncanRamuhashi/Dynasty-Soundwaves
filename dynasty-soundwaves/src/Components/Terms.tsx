@@ -17,14 +17,18 @@ const Terms = () => {
           headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
+         if(response.status === STATUS_CODES.NOT_FOUND){
+           alert('Nothing found');
+         }else{
+          const data = await response.json();
+          if (data?.success) {
+            setConditions(data.data?.conditions || 'Default conditions text.');
+            setTerms(data.data?.terms || 'Default terms text.');
+          } else {
+            alert(data.message || "Failed to load terms and conditions.");
+          }
+         }
 
-        const data = await response.json();
-        if (data?.success) {
-          setConditions(data.data?.conditions || 'Default conditions text.');
-          setTerms(data.data?.terms || 'Default terms text.');
-        } else {
-          alert(data.message || "Failed to load terms and conditions.");
-        }
       } catch (error) {
         console.error("Error fetching terms and conditions:", error);
         alert("An error occurred. Please try again.");

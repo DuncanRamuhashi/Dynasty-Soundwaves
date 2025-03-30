@@ -42,10 +42,14 @@ const Payments: React.FC = () => {
             credentials: "include",
           }
         );
+          if(response.status === STATUS_CODES.NOT_FOUND){
+            alert('No payments found for this seller');
+          }else{
+            const data = await response.json();
+           
+            setTrans(data.data || []);
+          }
 
-        const data = await response.json();
-        console.log(data);
-        setTrans(data.data || []);
       } catch (error) {
         console.error("Error getting payments:", error);
         alert("An error occurred while fetching payments.");
