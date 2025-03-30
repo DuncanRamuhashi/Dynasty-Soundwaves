@@ -153,7 +153,13 @@ const Navbar = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, otp }),
             });
-            const data = await response.json();
+             if(response.status === STATUS_CODES.NOT_FOUND){
+                alert('User not found');
+             }else if(response.status === STATUS_CODES.BAD_REQUEST){
+                  alert('Invalid Otp or Otp has expired');
+             }else{
+                const data = await response.json();
+
             if (data.success) {
                 alert("OTP verified successfully!");
                 setIsOtpOpen(false);
@@ -165,6 +171,8 @@ const Navbar = () => {
             } else {
                 alert(data.message);
             }
+             }
+            
         } catch (error) {
             console.error("OTP verification error:", error);
             alert("OTP verification failed");
@@ -183,18 +191,24 @@ const Navbar = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, email, password, role: userType }),
             });
-            const data = await response.json();
-            if (data.success) {
-                alert("Registration successful, please check your email for the OTP!");
-                setIsRegOpen(false);
-                setIsOtpOpen(true);
-                setIsOtpSent(true);
-                setName("");
-                setPassword("");
-                setUserType("");
-            } else {
-                alert(data.message);
+
+            if(response.status === STATUS_CODES.BAD_REQUEST){
+                alert('User already exists');
+            }else{
+                const data = await response.json();
+                if (data.success) {
+                    alert("Registration successful, please check your email for the OTP!");
+                    setIsRegOpen(false);
+                    setIsOtpOpen(true);
+                    setIsOtpSent(true);
+                    setName("");
+                    setPassword("");
+                    setUserType("");
+                } else {
+                    alert(data.message);
+                }
             }
+            
         } catch (error) {
             console.error("Registration error:", error);
             alert("Registration failed, please try again");
@@ -212,12 +226,19 @@ const Navbar = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),
             });
+          if(response.status === STATUS_CODES.NOT_FOUND){
+            alert('user not found');
+          }else if(response.status === STATUS_CODES.BAD_REQUEST){
+            alert('Account already verified');
+          }else{
             const data = await response.json();
             if (data.success) {
                 alert("OTP resent successfully!");
             } else {
                 alert(data.message);
             }
+          }
+
         } catch (error) {
             console.error("Resend OTP error:", error);
             alert("Error in resending OTP");
