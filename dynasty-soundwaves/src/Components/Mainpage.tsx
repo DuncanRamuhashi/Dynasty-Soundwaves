@@ -94,7 +94,7 @@ const Mainpage = () => {
   const [playName, setPlayName] = useState("");
   const [playImage, setPlyImage] = useState("");
   const [playAudioTrack, setPlayAudioTrack] = useState("");
-  const [playTime, setPlayTime] = useState(Number);
+ 
   const [searchTerm, setSearchTerm] = useState(""); // New state for search
 
   
@@ -177,7 +177,7 @@ const Mainpage = () => {
               setPlayName(name);
               setPlyImage(image);
               setPlayAudioTrack(data.data.audio);
-              setPlayTime(time);
+             
               const index = musicList.findIndex(m => m._id === trackID);
               sessionStorage.setItem('indexSong',index.toString());
           }

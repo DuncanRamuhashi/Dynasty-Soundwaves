@@ -47,9 +47,7 @@ const UpdateTerms = () => {
     fetchTermsAndConditions();
   }, []);
 
-  const proceedToPayment = () => {
-    console.log("Proceeding to payment...");
-  };
+ 
 
   // Handle saving updated terms & conditions
   const handleSave = async () => {

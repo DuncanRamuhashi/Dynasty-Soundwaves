@@ -118,19 +118,6 @@ const Player: React.FC<PlayerProps> = ({ songID, title, artistName, image, audio
     }
   };
    
-// Playing next
-const handleNext = (index: number, playNumber: number, totalNumber: number) => {
-  let n = playNumber + 1;  // Increment playNumber to move to the next item
-  if (n >= totalNumber) n = 0;  
-  sessionStorage.setItem('indexSong', n.toString());  
-}
-
-// Playing previous
-const handlePrev = (index: number, playNumber: number, totalNumber: number) => {
-  let n = playNumber - 1;  
-  if (n < 0) n = totalNumber - 1; 
-  sessionStorage.setItem('indexSong', n.toString()); 
-}
 
 
 
