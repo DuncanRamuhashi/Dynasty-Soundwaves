@@ -31,7 +31,7 @@ useEffect(() => {
 
   const getMusic = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/music/get-music/${user._id}/${token}`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/api/music/get-music/${user._id}/${token}`, {
         method: "GET", 
         headers: {
           "Content-Type": "application/json",
@@ -70,7 +70,7 @@ const formatDuration = (seconds: number): string => {
 // doita machelo 
   const handleDelete = async (id :string) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/music/delete-music/${id}/${token}`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/api/music/delete-music/${id}/${token}`, {
         method: "DELETE", 
         headers: {
           "Content-Type": "application/json",

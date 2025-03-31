@@ -46,7 +46,7 @@ const Payment: React.FC = () => {
   const  cartID  =  sessionStorage.getItem('cartID');
   console.log(cartID);
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/payment/create-payment`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/api/payment/create-payment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
