@@ -293,10 +293,10 @@ const Navbar = () => {
                 id="nav-menu"
                 className={`${
                     menuOpen ? "block" : "hidden"
-                } md:flex md:flex-row list-none items-center space-y-4 md:space-y-0 md:space-x-6 absolute md:static top-full left-0 right-0 bg-gray-100 md:bg-transparent p-4 md:p-0 z-40 transition-all duration-300 ease-in-out`}
+                } md:flex md:flex-row list-none items-center space-y-4 md:space-y-0 md:space-x-6 absolute md:static top-16  right-0  bg-gray-100 md:bg-transparent p-4 md:p-0 z-40 transition-all duration-300 ease-in-out`}
             >
                 {user?.role === "user" && (
-                    <>
+                   <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4"> 
                         <Link to="/cart" className="relative flex items-center" onClick={() => setMenuOpen(false)}>
                             <FaShoppingCart className="text-xl md:text-2xl cursor-pointer hover:text-gray-400" />
                             <span className="absolute -top-4 -right-3 bg-gray-900 text-gray-100 text-xs font-bold px-2 py-1 rounded-full">
@@ -307,23 +307,24 @@ const Navbar = () => {
                         <Link to="/usereport" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
                             <FaRegListAlt className="text-xl md:text-2xl" />
                         </Link>
-                    </>
+                        </div>
                 )}
 
                 {user?.role === "admin" && (
-                    <>
+                      <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4"> 
                         <Link to="/members" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
                             <FaPeopleCarry className="text-xl md:text-2xl" />
                         </Link>
                         <Link to="/termsandcondition" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
                             <FaBook className="text-xl md:text-2xl" />
                         </Link>
-                    </>
+                        </div>
                 )}
 
                 {user?.role === "seller" && (
-                    <>
-                        <Link to="/upload" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
+                    <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4"> 
+                    
+                        <Link to="/upload" className="hover:text-gray-400 items" onClick={() => setMenuOpen(false)}>
                             <FaUpload className="text-xl md:text-2xl" />
                         </Link>
                         <Link to="/artistmusic" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
@@ -332,7 +333,7 @@ const Navbar = () => {
                         <Link to="/payments" className="hover:text-gray-400" onClick={() => setMenuOpen(false)}>
                             <FaMoneyBillWave className="text-xl md:text-2xl" />
                         </Link>
-                    </>
+                    </div>
                 )}
 
                 {isLoggedIn ? (
@@ -351,6 +352,7 @@ const Navbar = () => {
                         </button>
                     </div>
                 ) : (
+                    <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
                     <FaRegUser
                         className="text-xl md:text-2xl cursor-pointer hover:text-gray-400"
                         onClick={() => {
@@ -358,6 +360,7 @@ const Navbar = () => {
                             setMenuOpen(false);
                         }}
                     />
+                    </div>
                 )}
             </div>
 

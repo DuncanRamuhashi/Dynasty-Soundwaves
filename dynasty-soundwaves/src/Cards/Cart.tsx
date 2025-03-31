@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
+import {STATUS_CODES} from    '../constants.ts';
 interface CartItem {
   _id: string;
   title: string;
@@ -73,10 +73,13 @@ const Cart: React.FC = () => {
           }
         );
 
-        if (!response.ok) {
-          const result = await response.json();
-          throw new Error(result.message || "Failed to remove item from server");
-        }
+            if(response.status === STATUS_CODES.BAD_REQUEST){
+              alert('Music ID is required');
+            }else if(response.status === STATUS_CODES.NOT_FOUND){ 
+              alert('Cart not found/music not found');
+            }else{
+               alert('item removed');
+            }
       }
     } catch (err) {
       console.error("Error removing item:", err);

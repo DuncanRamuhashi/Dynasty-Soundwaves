@@ -40,9 +40,6 @@ const Usereport = () => {
           }
         );
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
         if(response.status === STATUS_CODES.NOT_FOUND){
        alert('No payments found for this user');
         }else{
