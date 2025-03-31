@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { FaArrowDown, FaShoppingCart } from "react-icons/fa";
-import Navbar from "./Navbar";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { FaShoppingCart } from "react-icons/fa";
+
+import {  useNavigate } from "react-router-dom";
 import Player from "../Cards/Player";
 import {STATUS_CODES} from    '../constants.ts';
 

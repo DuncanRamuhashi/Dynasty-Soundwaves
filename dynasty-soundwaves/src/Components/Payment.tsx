@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCcVisa, FaCcMastercard, FaCcAmex, FaCcDiscover } from "react-icons/fa";
-import {STATUS_CODES} from    '../constants.ts';
+
 // Define types
 interface User {
   _id: string;

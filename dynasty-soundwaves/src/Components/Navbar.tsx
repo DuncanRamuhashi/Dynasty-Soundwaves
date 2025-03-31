@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FaSearch, FaShoppingCart, FaRegUser, FaUser, FaRegListAlt, FaMoneyBillWave, FaPeopleCarry, FaUpload, FaBook, FaMusic, FaHome } from "react-icons/fa";
+import {  FaShoppingCart, FaRegUser, FaUser, FaRegListAlt, FaMoneyBillWave, FaPeopleCarry, FaUpload, FaBook, FaMusic, FaHome } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/ddddd-removebg-preview.png";
 import { HiMenu, HiX } from "react-icons/hi";

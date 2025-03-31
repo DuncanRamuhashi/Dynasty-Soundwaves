@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import image from '../assets/pexels-rdne-7841424.jpg';
 import {STATUS_CODES} from    '../constants.ts';

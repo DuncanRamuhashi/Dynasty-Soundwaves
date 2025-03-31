@@ -19,9 +19,9 @@ const Payments: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const paymentsPerPage = 2;
 
-  const indexOfLastPayment = currentPage * paymentsPerPage;
-  const indexOfFirstPayment = indexOfLastPayment - paymentsPerPage;
-  const currentPayments = payments.slice(indexOfFirstPayment, indexOfLastPayment);
+
+
+
 
   const totalPages = Math.ceil(payments.length / paymentsPerPage);
   const storedUser = JSON.parse(sessionStorage.getItem("user") || "null");
