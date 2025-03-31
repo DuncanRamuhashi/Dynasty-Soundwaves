@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const uploadMusicSchemaZod = z.object({
   title: z.string().min(1, "Title is required"),
-  duration: z.string().min(1, "Duration is required"),
+  duration: z.number().min(1, "Duration is required"),
   genre: z.string().min(1, "Genre is required"),
   bpm: z.number().min(1, "BPM must be a positive number"),
   mood: z.string().min(1, "Mood is required"),

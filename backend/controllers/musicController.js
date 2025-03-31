@@ -37,8 +37,12 @@ export const getMusicById =asyncHandler( async (req, res) => {
  
     const  userId  = req.params.id;
    
-    await servicegetMusicById(userId);
-
+  const musics =   await servicegetMusicById(userId);
+  res.status(STATUS_CODES.OK).json({ 
+    success: true, 
+    data: musics,
+    count: musics.length 
+  });
 });
 
 

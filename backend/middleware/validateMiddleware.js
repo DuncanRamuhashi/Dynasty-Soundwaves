@@ -8,7 +8,7 @@ const validate = (schema) => (req, res, next) => {
         const err = new Error("Validation Failed");
         err.statusCode = STATUS_CODES.BAD_REQUEST;
         err.errors = result.error.errors.map((e) => e.message);
-        return errorHandler(err, req, res, next); // Use errorHandler directly
+        return errorHandler.errorHandler(err, req, res, next); // Use errorHandler directly
     }
 
     req.body = result.data;

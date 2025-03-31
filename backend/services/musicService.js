@@ -19,7 +19,7 @@ export const servicegetAllMusic = async () => {
     const music = await Music.find({ downloadable: { $ne: true } })
       .sort({ createdAt: -1 })
       .select('_id title genre bpm mood duration tags image price sellerID');
- 
+       
     // Fetch all seller details in parallel
     const sellerIds = music.map(track => track.sellerID);
     const sellers = await User.find({ _id: { $in: sellerIds } }).select('_id name');
@@ -84,12 +84,8 @@ export const servicegetMusicById = async (id) => {
         throw new HttpError("No music found for this user",STATUS_CODES.NOT_FOUND);
     }
       
-    res.status(STATUS_CODES.OK).json({ 
-      success: true, 
-      data: musics,
-      count: musics.length 
-    });
 
+   return musics;
 };
 
 // ✅ Update Music By ID

@@ -5,9 +5,9 @@ interface MusicUploadData {
   title: string;
   duration: number | null;
   genre: string;
-  bpm: string;
+  bpm:  number | null;
   mood: string;
-  price: string;
+  price: number | null;
   audio: string | null;
   sellerID: string;
   tags: string[];
@@ -42,8 +42,8 @@ const Upload = () => {
   const [songTitle, setSongTitle] = useState<string>('');
   const [genre, setGenre] = useState<string>('');
   const [mood, setMood] = useState<string>('');
-  const [bpm, setBpm] = useState<string>('');
-  const [price, setPrice] = useState<string>('');
+  const [bpm, setBpm] = useState<number|null>(null);
+  const [price, setPrice] = useState<number | null>( null);
   const [tags, setTags] = useState<string[]>([]);
   const [image, setImage] = useState<string | null>(null);
   const [audioFile, setAudioFile] = useState<string | null>(null);
@@ -185,8 +185,8 @@ const Upload = () => {
         setSongTitle('');
         setGenre('');
         setMood('');
-        setBpm('');
-        setPrice('');
+        setBpm(null);
+        setPrice(null);
         setTags([]);
         setImage(null);
         setAudioFile(null);
@@ -262,8 +262,8 @@ const Upload = () => {
             <label className="block text-gray-700 font-medium">BPM:</label>
             <input
               type="number"
-              value={bpm}
-              onChange={(e) => setBpm(e.target.value)}
+              value={bpm ?? ''}
+              onChange={(e) => setBpm(Number(e.target.value))}
               disabled={isLoading}
               className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
             />
@@ -273,8 +273,8 @@ const Upload = () => {
             <label className="block text-gray-700 font-medium">Price in Rands:</label>
             <input
               type="number"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              value={price ?? '' }
+              onChange={(e) => setPrice(Number(e.target.value))}
               disabled={isLoading}
               className="border-2 border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
             />
@@ -338,8 +338,8 @@ const Upload = () => {
                 setSongTitle('');
                 setGenre('');
                 setMood('');
-                setBpm('');
-                setPrice('');
+                setBpm(null);
+                setPrice(null);
                 setTags([]);
                 setImage(null);
                 setAudioFile(null);
