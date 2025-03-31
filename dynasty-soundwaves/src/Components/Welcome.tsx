@@ -4,7 +4,7 @@ import welcomeGif from '../assets/welcome.gif';
 
 const Welcome = () => {
   const navigate = useNavigate();
- console.log('this is wack',import.meta.env.VITE_BACKENDURL);
+ 
   useEffect(() => {
     setTimeout(() => {
       navigate('/home'); // Navigate to MainPage after 3 seconds

@@ -221,7 +221,8 @@ const Mainpage = () => {
   useEffect(() => {
     const getMusic = async  () => {
         console.log("why cant i get music ");
-        console.log("useEffect triggered!");
+        console.log('this is wack',`${import.meta.env.VITE_BACKENDURL}/api/music/get-all-music`);
+
       try {
         const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/api/music/get-all-music`, {
           method: "GET", 
