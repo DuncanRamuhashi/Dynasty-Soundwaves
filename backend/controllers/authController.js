@@ -13,7 +13,7 @@ export const registerUser =  asyncHandler (async (req, res) => {
  
     await serviceRegisterUser(req.body);
 
-        res.status(STATUS_CODES.CREATED).json({ success: true, message: 'User registered successfully. Please verify your email.' });
+ res.status(STATUS_CODES.CREATED).json({ success: true, message: 'User registered successfully. Please verify your email.' });
  
 });
 
@@ -29,6 +29,7 @@ export const resendOtp =asyncHandler( async (req, res) => {
 export const verifyEmail =asyncHandler( async (req, res) => {
     const { email, otp } = req.body;
     await  serviceVerifyEmail(email,otp);
+    res.status(STATUS_CODES.OK).json({ success: true, message: 'Account Verified' });
 });
 
 // Login user with email verification check

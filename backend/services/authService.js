@@ -106,7 +106,7 @@ export const serviceVerifyEmail = async (email,otp) => {
         
     }
 
-    
+    console.log(otp);
         const user = await User.findOne({email});
 
         // Check if the user exists
@@ -152,8 +152,7 @@ const mailOptions = {
      await transporter.sendMail(mailOptions);
         await user.save();
 
-        // Send JWT token after email verification
-        generateToken(res, user);
+     
 
         
 
@@ -164,7 +163,9 @@ export const serviceLoginUser = async (userData) => {
 
         const { email, password } = userData;
         const user = await User.findOne({ email });
-
+         if(!user){
+            throw new HttpError("User doesnt exit",STATUS_CODES.NOT_FOUND);
+         }
         if (!user || !(await user.matchPassword(password))) {
             throw new HttpError("Invalid email or password",STATUS_CODES.UNAUTHORIZED);
 

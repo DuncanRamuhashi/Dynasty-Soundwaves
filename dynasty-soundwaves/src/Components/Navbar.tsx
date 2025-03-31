@@ -117,6 +117,8 @@ const Navbar = () => {
             
            if(response.status === STATUS_CODES.UNAUTHORIZED){
             alert("incorrect password or email");
+           }else if(response.status === STATUS_CODES.NOT_FOUND){
+            alert("User doesnt exits");
            }else{
                 const data = await response.json();
             if (data.success) {
@@ -453,7 +455,7 @@ const Navbar = () => {
                             />
                             <input
                                 type="password"
-                                placeholder="Password"
+                                placeholder="Password "
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="w-full p-2 border rounded mb-3 focus:outline-none focus:ring-2 focus:ring-gray-900"
