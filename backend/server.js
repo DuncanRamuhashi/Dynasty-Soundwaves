@@ -26,7 +26,9 @@ app.use(
   );
 app.use(cookieParser());
 
-
+app.get("/",(req,res)=>{
+res.json("Welcome to my DS Api");
+});
 app.use('/api/auth',authRoutes);
 app.use('/api/cart',cartRouter);
 app.use('/api/invoice',invoiceRouter);
