@@ -19,11 +19,14 @@ db();
 
 app.use(express.json());
 app.use(
-    cors({
-      origin: 'https://dynasty-soundwaves.vercel.app', // Change this to your frontend URL
-      credentials: true, // Allow sending cookies and authentication headers
-    })
-  );
+  cors({
+      origin: 'https://dynasty-soundwaves.vercel.app', 
+      credentials: true,
+      methods: 'GET,POST,PUT,DELETE,OPTIONS',
+      allowedHeaders: 'Content-Type,Authorization'
+  })
+);
+
 app.use(cookieParser());
 
 app.get("/",(req,res)=>{
