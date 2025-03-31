@@ -20,10 +20,10 @@ db();
 app.use(express.json());
 app.use(
   cors({
-      origin: '*', 
-      credentials: true,
-      methods: 'GET,POST,PUT,DELETE,OPTIONS',
-      allowedHeaders: 'Content-Type,Authorization'
+    origin: 'https://dynasty-soundwaves.vercel.app', // Allow only your frontend
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
   })
 );
 
