@@ -33,20 +33,19 @@ const App: React.FC = () => {
         <main className="px-4 py-6">
           <Suspense fallback={<LoadingScreen />}>
             <Routes>
-              <Route path="/" element={<Welcome />} />
-              <Route path="/home" element={<MainPage />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/cart" element={<Cart />} />
-            
-              <Route path="/termsandcondition" element={<Terms />} />
-              <Route path="/payment" element={<Payment />} />
-              <Route path="/usereport" element={<Usereport />} />
-              <Route path="/payments" element={<Payments />} />
-              <Route path="/members" element={<Members />} />
-              <Route path="/upload" element={<Upload />} />
-              <Route path="/artistmusic" element={<MusicList />} />
-              <Route path="/updateterms" element={<UpdateTerms />} />
-              <Route path="/allreport" element={<Reports />} />
+            <Route path="/" element={<Welcome />} />
+          <Route path="/home" element={<MainPage />} />
+          <Route path="/profile" element={<Profile/>} />
+          <Route path="/cart" element={<Cart/>} />
+          <Route path="/termsandconditions" element={<Terms/>} />
+          <Route path="/payment" element={<Payment/>} />
+          <Route path="/usereport" element={<Usereport/>} />
+          <Route path="/payments" element={<Payments/>} />
+          <Route path="/members" element={<Members/>} />
+          <Route path="/upload" element={<Upload/>} />
+          <Route path="/artistmusic" element={<MusicList/>} />
+           <Route path="/termsandcondition" element={<UpdateTerms/>} />
+           <Route path="/allreport" element={<Reports/>} />
             </Routes>
           </Suspense>
         </main>
